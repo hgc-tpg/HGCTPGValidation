@@ -48,7 +48,8 @@ pipeline {
                                 pwd
                                 ~/grid_login
                                 cd test_dir
-                                REF_RELEASE=$(echo $CHANGE_TARGET | cut -d'-' -f 3)
+                                #REF_RELEASE=$(echo $CHANGE_TARGET | cut -d'-' -f 3)
+                                ../HGCTPGValidation/scripts/extractReleaseName.sh
                                 ../HGCTPGValidation/scripts/installCMSSWRef.sh $REF_RELEASE $CHANGE_TARGET
                                 '''
                             }
@@ -58,7 +59,8 @@ pipeline {
                                 sh '''
                                 pwd
                                 ~/grid_login
-                                REF_RELEASE=$(echo $CHANGE_TARGET | cut -d'-' -f 3)
+                                #REF_RELEASE=$(echo $CHANGE_TARGET | cut -d'-' -f 3)
+                                ../HGCTPGValidation/scripts/extractReleaseName.sh
                                 cd test_dir/${REF_RELEASE}_HGCalTPGValidation_ref/src
                                 ../../../HGCTPGValidation/scripts/produceDataRef.sh
                                 '''            
@@ -75,7 +77,9 @@ pipeline {
                                 pwd
                                 ~/grid_login
                                 cd test_dir
-                                REF_RELEASE=$(echo $CHANGE_TARGET | cut -d'-' -f 3)
+                                ../HGCTPGValidation/scripts/extractReleaseName.sh
+                                #REF_RELEASE=$(echo $CHANGE_TARGET | cut -d'-' -f 3)
+                                ../HGCTPGValidation/scripts/extractReleaseName.sh
                                 ../HGCTPGValidation/scripts/installCMSSWTest.sh $REF_RELEASE $CHANGE_BRANCH
                                 '''
                             }
@@ -85,7 +89,8 @@ pipeline {
                                 sh '''
                                 pwd
                                 ~/grid_login
-                                REF_RELEASE=$(echo $CHANGE_TARGET | cut -d'-' -f 3)
+                                #REF_RELEASE=$(echo $CHANGE_TARGET | cut -d'-' -f 3)
+                                ../HGCTPGValidation/scripts/extractReleaseName.sh
                                 cd test_dir/${REF_RELEASE}_HGCalTPGValidation_test/src
                                 ../../../HGCTPGValidation/scripts/produceDataTest.sh
                                 '''            
