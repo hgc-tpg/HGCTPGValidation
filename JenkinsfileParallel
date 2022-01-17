@@ -64,7 +64,7 @@ pipeline {
                                 unset IFS
                                 export LABEL="ref"
                                 cd test_dir/${REF_RELEASE}_HGCalTPGValidation_$LABEL/src
-                                ../../../HGCTPGValidation/scripts/produceData.sh
+                                ../../../HGCTPGValidation/scripts/produceData.sh $LABEL
                                 '''            
                             }
                         }
@@ -95,7 +95,7 @@ pipeline {
                                 unset IFS
                                 export LABEL="test"
                                 cd test_dir/${REF_RELEASE}_HGCalTPGValidation_$LABEL/src
-                                ../../../HGCTPGValidation/scripts/produceData.sh
+                                ../../../HGCTPGValidation/scripts/produceData.sh $LABEL
                                 '''            
                             }
                         }
