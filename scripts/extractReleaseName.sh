@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+# $1 is the target branch name $CHANGE_TARGET
+
 ########################################################
 IFS="-"
-for i in $STR
+for i in $1
 do
   s=$i
   IFS="_"
