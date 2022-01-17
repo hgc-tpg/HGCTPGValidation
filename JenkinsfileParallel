@@ -61,7 +61,8 @@ pipeline {
                                 pwd
                                 ~/grid_login
                                 #REF_RELEASE=$(echo $CHANGE_TARGET | cut -d'-' -f 3)
-                                ../HGCTPGValidation/scripts/extractReleaseName.sh
+                                source ../HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
+                                unset IFS
                                 cd test_dir/${REF_RELEASE}_HGCalTPGValidation_ref/src
                                 ../../../HGCTPGValidation/scripts/produceDataRef.sh
                                 '''            
@@ -92,7 +93,8 @@ pipeline {
                                 pwd
                                 ~/grid_login
                                 #REF_RELEASE=$(echo $CHANGE_TARGET | cut -d'-' -f 3)
-                                ../HGCTPGValidation/scripts/extractReleaseName.sh
+                                source ../HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
+                                unset IFS
                                 cd test_dir/${REF_RELEASE}_HGCalTPGValidation_test/src
                                 ../../../HGCTPGValidation/scripts/produceDataTest.sh
                                 '''            
