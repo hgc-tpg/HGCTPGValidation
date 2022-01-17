@@ -37,7 +37,7 @@ root-config --version
 find . -name "out_ref.log" | xargs grep "TimeModule>" > TimingInfo_ref.txt
 find . -name "out_test.log" | xargs grep "TimeModule>" > TimingInfo_test.txt
 # Extract Memory Check information and global Time information
-python ../HGCTPGValidation/hgctpgvalidation/display/extractTimeMemoryInfos.py --reffile out_ref.log --testfile out_test.log --refdir $1 --testdir $2
+python ../HGCTPGValidation/hgctpgvalidation/display/extractTimeMemoryInfos.py --reffile out.log --testfile out.log --refdir $1 --testdir $2
 # Create histograms Time/event/producer from TimingInfo_.txt 
 python ../HGCTPGValidation/hgctpgvalidation/display/timing.py --reffile TimingInfo_ref.txt --testfile TimingInfo_test.txt --refdir $1 --testdir $2
 # Compare histograms for the two releases and create pages
