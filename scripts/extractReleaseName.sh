@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-STR="hgc-tpg-devel-CMSSW_12_1_0_pre3-test"
-
 ########################################################
 IFS="-"
 for i in $STR
