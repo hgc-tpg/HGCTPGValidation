@@ -49,9 +49,10 @@ pipeline {
                                 ~/grid_login
                                 cd test_dir
                                 source ../HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
+                                source ../HGCTPGValidation/scripts/getScramArch.sh $REF_RELEASE
                                 unset IFS
                                 export LABEL="ref"
-                                ../HGCTPGValidation/scripts/installCMSSW.sh $REF_RELEASE $CHANGE_TARGET $LABEL
+                                ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $CHANGE_TARGET $LABEL
                                 '''
                             }
                         }
@@ -80,9 +81,10 @@ pipeline {
                                 ~/grid_login
                                 cd test_dir
                                 source ../HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
+                                source ../HGCTPGValidation/scripts/getScramArch.sh $REF_RELEASE
                                 unset IFS
                                 export LABEL="test"
-                                ../HGCTPGValidation/scripts/installCMSSW.sh $REF_RELEASE $CHANGE_BRANCH $LABEL
+                                ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $CHANGE_BRANCH $LABEL
                                 '''
                             }
                         }
