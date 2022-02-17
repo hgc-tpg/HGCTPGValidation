@@ -1,23 +1,27 @@
 #!/bin/bash
 
-# ./installCMSSW.sh $RELEASE $CHANGE_TARGET $LABEL
-# $1 release name
-# $2 target branch name
-# $3 label "ref" or "test"
+# ./installCMSSW.sh $SCRAM_ARCH $RELEASE $CHANGE_TARGET $LABEL
+# 
+# $1 SCRAM_ARCH
+# $2 release name
+# $3 target branch name
+# $4 label "ref" or "test"
 
-echo $1
-echo $2
-echo $3
-source /cvmfs/cms.cern.ch/cmsset_default.sh
-export SCRAM_ARCH=slc7_amd64_gcc900
+export SCRAM_ARCH=$1
 echo $SCRAM_ARCH
+relversion=$2
+echo $relversion
+branch=$3
+echo $branch
+label=$4
+echo $label
+
+source /cvmfs/cms.cern.ch/cmsset_default.sh
 module purge
-scramv1 p -n $1_HGCalTPGValidation_$3 CMSSW $1
-cd $1_HGCalTPGValidation_$3/src
+scramv1 p -n $relversion_HGCalTPGValidation_$label CMSSW $relversion
+cd $relversion_HGCalTPGValidation_$label/src
 echo $PWD
 eval `scramv1 runtime -sh`
-#git config --global user.name "Emilia Becheva"
-#git config --global user.email emilia.becheva@llr.in2p3.fr
-git cms-merge-topic ebecheva:$2
-git checkout -b local_$2 ebecheva/$2
+git cms-merge-topic hgc-tpg:$branch
+git checkout -b local_$branch hgc-tpg/$branch
 scram b -j8
