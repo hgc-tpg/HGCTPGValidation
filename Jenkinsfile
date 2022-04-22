@@ -43,7 +43,6 @@ pipeline {
                         pwd
                         cd test_dir
                         source ../HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
-                        unset IFS
                         source ../HGCTPGValidation/scripts/getScramArch.sh $REF_RELEASE
                         export LABEL="test"
                         if [ -z "$CHANGE_FORK" ]
@@ -62,7 +61,6 @@ pipeline {
                         sh '''
                         source /cvmfs/cms.cern.ch/cmsset_default.sh
                         source ./HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
-                        unset IFS
                         export LABEL="test"
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_$LABEL/src
                         scram build code-checks
@@ -80,7 +78,6 @@ pipeline {
                         sh '''
                         pwd
                         source ./HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
-                        unset IFS
                         export LABEL="test"
                         export PROC_MODIFIER=""
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_$LABEL/src
@@ -99,7 +96,6 @@ pipeline {
                         pwd
                         cd test_dir
                         source ../HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
-                        unset IFS
                         source ../HGCTPGValidation/scripts/getScramArch.sh $REF_RELEASE
                         export LABEL="ref"
                         export REMOTE="hgc-tpg"
@@ -112,7 +108,6 @@ pipeline {
                         sh '''
                         pwd
                         source ./HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
-                        unset IFS
                         export LABEL="ref"
                         export PROC_MODIFIER=""
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_$LABEL/src
@@ -129,7 +124,6 @@ pipeline {
                 source ../HGCTPGValidation/env_install.sh
                 echo $PWD
                 source ../HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
-                unset IFS
                 ../HGCTPGValidation/scripts/displayHistos.sh ./${REF_RELEASE}_HGCalTPGValidation_ref/src ./${REF_RELEASE}_HGCalTPGValidation_test/src ./GIFS
                 echo 'CHANGE_ID= ', $CHANGE_ID
                 echo '$CHANGE_TITLE= ', $CHANGE_TITLE
