@@ -20,7 +20,7 @@ then
   --step USER:Validation/HGCalValidation/hgcalRunEmulatorValidationTPG_cff.hgcalTPGRunEmulatorValidation + \
   --geometry Extended2026D49 --era Phase2C9 --procModifiers $2 + \
   --inputCommands "keep *","drop l1tEMTFHit2016Extras_simEmtfDigis_CSC_HLT","drop l1tEMTFHit2016Extras_simEmtfDigis_RPC_HLT","drop l1tEMTFHit2016s_simEmtfDigis__HLT","drop l1tEMTFTrack2016Extras_simEmtfDigis__HLT","drop l1tEMTFTrack2016s_simEmtfDigis__HLT" + \
-  --filein file:/data_CMS_upgrade/data_jenkins/003F2BA9-0D02-5A43-A53F-4161E513BFA6.root + \
+  --filein file:/data_cms_upgrade/data_jenkins/Phase2HLTTDRSummer20ReRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/FEVT/PU200_111X_mcRun4_realistic_T15_v1-v2/003ACFBC-23B2-EA45-9A12-BECFF07760FC.root + \
   --no_output + \
   --customise_commands "process.MessageLogger.files.out_$1 = dict(); process.Timing = cms.Service('Timing', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service('SimpleMemoryCheck', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)"
 else
@@ -31,7 +31,7 @@ else
   --step USER:Validation/HGCalValidation/hgcalRunEmulatorValidationTPG_cff.hgcalTPGRunEmulatorValidation + \
   --geometry Extended2026D49 --era Phase2C9 + \
   --inputCommands "keep *","drop l1tEMTFHit2016Extras_simEmtfDigis_CSC_HLT","drop l1tEMTFHit2016Extras_simEmtfDigis_RPC_HLT","drop l1tEMTFHit2016s_simEmtfDigis__HLT","drop l1tEMTFTrack2016Extras_simEmtfDigis__HLT","drop l1tEMTFTrack2016s_simEmtfDigis__HLT" + \
-  --filein file:/data_CMS_upgrade/data_jenkins/003F2BA9-0D02-5A43-A53F-4161E513BFA6.root + \
+  --filein file:/data_cms_upgrade/data_jenkins/Phase2HLTTDRSummer20ReRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/FEVT/PU200_111X_mcRun4_realistic_T15_v1-v2/003ACFBC-23B2-EA45-9A12-BECFF07760FC.root + \
   --no_output + \
   --customise_commands "process.MessageLogger.files.out_$1 = dict(); process.Timing = cms.Service('Timing', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service('SimpleMemoryCheck', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)"
 fi
