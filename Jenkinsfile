@@ -127,12 +127,12 @@ pipeline {
                 ../HGCTPGValidation/scripts/displayHistos.sh ./${REF_RELEASE}_HGCalTPGValidation_ref/src ./${REF_RELEASE}_HGCalTPGValidation_test/src ./GIFS
                 echo 'CHANGE_ID= ', $CHANGE_ID
                 echo '$CHANGE_TITLE= ', $CHANGE_TITLE
-                if [ -d /data/jenkins/workspace/validation_data/PR$CHANGE_ID ] 
+                if [ -d /data/jenkins/workspace/validation_data_test/PR$CHANGE_ID ] 
                 then
                     echo "Directory " PR$CHANGE_ID " exists." 
-                    rm -rf /data/jenkins/workspace/validation_data/PR$CHANGE_ID
+                    rm -rf /data/jenkins/workspace/validation_data_test/PR$CHANGE_ID
                 fi
-                export data_dir=/data/jenkins/workspace/validation_data
+                export data_dir=/data/jenkins/workspace/validation_data_test
                 mkdir $data_dir/PR$CHANGE_ID
                 cp -rf GIFS/. $data_dir/PR$CHANGE_ID
                 python ../HGCTPGValidation/scripts/writeToFile.py --dirname $data_dir/PR$CHANGE_ID --prnumber $CHANGE_ID --prtitle "PR$CHANGE_ID : $CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
