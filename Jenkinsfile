@@ -3,7 +3,7 @@ pipeline {
         label 'llrgrhgtrig.in2p3.fr'
     }
     environment {
-        EMAIL_TO = 'jenkins@llr.in2p3.fr'
+        EMAIL_TO = 'becheva@llr.in2p3.fr'
     }
     options {
         skipDefaultCheckout() 
