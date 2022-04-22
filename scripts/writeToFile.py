@@ -1,4 +1,5 @@
-# Write the PullRequest ($CHANGE_TITLE) name into a text file
+# Write the PullRequest number (PR$CHANGE_ID), the title ($CHANGE_TITLE) and the name of the PR author ($CHANGE_AUTHOR) 
+# into a text file, validation_webpages.txt, in the directory with histograms 
 # python writeToFile.py --dirname $data_dir/PR$CHANGE_ID --prnumber $CHANGE_ID --prtitle "PR$CHANGE_ID : $CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
 
 import os
