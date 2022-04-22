@@ -21,7 +21,7 @@ pipeline {
                 then
                     rm -rf HGCTPGValidation
                 fi
-                git clone -b master https://github.com/hgc-tpg/HGCTPGValidation HGCTPGValidation
+                git clone -b Jenkins-developments-test https://github.com/hgc-tpg/HGCTPGValidation HGCTPGValidation
                 source HGCTPGValidation/env_install.sh
                 pip install attrs
                 if [ -d "./test_dir" ] 
