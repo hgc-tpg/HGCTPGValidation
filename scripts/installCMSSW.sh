@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# ./installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BRANCH $CHANGE_TARGET $LABEL
+# This code is to use with Jenkins jobs triggering on Github Pull Request in the repository https://github.com/hgc-tpg
+# ./installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $CHANGE_BRANCH $CHANGE_TARGET $LABEL
 
 # $1 SCRAM_ARCH
 # $2 release name
 # $3 remote name 
-# $4 branch name (ref or test)
-# $5 branch name ref
+# $4 branch name (corresponds to the branch containing the changes)
+# $5 reference branch name (this is the target or base branch to which the change could be merged, it is in https://github.com/hgc-tpg repository)
 # $6 label "ref" or "test"
 
 export SCRAM_ARCH=$1
