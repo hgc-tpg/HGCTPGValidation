@@ -9,29 +9,44 @@ pipeline {
         skipDefaultCheckout() 
     }
     stages {
-        stage('InstallAutoValidationPackage') {
-            steps {
-                echo 'Install automatic validation package HGCTPGValidation.'
-                sh '''
-                uname -a
-                whoami
-                pwd
-                ls -l
-                if [ -d "./HGCTPGValidation" ] 
-                then
-                    rm -rf HGCTPGValidation
-                fi
-                git clone -b Jenkins-developments-test https://github.com/hgc-tpg/HGCTPGValidation HGCTPGValidation
-                source HGCTPGValidation/env_install.sh
-                pip install attrs
-                if [ -d "./test_dir" ] 
-                then
-                    echo "Directory test_dir exists." 
-                    rm -rf test_dir
-                fi
-                mkdir test_dir
-                ls -lrt ..
-                '''
+        stage('Initialize'){
+            stages{
+                stage('CleanEnv'){
+                    steps{
+                        echo 'Clean the working environment.'
+                        sh '''
+                        if [ -d "/data/jenkins/workspace/validation_data_test/PR$CHANGE_ID" ] 
+                            then
+                            rm -rf /data/jenkins/workspace/validation_data_test/PR$CHANGE_ID
+                        fi
+                        '''
+                    }
+                }
+                stage('InstallAutoValidationPackage') {
+                    steps {
+                        echo 'Install automatic validation package HGCTPGValidation.'
+                        sh '''
+                        uname -a
+                        whoami
+                        pwd
+                        ls -l
+                        if [ -d "./HGCTPGValidation" ] 
+                        then
+                            rm -rf HGCTPGValidation
+                        fi
+                        git clone -b Jenkins-developments-test https://github.com/hgc-tpg/HGCTPGValidation HGCTPGValidation
+                        source HGCTPGValidation/env_install.sh
+                        pip install attrs
+                        if [ -d "./test_dir" ] 
+                        then
+                            echo "Directory test_dir exists." 
+                            rm -rf test_dir
+                        fi
+                        mkdir test_dir
+                        ls -lrt ..
+                        '''
+                    }
+                }
             }
         }
         stage('BuildCMSSWTest'){
