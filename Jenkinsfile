@@ -16,7 +16,7 @@ pipeline {
                         echo 'Clean the working environment.'
                         sh '''
                         if [ -d "/data/jenkins/workspace/validation_data_test/PR$CHANGE_ID" ] 
-                            then
+                        then
                             rm -rf /data/jenkins/workspace/validation_data_test/PR$CHANGE_ID
                         fi
                         '''
