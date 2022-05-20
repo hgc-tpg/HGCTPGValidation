@@ -1,0 +1,78 @@
+pipeline {
+    parameters{
+      string(name: 'Config1', default value: '', description: 'This is the first configuration')
+      string(name: 'Config2', default value: '', description: 'Second configuration')
+      string(name: 'Config3', default value: '', description: 'Third configuration')
+    } 
+    agent {
+        label 'llrgrhgtrig.in2p3.fr'
+    }
+    environment {
+        EMAIL_TO = 'becheva@llr.in2p3.fr'
+    }
+    options {
+        skipDefaultCheckout() 
+    }
+    stages {
+        stage('Initialize'){
+            stages{
+                stage('CleanEnv'){
+                    steps{
+                        echo 'Clean the working environment.'
+                        echo "First configuration = params.Config1"
+                    }
+                }
+                stage('InstallAutoValidationPackage') {
+                    steps {
+                        echo 'Install automatic validation package HGCTPGValidation.'
+                        echo "First configuration = params.Config1"
+                    }
+                }
+            }
+        }
+        stage('BuildCMSSWTest'){
+            stages{
+                stage('Install'){
+                    steps {
+                        echo 'InstallCMSSW Test step..'
+                        echo "First configuration = params.Config1"
+                    }
+                }
+                stage('QualityChecks'){
+                    steps{
+                        echo 'QualityChecks..'
+                        echo "First configuration = params.Config1"
+                    }
+                }
+                stage('Produce'){
+                    steps {
+                        echo 'Produce ..'
+                        echo "First configuration = params.Config1"          
+                    }
+                }
+            }
+        }
+        stage('BuildCMSSWRef'){
+            stages{
+                stage('Install'){
+                    steps {
+                        echo 'InstallCMSSW Ref step..'
+                        echo "First configuration = params.Config1" 
+                    }
+                }           
+                stage('Produce'){
+                    steps {
+                        echo 'Produce ..'
+                        echo "First configuration = params.Config1"            
+                    }
+                }
+            }
+        }
+        stage('Display') {
+            steps {
+                echo 'Display ..'
+                echo "First configuration = params.Config1"            
+            }
+        }
+    }
+}
