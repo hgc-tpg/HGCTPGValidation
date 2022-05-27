@@ -1,14 +1,22 @@
-# Write the PullRequest number (PR$CHANGE_ID), the title ($CHANGE_TITLE) and the name of the PR author ($CHANGE_AUTHOR) 
-# into a text file, validation_webpages.txt, in the directory with histograms 
-# python writeToFile.py --dirname $data_dir/PR$CHANGE_ID --prnumber $CHANGE_ID --prtitle "PR$CHANGE_ID : $CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
+# Write the PullRequest ($CHANGE_TITLE) name into a text file
+# python writeToFile.py --dirname PR$CHANGE_ID --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
+
+# File structure
+# PR$CHANGE_ID : $CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)
+# PR$CHANGE_IDconfig1 : $CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)
+# Ex : PR3 : Testing multiconfig (from user_name, https.....)
+#      PR3config1 : Testing multiconfig (from user_name, https.....)
 
 import os
 import sys
 
 def writeIntoFile(prnumber, prtitle):
     with open('validation_webpages.txt', 'w') as f:
-        f.write(prtitle)
-    
+        prnb  = "PR" + prnumber
+        title = prnb + " : " + prtitle + "\n"
+        title_config1 = prnb + "config1" + " : " + prtitle
+        f.write(title + title_config1) 
+
 def main(dirname, prnumber, prtitle):
     print('dirname = ', dirname)
     print('prtitle = ', prtitle)
