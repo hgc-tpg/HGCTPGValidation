@@ -25,7 +25,7 @@ def main(dirname, prnumber, prtitle):
             writeIntoFile(title)
         else:
             print('dirname2 = ', dirname)
-            dirname = dirname + "PR" + str(prnumber) + "config" + str(x)
+            dirname = dirname + "/PR" + str(prnumber) + "config" + str(x)
             print(dirname)
             os.chdir(dirname)
             title = "PR" + str(prnumber) + "config" + str(x) + " : " + prtitle
