@@ -3,7 +3,7 @@ pipeline {
         label 'llrgrhgtrig.in2p3.fr'
     }
     environment {
-        EMAIL_TO = 'jenkins@llr.in2p3.fr'
+        EMAIL_TO = 'ebecheva@llr.in2p3.fr'
     }
     options {
         skipDefaultCheckout() 
@@ -15,9 +15,9 @@ pipeline {
                     steps{
                         echo 'Clean the working environment.'
                         sh '''
-                        if [ -d "/data/jenkins/workspace/validation_data/PR$CHANGE_ID" ] 
+                        if [ -d "/data/jenkins/workspace/validation_data_test/PR$CHANGE_ID" ] 
                         then
-                            rm -rf /data/jenkins/workspace/validation_data/PR$CHANGE_ID
+                            rm -rf /data/jenkins/workspace/validation_data_test/PR$CHANGE_ID
                         fi
                         '''
                     }
@@ -34,7 +34,7 @@ pipeline {
                         then
                             rm -rf HGCTPGValidation
                         fi
-                        git clone -b master https://github.com/hgc-tpg/HGCTPGValidation HGCTPGValidation
+                        git clone -b Jenkins-UseMulticonfigWebPageValidation https://github.com/ebecheva/HGCTPGValidation HGCTPGValidation
                         source HGCTPGValidation/env_install.sh
                         pip install attrs
                         if [ -d "./test_dir" ] 
@@ -142,12 +142,12 @@ pipeline {
                 ../HGCTPGValidation/scripts/displayHistos.sh ./${REF_RELEASE}_HGCalTPGValidation_ref/src ./${REF_RELEASE}_HGCalTPGValidation_test/src ./GIFS
                 echo 'CHANGE_ID= ', $CHANGE_ID
                 echo '$CHANGE_TITLE= ', $CHANGE_TITLE
-                if [ -d /data/jenkins/workspace/validation_data/PR$CHANGE_ID ] 
+                if [ -d /data/jenkins/workspace/validation_data_test/PR$CHANGE_ID ] 
                 then
                     echo "Directory " PR$CHANGE_ID " exists." 
-                    rm -rf /data/jenkins/workspace/validation_data/PR$CHANGE_ID
+                    rm -rf /data/jenkins/workspace/validation_data_test/PR$CHANGE_ID
                 fi
-                export data_dir=/data/jenkins/workspace/validation_data
+                export data_dir=/data/jenkins/workspace/validation_data_test
                 mkdir $data_dir/PR$CHANGE_ID
                 mkdir $data_dir/PR$CHANGE_IDconfig1
                 cp -rf GIFS/. $data_dir/PR$CHANGE_IDconfig1
