@@ -14,7 +14,7 @@ def writeIntoFile(prnumber, prtitle):
     with open('validation_webpages.txt', 'w') as f:
         prnb  = "PR" + prnumber
         title = prnb + " : " + prtitle + "\n"
-        title_config1 = "Config1"
+        title_config1 = prnb + "config1"
         f.write(title + title_config1) 
 
 def main(dirname, prnumber, prtitle):
