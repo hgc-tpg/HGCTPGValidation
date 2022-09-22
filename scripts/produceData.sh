@@ -15,7 +15,7 @@ if [[ -n $2 ]] #if not empty
 then
   cmsDriver.py hgcal_tpg_validation -n 50 + \
   --mc --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW + \
-  --conditions auto:phase2_realistic + \
+  --conditions auto:phase2_realistic_T15 + \
   --beamspot HLLHC14TeV + \
   --step USER:Validation/HGCalValidation/hgcalRunEmulatorValidationTPG_cff.hgcalTPGRunEmulatorValidation + \
   --geometry Extended2026D49 --era Phase2C9 --procModifiers $2 + \
@@ -26,7 +26,7 @@ then
 else
   cmsDriver.py hgcal_tpg_validation -n 50 + \
   --mc --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW + \
-  --conditions auto:phase2_realistic + \
+  --conditions auto:phase2_realistic_T15 + \
   --beamspot HLLHC14TeV + \
   --step USER:Validation/HGCalValidation/hgcalRunEmulatorValidationTPG_cff.hgcalTPGRunEmulatorValidation + \
   --geometry Extended2026D49 --era Phase2C9 + \
