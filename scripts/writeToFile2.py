@@ -10,19 +10,26 @@
 import os
 import sys
 
-def writeIntoFile(prnumber, prtitle):
+def writeIntoFile(title):
     with open('validation_webpages.txt', 'w') as f:
-        prnb  = "PR" + prnumber
-        title = prnb + " : " + prtitle + "\n"
-        title_config1 = prnb + "config1" + " : Config1"
-        f.write(title + title_config1) 
+        f.write(title) 
 
 def main(dirname, prnumber, prtitle):
     print('dirname = ', dirname)
     print('prtitle = ', prtitle)
     print('prnumber= ', prnumber)
-    os.chdir(dirname)
-    writeIntoFile(prnumber, prtitle)
+    for x in range(2):
+        if x==0:
+            os.chdir(dirname) 
+            title = "PR" + str(prnumber) + " : " + prtitle
+            writeIntoFile(title)
+        else:
+            print('dirname2 = ', dirname)
+            dirname = dirname + "/PR" + str(prnumber) + "config" + str(x)
+            print(dirname)
+            os.chdir(dirname)
+            title = "PR" + str(prnumber) + "config" + str(x) + " : " + prtitle
+            writeIntoFile(title)
 
 
 if __name__== "__main__":
