@@ -2,47 +2,172 @@ pipeline {
     agent {
         label 'llrgrhgtrig.in2p3.fr'
     }
+    environment {
+        EMAIL_TO = 'becheva@llr.in2p3.fr'
+    }
     options {
         skipDefaultCheckout() 
     }
     stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-                sh '''
-                uname -a
-                whoami
-                pwd
-                ls -l
-                if [ -d "./HGCTPGValidation" ] 
-                then
-                    rm -rf HGCTPGValidation
-                fi
-                git clone -b master https://github.com/ebecheva/HGCTPGValidation HGCTPGValidation
-                ~/grid_login
-                source HGCTPGValidation/env_install.sh
-                pip install attrs
-                if [ -d "./test_dir" ] 
-                then
-                    echo "Directory test_dir exists." 
-                    rm -rf test_dir
-                fi
-                mkdir test_dir
-                cd test_dir
-                pwd
-                ls -lrt ..
-                python ../HGCTPGValidation/scripts/validation_tpg.py --cfg HGCTPGValidation.config.user_parameters_testJenkins_cfg.py
-                '''
+        stage('Initialize'){
+            stages{
+                stage('CleanEnv'){
+                    steps{
+                        echo 'Clean the working environment.'
+                        sh '''
+                        if [ -d "/data/jenkins/workspace/validation_data_test/PR$CHANGE_ID" ] 
+                        then
+                            rm -rf /data/jenkins/workspace/validation_data_test/PR$CHANGE_ID
+                        fi
+                        '''
+                    }
+                }
+                stage('InstallAutoValidationPackage') {
+                    steps {
+                        echo 'Install automatic validation package HGCTPGValidation.'
+                        sh '''
+                        uname -a
+                        whoami
+                        pwd
+                        ls -l
+                        if [ -d "./HGCTPGValidation" ] 
+                        then
+                            rm -rf HGCTPGValidation
+                        fi
+                        git clone -b Jenkins-UseMulticonfigWebPageValidation https://github.com/ebecheva/HGCTPGValidation HGCTPGValidation
+                        source HGCTPGValidation/env_install.sh
+                        pip install attrs
+                        if [ -d "./test_dir" ] 
+                        then
+                            echo "Directory test_dir exists." 
+                            rm -rf test_dir
+                        fi
+                        mkdir test_dir
+                        ls -lrt ..
+                        '''
+                    }
+                }
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-                echo "${env.RJPP_SCM_URL}"
-                echo "${env.RJPP_JENKINSFILE}"
-                echo "${env.RJPP_BRANCH}"
-                sh 'true'
+        stage('BuildCMSSWTest'){
+            stages{
+                stage('Install'){
+                    steps {
+                        echo 'InstallCMSSW Test step..'
+                        sh '''
+                        pwd
+                        cd test_dir
+                        source ../HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
+                        source ../HGCTPGValidation/scripts/getScramArch.sh $REF_RELEASE
+                        export LABEL="test"
+                        if [ -z "$CHANGE_FORK" ]
+                        then
+                            export REMOTE="hgc-tpg"
+                        else
+                            export REMOTE=$CHANGE_FORK
+                        fi
+                        echo 'REMOTE= ', $REMOTE
+                        ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $CHANGE_BRANCH $CHANGE_TARGET $LABEL
+                        '''
+                    }
+                }
+                stage('QualityChecks'){
+                    steps{
+                        sh '''
+                        source /cvmfs/cms.cern.ch/cmsset_default.sh
+                        source ./HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
+                        export LABEL="test"
+                        cd test_dir/${REF_RELEASE}_HGCalTPGValidation_$LABEL/src
+                        scram build code-checks
+                        scram build code-format
+                        GIT_STATUS=`git status --porcelain`
+                        if [ ! -z "$GIT_STATUS" ]; then
+                            echo "Code-checks or code-format failed."
+                            exit 1;
+                        fi
+                        '''
+                    }
+                }
+                stage('Produce'){
+                    steps {
+                        sh '''
+                        pwd
+                        source ./HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
+                        export LABEL="test"
+                        export PROC_MODIFIER=""
+                        cd test_dir/${REF_RELEASE}_HGCalTPGValidation_$LABEL/src
+                        ../../../HGCTPGValidation/scripts/produceData.sh $LABEL $PROC_MODIFIER
+                        '''            
+                    }
+                }
             }
+        }
+        stage('BuildCMSSWRef'){
+            stages{
+                stage('Install'){
+                    steps {
+                        echo 'InstallCMSSW Ref step..'
+                        sh '''
+                        pwd
+                        cd test_dir
+                        source ../HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
+                        source ../HGCTPGValidation/scripts/getScramArch.sh $REF_RELEASE
+                        export LABEL="ref"
+                        export REMOTE="hgc-tpg"
+                        ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $CHANGE_TARGET $CHANGE_TARGET $LABEL
+                        '''
+                    }
+                }           
+                stage('Produce'){
+                    steps {
+                        sh '''
+                        pwd
+                        source ./HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
+                        export LABEL="ref"
+                        export PROC_MODIFIER=""
+                        cd test_dir/${REF_RELEASE}_HGCalTPGValidation_$LABEL/src
+                        ../../../HGCTPGValidation/scripts/produceData.sh $LABEL $PROC_MODIFIER
+                        '''            
+                    }
+                }
+            }
+        }
+        stage('Display') {
+            steps {
+                sh '''
+                cd test_dir
+                source ../HGCTPGValidation/env_install.sh
+                echo $PWD
+                source ../HGCTPGValidation/scripts/extractReleaseName.sh $CHANGE_TARGET
+                ../HGCTPGValidation/scripts/displayHistos.sh ./${REF_RELEASE}_HGCalTPGValidation_ref/src ./${REF_RELEASE}_HGCalTPGValidation_test/src ./GIFS
+                echo 'CHANGE_ID= ', $CHANGE_ID
+                echo '$CHANGE_TITLE= ', $CHANGE_TITLE
+                if [ -d /data/jenkins/workspace/validation_data_test/PR$CHANGE_ID ] 
+                then
+                    echo "Directory " PR$CHANGE_ID " exists." 
+                    rm -rf /data/jenkins/workspace/validation_data_test/PR$CHANGE_ID
+                fi
+                export data_dir=/data/jenkins/workspace/validation_data_test
+                mkdir $data_dir/PR$CHANGE_ID
+                mkdir $data_dir/PR$CHANGE_ID/"PR$CHANGE_ID"config1
+                cp -rf GIFS/. $data_dir/PR$CHANGE_ID/"PR$CHANGE_ID"config1
+                python ../HGCTPGValidation/scripts/writeToFile.py --dirname $data_dir/PR$CHANGE_ID --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
+                '''            
+            }
+        }
+    }
+    post {
+        success {
+            echo 'The job finished successfully.'
+            mail to: "${EMAIL_TO}",
+                 subject: "Jenkins job succeded: ${currentBuild.fullDisplayName}",
+                 body:  "The job finished successfully. \n\n Pull request: ${env.BRANCH_NAME} build number: #${env.BUILD_NUMBER} \n\n Title: ${env.CHANGE_TITLE} \n\n Author of the PR: ${env.CHANGE_AUTHOR} \n\n Target branch: ${env.CHANGE_TARGET} \n\n Feature branch: ${env.CHANGE_BRANCH} \n\n Check console output at ${env.BUILD_URL} \n\n and ${env.CHANGE_URL} to view the results.  \n\n The validation histograms are available at https://llrhgcaltpgvalidation.in2p3.fr/PR/ \n\n"
+        }
+        failure {
+            echo 'Job failed'
+            mail to: "${EMAIL_TO}",
+                 subject: "Jenkins job failed: ${currentBuild.fullDisplayName}",
+                 body: "The compilation or the build steps failed. \n\n Pull request: ${env.BRANCH_NAME} build number: #${env.BUILD_NUMBER} \n\n Title: ${env.CHANGE_TITLE} \n\n Author of the PR: ${env.CHANGE_AUTHOR} \n\n Target branch: ${env.CHANGE_TARGET} \n\n Feature branch: ${env.CHANGE_BRANCH} \n\n Check console output at ${env.BUILD_URL} \n\n and ${env.CHANGE_URL} to view the results.  \n\n The validation histograms are available at https://llrhgcaltpgvalidation.in2p3.fr/PR/ \n\n"
         }
     }
 }

@@ -6,12 +6,19 @@ This is a Python package, CMSSW independent, used to
 * Run the HGCAL TPG validation for two different CMSSW releases or the same release but different parameters (the validation code is in the package Validation/HGCalValidation),
 * Compare the histograms produced during the validation process, create a corresponding *.gif file 
 * Create web page presenting all the results
+* A specific code (Jenkinsfile and some scripts) have been added to run Jenkins continuous integration
 
 The package is organized in several directories:
 * `hgctpgvalidation`: contain the main routines for creating CMSSW working directory for each release as well as the default parameters values, python programs for display step
 * `config`: user_parameters.py allows users to customise the HGCAL TPG simulation  
 * `data`: the histograms to be compared are listed in HGCALTriggerPrimitivesHistos.txt file
-* `scripts`: validation validation_tpg.py is the main program for the automatic HGCAL TPG, the displayHistos.sh is the bash script running the compare/display part of the validation
+* `scripts`: 
+
+  ** validation validation_tpg.py is the main program for the automatic HGCAL TPG, the displayHistos.sh is the bash script running the compare/display part of the validation, 
+  
+  ** installCMSSW.sh and produceData.sh are the main scripts used in the Jenkins pipeline
+  
+  ** extractReleaseName.sh, getScramArch.sh and writeToFile.py are used to get 1) the release name from the target branch name, 2) to get scram arch for this release, and 3) to write the information to be displayed on the web page. 
 
 
 ## Installation
