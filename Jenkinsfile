@@ -34,7 +34,7 @@ pipeline {
                         then
                             rm -rf HGCTPGValidation
                         fi
-                        git clone -b Jenkins-UseMulticonfigWebPageValidation https://github.com/ebecheva/HGCTPGValidation HGCTPGValidation
+                        git clone -b master https://github.com/ebecheva/HGCTPGValidation HGCTPGValidation
                         source HGCTPGValidation/env_install.sh
                         pip install attrs
                         if [ -d "./test_dir" ] 
