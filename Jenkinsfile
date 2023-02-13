@@ -57,7 +57,7 @@ pipeline {
                     steps{
                         echo 'Clean the working environment.'
                         sh '''
-                        if [ -d "/data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID" ] 
+                        if [ -d "/data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID" ]
                         then
                             rm -rf /data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID
                         fi
@@ -81,7 +81,7 @@ pipeline {
                         pip install attrs
                         if [ -d "./test_dir" ] 
                         then
-                            echo "Directory test_dir exists." 
+                            echo "Directory test_dir exists."
                             rm -rf test_dir
                         fi
                         mkdir test_dir
