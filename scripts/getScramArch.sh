@@ -18,7 +18,7 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 # scram list -c display the result in a simple lines, 
 # grep -w show the lines that match exactly to the release name 
 # for ex. we'll see the lines only for CMSSW_12_2_0, not for the pre-releases
-#echo "Release to use = " $1
+
 scram list -c $1  | grep -w $1 > out
 input="out"
 declare -i i=0
@@ -28,29 +28,21 @@ scram_arch_array=()
 # read the file containing the  
 while IFS= read -r line
 do
-  #echo i: $i
-  #echo "my line: $line"
   # Get the second part that corresponds to the name of the release
   REL_NAME=$(echo $line | cut -d' ' -f 2)
   if [ "$REL_NAME" =  "$1" ]
   then
-    #echo " REL_NAME = " $REL_NAME
     # Get the last part of each line read in the file
     SUBSTR=$(echo $line | cut -d' ' -f 3)
-    #echo " sub= " $SUBSTR
     # Extract the scram_arch name
     scram_arch=$(echo $SUBSTR | cut -d'/' -f 4)
     scram_arch_array[$i]=$scram_arch
-    #echo " scram_arch = " ${scram_arch_array[$i]}
     # Extract the gcc name version, ex gcc900, or gcc10
     gcc=$(echo $scram_arch| cut -d'_' -f 3)
-    #echo " gcc name version = " $gcc
     # Extract the gcc version from the name of the version, ex "10" 
     version=${gcc:3}
-    #echo " legth of the version name = " ${#version}
     # Get the length of "version"
     length=$((${#version}))
-    #echo $length
     # slc7_amd64_gcc11, or slc7_amd64_gcc10, slc7_amd64_gcc900....
     if [ "$length" -le 2 ]
     then
@@ -59,7 +51,6 @@ do
     else
       final_gcc_version[$i]=$version
     fi
-    #echo " gcc version = " ${final_gcc_version[$i]}
     j=$((i-1))
     # Compare the current version with the previous one
     # Keep the latest version
@@ -72,8 +63,6 @@ do
       SCRAM_ARCH=${scram_arch_array[$i-1]}
     fi
     export $SCRAM_ARCH
-    #echo "the most recent gcc version is (x100) = " $recent_gcc_version
-    #echo "the scram_arch to use is = " $SCRAM_ARCH
   fi
   ((i=i+1))
 done < "$input"
