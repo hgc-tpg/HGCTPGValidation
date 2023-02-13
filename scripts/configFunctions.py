@@ -29,18 +29,13 @@ def check_schema_config(config):
 
     try:
         config_schema.validate(config)
-        print("Configuration is valid.")
     except SchemaError as se:
         raise se
 
 
 # Read the file with configurations sets
 def read_subset(path, config):
-    print('path=', path)
-    print('config=', config)
-
     filename = path + config + '.yaml'
-    print('filename = ', filename)
 
     with open(filename) as f:
         try:
@@ -60,14 +55,12 @@ def get_listOfConfigs(path, confSubsets):
     # List of configuration pairs (ref, test)
     subsets = []
     for conf in config:
-        print(conf)
         configValues = []
         # Read the configuration - key: value
         #- ref: default
         #  test: bcstc
         for release, confName in conf.items():
             configValues.append(confName)
-            print("key = ", release, "value = ", confName)
 
         subsets.append(configValues)
 
@@ -76,14 +69,12 @@ def get_listOfConfigs(path, confSubsets):
 
 # Read the configuration file
 def read_config(path, configuration):
-    os.system('python --version')
     filename = path + configuration + '.yaml'
 
     with open(filename) as f:
         try:
             config = yaml.safe_load(f)
-            print("Read simulation configuration file.")
-            print(config)
+            print("Read validation configuration file.")
         except yaml.YAMLError as e:
             print(e)
 
