@@ -93,9 +93,7 @@ pipeline {
                     steps{
                         script{
                             env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}')
-                            println(env.REF_RELEASE)
                             env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}')
-                            println(env.SCRAM_ARCH)
                         }
                         echo "REF_RELEASE= ${REF_RELEASE}"
                         echo "SCRAM_ARCH = ${SCRAM_ARCH}"
