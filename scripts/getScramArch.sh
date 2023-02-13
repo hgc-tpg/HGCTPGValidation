@@ -8,7 +8,11 @@
 #CMSSW           CMSSW_12_2_0              /cvmfs/cms.cern.ch/slc7_amd64_gcc900/cms/cmssw/CMSSW_12_2_0
 
 # The program extracts the scram_arch for the more recent gcc version (if there more than one arches)
-# When using this script inside a Groovy script, do not add other "echo.." messages except the last one
+
+# This script is used in a Groovy script in Jenkinsfile. 
+# The information from thelast line of the script, "echo $SCRAM_ARCH", is written in the stdout 
+# that is taken to fill the global variable SCRAM_ARCH in Jenkinsfile.
+# For this reason, it is imperative to not add other "echo" messages except the last one.
 
 # Show available SCRAM-based projects for selected SCRAM_ARCH. 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
@@ -66,4 +70,6 @@ do
   fi
   ((i=i+1))
 done < "$input"
+# The printed SCRAM_ARCH value is used to fill the global variable SCRAM_ARCH in Jenkinsfile
+# Please, see the detailed information at the beginning of this file.
 echo $SCRAM_ARCH
