@@ -95,7 +95,7 @@ pipeline {
                             VAR_REL = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}')
                             env.REF_RELEASE=VAR_REL
                             println(env.REF_RELEASE)
-                            VAR_SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch_EnvVar.sh ${REF_RELEASE}')
+                            VAR_SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}')
                             env.SCRAM_ARCH=VAR_SCRAM_ARCH
                             println(env.SCRAM_ARCH)
                         }
