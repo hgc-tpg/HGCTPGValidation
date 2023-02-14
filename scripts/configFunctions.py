@@ -8,6 +8,22 @@ import subprocess
 
 from schema import Schema, SchemaError
 
+# Define the schema of the subset config file
+def check_schema_subset(config, filename):
+    config_schema = Schema({
+        "subsetName": str,
+        "description": str,
+        "configuration": 
+            [{"ref": str, "test": str}]
+    })
+
+    try:
+      config_schema.validate(config)
+      print("Subset configuration is valid.")
+    except SchemaErroras as se:
+      print("The configuration format is not correct. Please check the file ", config, ".yaml.")
+      raise se
+      
 # Define the schema of the configuration data
 def check_schema_config(config, filename):
     config_schema = Schema({
@@ -45,6 +61,8 @@ def read_subset(path, config):
             print("Error occured when loading the file containing the configuration subsets file ", filename)
             print(e)
 
+    check_schema_subset(subset, filename)
+         
     return subset
 
 
