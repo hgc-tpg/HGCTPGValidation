@@ -87,7 +87,6 @@ def read_config(configuration):
 
 # Run cmsDriver
 def run_cmsDriver(configdata, release):
-    pprint.pprint('Running cmsDriver')
     configName=configdata['shortName']
     nbEvents=configdata['parameters']['nbOfEvents']
     conditions=configdata['parameters']['conditions']
@@ -130,22 +129,17 @@ def run_cmsDriver(configdata, release):
     return command
     
 def main(subsetconfig, release):
-    print('subsetconfig=',subsetconfig)
     logfile = open('logfile', 'w')
     logfile.write('Subprocess starts\n')
     
     # read the subset_config file
     data = read_subset(subsetconfig)
     config = data["configuration"]
-    #print(config)
-    print(os.getcwd()) 
     for conf in config:
-        #print(conf)
         # Read the configuration - key: value
         #- ref: default 
         #  test: bcstc
         for key, value in conf.items():
-            print("key = ", key, "value = ", value)
             # Do only for "test" or for "ref"
             if key==release:
               # Read the config file corresponding to key:value
