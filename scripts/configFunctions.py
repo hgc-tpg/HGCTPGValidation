@@ -62,7 +62,7 @@ def read_subset(path, config):
             print(e)
 
     check_schema_subset(subset, filename)
-         
+
     return subset
 
 
