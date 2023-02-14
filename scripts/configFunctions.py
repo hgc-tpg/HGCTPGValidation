@@ -9,7 +9,7 @@ import subprocess
 from schema import Schema, SchemaError
 
 # Define the schema of the configuration data
-def check_schema_config(config):
+def check_schema_config(config, filename):
     config_schema = Schema({
         "shortName": str,
         "longName": str,
@@ -30,6 +30,7 @@ def check_schema_config(config):
     try:
         config_schema.validate(config)
     except SchemaError as se:
+        print("The configuration format is not correct. Please check the file ", filename)
         raise se
 
 
@@ -41,6 +42,7 @@ def read_subset(path, config):
         try:
             subset = yaml.safe_load(f)
         except yaml.YAMLError as e:
+            print("Error occured when loading the file containing the configuration subsets file ", filename)
             print(e)
 
     return subset
@@ -76,8 +78,9 @@ def read_config(path, configuration):
             config = yaml.safe_load(f)
             print("Read validation configuration file.")
         except yaml.YAMLError as e:
+            print("Error occured when loading the configuration file ", filename)
             print(e)
 
-    check_schema_config(config)
+    check_schema_config(config, filename)
 
     return config
