@@ -21,7 +21,7 @@ def check_schema_subset(config, filename):
       config_schema.validate(config)
       print("Subset configuration is valid.")
     except SchemaErroras as se:
-      print("The configuration format is not correct. Please check the file ", config, ".yaml.")
+      print("The configuration format is not correct. Please check the file", filename)
       raise se
       
 # Define the schema of the configuration data
