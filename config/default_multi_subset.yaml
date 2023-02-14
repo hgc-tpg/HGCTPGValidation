@@ -1,10 +1,10 @@
 ---
 subsetName: default subset
-description: basic test
+description: Default set of comparisons
 configuration:
     - ref: default
       test: default
-    - ref: default 
+    - ref: bcstc
       test: bcstc
     - ref: newProcessors
-      test: bcstc
+      test: newProcessors
