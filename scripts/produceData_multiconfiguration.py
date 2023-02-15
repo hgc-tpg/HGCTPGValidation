@@ -48,7 +48,7 @@ def run_cmsDriver(configdata, release):
     
 def main(subsetconfig, release):
     logfile = open('logfile', 'w')
-    logfile.write('Subprocess starts\n')
+    logfile.write('Starts producing data from configurations.\n')
     
     # Path to the config files
     path='../../../HGCTPGValidation/config/'
