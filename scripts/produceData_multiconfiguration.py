@@ -99,31 +99,22 @@ def run_cmsDriver(configdata, release):
     customiseUser=configdata['parameters']['customise_commands']
     customise=f'{customiseUser} "process.onlineSaver.tag = cms.untracked.string(\'validation_HGCAL_TPG_{configName}_{release}\'); process.MessageLogger.files.out_{configName}_{release} = dict(); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)"'
  
-    if procModifiers == 'empty':
-        command = f"echo $PWD; source /cvmfs/cms.cern.ch/cmsset_default.sh; eval `scramv1 runtime -sh`; \
-        cmsDriver.py hgcal_tpg_validation_{configName}_{release} -n {str(nbEvents)} \
-         --mc --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW \
-        --conditions {conditions} \
-        --beamspot {beamspot} \
-        --step USER:Validation/HGCalValidation/hgcalRunEmulatorValidationTPG_cff.hgcalTPGRunEmulatorValidation \
-        --geometry {geometry} --era {era} \
-        --inputCommands {inputCommands} \
-        --filein {filein} \
-        --no_output \
-        --customise_commands {customise}"    
-    else:
-        command = f"echo $PWD; source /cvmfs/cms.cern.ch/cmsset_default.sh; eval `scramv1 runtime -sh`; \
-        cmsDriver.py hgcal_tpg_validation_{configName}_{release} -n {str(nbEvents)} \
-         --mc --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW \
-        --conditions {conditions} \
-        --beamspot {beamspot} \
-        --step USER:Validation/HGCalValidation/hgcalRunEmulatorValidationTPG_cff.hgcalTPGRunEmulatorValidation \
-        --geometry {geometry} --era {era} \
-        --inputCommands {inputCommands} \
-        --procModifiers {procModifiers} \
-        --filein {filein} \
-        --no_output \
-        --customise_commands {customise}"
+    # If procModifiers==empty we get an empty string, so procModifiers is not used, 
+    # else --procModifiers {procModifiers} is added
+    procMod = f'{"" if procModifiers=="empty" else f"--procModifiers {procModifiers}"}'
+    
+    command = f"echo $PWD; source /cvmfs/cms.cern.ch/cmsset_default.sh; eval `scramv1 runtime -sh`; \
+    cmsDriver.py hgcal_tpg_validation_{configName}_{release} -n {str(nbEvents)} \
+    --mc --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW \
+    --conditions {conditions} \
+    --beamspot {beamspot} \
+    --step USER:Validation/HGCalValidation/hgcalRunEmulatorValidationTPG_cff.hgcalTPGRunEmulatorValidation \
+    --geometry {geometry} --era {era} \
+    --inputCommands {inputCommands} \
+    {procMod} \
+    --filein {filein} \
+    --no_output \
+    --customise_commands {customise}"
     
     pprint.pprint(command)
     return command
