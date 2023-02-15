@@ -25,8 +25,8 @@ def run_cmsDriver(configdata, release):
     filein=configdata['parameters']['filein']
     customiseUser=configdata['parameters']['customise_commands']
     customise=f'{customiseUser} "process.onlineSaver.tag = cms.untracked.string(\'validation_HGCAL_TPG_{configName}_{release}\'); process.MessageLogger.files.out_{configName}_{release} = dict(); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)"'
- 
-    # If procModifiers==empty we get an empty string, so procModifiers is not used, 
+
+    # If procModifiers==empty we get an empty string, so procModifiers is not used,
     # else --procModifiers {procModifiers} is added
     procMod = f'{"" if procModifiers=="empty" else f"--procModifiers {procModifiers}"}'
     
