@@ -9,81 +9,8 @@ import os
 import sys
 import subprocess
 
-# Define the schema of the subset config file
-def check_schema_subset(config):
-    config_schema = Schema({
-        "subsetName": str,
-        "description": str,
-        "configuration": {
-            "ref": str,
-            "test": str
-        }
-    })
-
-    try:
-      config_schema.validate(config)
-      print("Subset configuration is valid.")
-    except SchemaErroras as se:
-      raise se
-
-# Define the schema of the configuration data
-def check_schema_config(config):
-    config_schema = Schema({
-        "shortName": str,
-        "longName": str,
-        "description": str,
-        "parameters": {
-            "nbOfEvents": int,
-            "conditions": str,
-            "beamspot": str,
-            "geometry": str,
-            "era": str,
-            "inputCommands": str,
-            "procModifiers": str,
-            "filein": str,
-            "customise_commands": str
-        }
-    })
-
-    try:
-        config_schema.validate(config)
-        print("Configuration is valid.")
-    except SchemaError as se:
-        raise se
-    
-# Read the subset file
-def read_subset(config):
-    print('config=',config)
-    
-    filename = config + '.yaml'
-    print('filename = ', filename)
-    
-    with open('../../../HGCTPGValidation/config/' + filename) as f:
-        try:
-            subset = yaml.safe_load(f)
-            print("Read subset configuration file.")
-            print(subset)
-        except yaml.YAMLError as e:
-            print(e)
-    
-    return subset
-    
-# Read the configuration file
-def read_config(configuration):
-    os.system('python --version')
-    filename = configuration + '.yaml'
-    
-    with open('../../../HGCTPGValidation/config/' + filename) as f:
-        try:
-            config = yaml.safe_load(f)
-            print("Read simulation configuration file.")
-            print(config)          
-        except yaml.YAMLError as e:
-            print(e)
-    
-    check_schema_config(config)
-    
-    return config
+sys.path.insert(0, '../../../HGCTPGValidation/scripts')
+from configFunctions import check_schema_subset, check_schema_config, read_subset, read_config, get_listOfConfigs
 
 # Run cmsDriver
 def run_cmsDriver(configdata, release):
@@ -123,8 +50,11 @@ def main(subsetconfig, release):
     logfile = open('logfile', 'w')
     logfile.write('Subprocess starts\n')
     
+    # Path to the config files
+    path='../../../HGCTPGValidation/config/'
+
     # read the subset_config file
-    data = read_subset(subsetconfig)
+    data = read_subset(path, subsetconfig)
     config = data["configuration"]
     for conf in config:
         # Read the configuration - key: value
@@ -134,7 +64,7 @@ def main(subsetconfig, release):
             # Do only for "test" or for "ref"
             if key==release:
               # Read the config file corresponding to key:value
-              config_data=read_config(value)
+              config_data=read_config(path, value)
               confName=config_data['shortName']
               # Generate and run the python configuration file with cmsDriver.py only if the file doesn't exist
               if os.path.exists(f"hgcal_tpg_validation_{confName}_{release}_USER.py"):
