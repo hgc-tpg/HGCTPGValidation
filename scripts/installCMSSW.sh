@@ -11,7 +11,7 @@
 # $6 reference branch name (this is the target or base branch to which the change could be merged, it is in https://github.com/hgc-tpg repository)
 # $7 label "ref" or "test"
 
-export SCRAM_ARCH=$1
+#export SCRAM_ARCH=$1
 echo $SCRAM_ARCH
 relversion=$2
 echo $relversion
