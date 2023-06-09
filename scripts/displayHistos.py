@@ -240,6 +240,12 @@ def main(configset, refdir, testdir, datadir, prnumber, prtitle):
         # Extract Time information for all modules
         extract_time_info(confRef, confTest)
         
+        # If the validation is performed only for test release, this release is compared to itself
+        # Create the missing file
+        if testdir==refdir:
+            print("testdir and refdir are the same.")
+            os.system("cp out_" + confTest + "_test.log out_" + confRef + "_ref.log")
+        
         # Extract Memory Check information and global Time information   
         extractTimeMemoryInfos("out_" + confRef + "_ref.log", refdir)
         extractTimeMemoryInfos("out_" + confTest + "_test.log", testdir)
