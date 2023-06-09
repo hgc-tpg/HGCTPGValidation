@@ -61,7 +61,7 @@ pipeline {
                         then
                             rm -rf HGCTPGValidation
                         fi
-                        git clone -b ${CHANGE_TARGET} https://github.com/${BASE_REMOTE}/HGCTPGValidation HGCTPGValidation
+                        git clone -b ${CHANGE_BRANCH} https://github.com/${BASE_REMOTE}/HGCTPGValidation HGCTPGValidation
                         source HGCTPGValidation/env_install.sh
                         pip install attrs
                         if [ -d "./test_dir" ] 
