@@ -118,7 +118,7 @@ pipeline {
                 cd test_dir
                 source ../HGCTPGValidation/env_install.sh
                 echo $PWD
-                python ../HGCTPGValidation/scripts/displayHistos.py --subsetconfig ${CONFIG_SUBSET} --refdir ${CMSSW_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src --testdir ${CMSSW_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src --datadir ${DATA_DIR} --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
+                python ../HGCTPGValidation/scripts/displayHistos.py --subsetconfig ${CONFIG_SUBSET} --refdir ${CMSSW_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src --testdir ${CMSSW_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src --datadir ${DATA_DIR} --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
                 '''            
             }
         }
