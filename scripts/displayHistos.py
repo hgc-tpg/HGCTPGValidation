@@ -244,6 +244,7 @@ def main(configset, refdir, testdir, datadir, prnumber, prtitle):
         # Create the missing file
         if testdir==refdir:
             print("testdir and refdir are the same.")
+            print("cp out_" + confTest + "_test.log out_" + confRef + "_ref.log")
             os.system("cp out_" + confTest + "_test.log out_" + confRef + "_ref.log")
             os.system("ls -lrt")
         else:
