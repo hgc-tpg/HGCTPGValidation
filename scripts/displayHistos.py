@@ -237,21 +237,24 @@ def main(configset, refdir, testdir, datadir, prnumber, prtitle):
         conf = elem[1] + "_" + elem[0]
         confRef = elem[0]
         confTest = elem[1]
-        # Extract Time information for all modules
-        extract_time_info(confRef, confTest)
         
         # If the validation is performed only for test release, this release is compared to itself
-        # Create the missing file
+        # Create the missing files for the ref configuration
         if testdir==refdir:
             print("testdir and refdir are the same.")
             print("cp out_" + confTest + "_test.log out_" + confRef + "_ref.log")
             currDir = os.getcwd()
             print('currDir = ', currDir)
-            os.system("ls -lrt")
+            # Copy out_config_test.log to out_config_ref.log
             os.system("cp " + testdir + "/out_" + confTest + "_test.log " + testdir + "/out_" + confRef + "_ref.log")
+            # Copy DQM...config_test.root to DQM...config_ref.root
+            os.system("cp " + testdir + "/DQM_V0001_validation_HGCAL_TPG_" + confTest + "_test_R000000001.root " + testdir + "/DQM_V0001_validation_HGCAL_TPG_" + confRef + "_ref_R000000001.root") 
             os.system("ls -lrt")
         else:
             print("testdir and refdir are different.")
+        
+        # Extract Time information for all modules
+        extract_time_info(confRef, confTest)
         
         # Extract Memory Check information and global Time information
         extractTimeMemoryInfos("out_" + confTest + "_test.log", testdir)
