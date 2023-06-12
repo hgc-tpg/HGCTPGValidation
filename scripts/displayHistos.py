@@ -245,14 +245,15 @@ def main(configset, refdir, testdir, datadir, prnumber, prtitle):
         if testdir==refdir:
             print("testdir and refdir are the same.")
             print("cp out_" + confTest + "_test.log out_" + confRef + "_ref.log")
+            os.system("ls -lrt")
             os.system("cp out_" + confTest + "_test.log out_" + confRef + "_ref.log")
             os.system("ls -lrt")
         else:
             print("testdir and refdir are different.")
         
-        # Extract Memory Check information and global Time information   
-        extractTimeMemoryInfos("out_" + confRef + "_ref.log", refdir)
+        # Extract Memory Check information and global Time information
         extractTimeMemoryInfos("out_" + confTest + "_test.log", testdir)
+        extractTimeMemoryInfos("out_" + confRef + "_ref.log", refdir)
      
         # Create histograms Time/event/producer from TimingInfo_.txt 
         readFileStatement(confRef, "ref", refdir)
