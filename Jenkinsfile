@@ -131,7 +131,7 @@ pipeline {
                             } 
                             else {
                                 env.REF_RELEASE = sh(returnStdout: true, script: 'module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
-                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE_HGCTPGVal}').trim()
+                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
                                 env.BASE_REMOTE = sh(returnStdout: true, script: 'module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
                                 env.REMOTE = env.BASE_REMOTE
                                 println(env.REF_RELEASE)
