@@ -58,7 +58,7 @@ pipeline {
                         case 'HGC TPG Dev Validation - ebecheva':
                             env.EMAIL_TO=env.EMAIL_TO_EB
                             env.BASE_REMOTE=env.BASE_REMOTE_EB
-                            env.REMOTE_HGCTPGVAL=env.CHANGE_FORK
+                            env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.REMOTE=env.CHANGE_FORK
                             env.DATA_DIR=env.DATA_DIR_EB
                             env.BRANCH_VAL=env.CHANGE_BRANCH
