@@ -25,7 +25,7 @@ def main():
     # read the configuration file
     data = read_config(path, configuration, 2)
     baseBranch=data['parameters']['cmsswBranch']
-    print(baseRemote)
+    print(baseBranch)
 
 if __name__ == "__main__":
     main()
