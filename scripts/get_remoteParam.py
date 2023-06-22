@@ -8,7 +8,7 @@ import os
 import sys
 import subprocess
 
-sys.path.insert(0, './HGCTPGValidation_JobDevVal/scripts')
+sys.path.insert(0, './HGCTPGValidation/scripts')
 from configFunctions import check_schema_paramValJob, read_config
 
 
@@ -20,7 +20,7 @@ def main():
     configuration = 'job_val_params'
     
     # Path to the config files
-    path='./HGCTPGValidation_JobDevVal/config/'
+    path='./HGCTPGValidation/config/'
     
     # read the configuration file
     data = read_config(path, configuration, 2)
