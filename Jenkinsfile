@@ -123,10 +123,10 @@ pipeline {
                 stage('SetCMSSWEnvVar'){
                     steps{
                         script{
-                            if (env.JOB_FLAG==0){
+                            if ( env.JOB_FLAG==0 )
                                 env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
                                 env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
-                            else {
+                            } else {
                                 env.REF_RELEASE_HGCTPGVal = sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
                                 env.SCRAM_ARCH_HGCTPGVal = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE_HGCTPGVal}').trim()
                                 env.BASE_REMOTE_HGCTPGVal = sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
