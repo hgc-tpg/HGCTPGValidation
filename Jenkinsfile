@@ -123,7 +123,7 @@ pipeline {
                 stage('SetCMSSWEnvVar'){
                     steps{
                         script{
-                            if ( env.JOB_FLAG==0 )
+                            if ( env.JOB_FLAG == 0 )
                                 env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
                                 env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
                             } else {
