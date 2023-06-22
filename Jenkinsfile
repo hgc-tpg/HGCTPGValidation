@@ -72,7 +72,7 @@ pipeline {
                     println(env.CHANGE_TARGET)
                     println(env.CHANGE_BRANCH)
                     println(env.CHANGE_URL)
-                    printl(env.CHANGE_FORK)
+                    println(env.CHANGE_FORK)
                 }
             }  
         }
