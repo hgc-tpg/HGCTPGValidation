@@ -22,63 +22,57 @@ pipeline {
                        case 'HGC TPG Automatic Validation':
                             env.EMAIL_TO=env.EMAIL_TO_MAIN
                             env.BASE_REMOTE=env.BASE_REMOTE_MAIN
+                            env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_MAIN
                             env.BRANCH_VAL=env.BRANCH_VAL_MAIN
-                            env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
-                            env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
                             break
                         case 'HGC TPG Automatic Validation - TEST':
                             env.EMAIL_TO=env.EMAIL_TO_EB
                             env.BASE_REMOTE=env.BASE_REMOTE_TEST
+                            env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_TEST
                             env.BRANCH_VAL=env.BRANCH_VAL_TEST
-                            env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
-                            env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
                             break
                         case 'HGC TPG Automatic Validation - TEST ebecheva':
                             env.EMAIL_TO=env.EMAIL_TO_EB
                             env.BASE_REMOTE=env.BASE_REMOTE_EB
+                            env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_EB
                             env.BRANCH_VAL=env.BRANCH_VAL_EB
-                            env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
-                            env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
                             break
                         case 'Job HGC TPG Automatic Validation - TEST jbsauvan':
                             env.EMAIL_TO=env.EMAIL_TO_JB
                             env.BASE_REMOTE=env.BASE_REMOTE_JB
+                            env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_JB
                             env.BRANCH_VAL=env.BRANCH_VAL_JB
-                            env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
-                            env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
                             break
                         case 'HGC TPG Dev Validation':
                             env.EMAIL_TO=env.EMAIL_TO_EB
                             env.BASE_REMOTE=env.BASE_REMOTE_MAIN
+                            env.REMOTE_HGCTPGVAL=env.CHANGE_FORK
+                            env.REMOTE=env.CHANGE_FORK
                             env.DATA_DIR=env.DATA_DIR_VALTEST
                             env.BRANCH_VAL=env.CHANGE_BRANCH
-                            env.REF_RELEASE=sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
-                            env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
-                            env.BASE_REMOTE=sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
-                            env.REMOTE=env.BASE_REMOTE
                             break
                         case 'HGC TPG Dev Validation - ebecheva':
                             env.EMAIL_TO=env.EMAIL_TO_EB
                             env.BASE_REMOTE=env.BASE_REMOTE_EB
+                            env.REMOTE_HGCTPGVAL=env.CHANGE_FORK
+                            env.REMOTE=env.CHANGE_FORK
                             env.DATA_DIR=env.DATA_DIR_EB
                             env.BRANCH_VAL=env.CHANGE_BRANCH
-                            env.REF_RELEASE=sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
-                            env.SCRAM_ARCH=sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
-                            env.BASE_REMOTE=sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
-                            env.REMOTE=env.BASE_REMOTE
                             break
                     }
                     println(env.BASE_REMOTE)
+                    println(env.REMOTE)
+                    println(env.REMOTE_HGCTPGVAL)
                     println(env.DATA_DIR)
                     println(env.BRANCH_VAL)
                     println(env.CHANGE_TARGET)
                     println(env.CHANGE_BRANCH)
                     println(env.CHANGE_URL)
-                    printl(env.SCRAM_ARCH)
+                    printl(env.CHANGE_FORK
                 }
             }  
         }
@@ -107,7 +101,7 @@ pipeline {
                         then
                             rm -rf HGCTPGValidation
                         fi
-                        git clone -b ${BRANCH_VAL} https://github.com/${BASE_REMOTE}/HGCTPGValidation HGCTPGValidation
+                        git clone -b ${BRANCH_VAL} https://github.com/${REMOTE_HGCTPGVAL}/HGCTPGValidation HGCTPGValidation
                         source HGCTPGValidation/env_install.sh
                         pip install attrs
                         if [ -d "./test_dir" ] 
@@ -118,6 +112,24 @@ pipeline {
                         mkdir test_dir
                         ls -lrt ..
                         '''
+                    }
+                }
+                stage('SetCMSSWEnvVar'){
+                    steps{
+                        script{
+                            env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
+                            env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
+                            env.REF_RELEASE_HGCTPGVal=sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
+                            env.SCRAM_ARCH_HGCTPGVal=sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE_HGCTPGVal}').trim()
+                            env.BASE_REMOTE_HGCTPGVal=sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
+                            env.REMOTE_HGCTPGVal=env.BASE_REMOTE_HGCTPGVal
+                        }
+                        echo "REF_RELEASE= ${REF_RELEASE}"
+                        echo "SCRAM_ARCH = ${SCRAM_ARCH}"
+                        echo "REF_RELEASE_HGCTPGVal = ${REF_RELEASE_HGCTPGVal}"
+                        echo "SCRAM_ARCH_HGCTPGVal = ${SCRAM_ARCH_HGCTPGVal}"
+                        echo "BASE_REMOTE_HGCTPGVal = ${BASE_REMOTE_HGCTPGVal}"
+                        echo "REMOTE_HGCTPGVal = ${REMOTE_HGCTPGVal}"
                     }
                 }
             }
@@ -168,7 +180,7 @@ pipeline {
                         echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
                         echo 'LABEL_TEST = ' ${LABEL_TEST}
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
-                        '''     
+                        '''
                     }
                 }
             }
