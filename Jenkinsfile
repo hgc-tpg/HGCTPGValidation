@@ -56,9 +56,9 @@ pipeline {
                             env.BASE_REMOTE=env.BASE_REMOTE_MAIN
                             env.DATA_DIR=env.DATA_DIR_VALTEST
                             env.BRANCH_VAL=env.CHANGE_BRANCH
-                            env.REF_RELEASE=sh(returnStdout: true, script: 'python get_cmsswRefBranch.py').trim()
+                            env.REF_RELEASE=sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
                             env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
-                            env.BASE_REMOTE=sh(returnStdout: true, script: 'python get_remoteParam.py').trim()
+                            env.BASE_REMOTE=sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
                             env.REMOTE=env.BASE_REMOTE
                             break
                         case 'HGC TPG Dev Validation - ebecheva':
@@ -66,9 +66,9 @@ pipeline {
                             env.BASE_REMOTE=env.BASE_REMOTE_EB
                             env.DATA_DIR=env.DATA_DIR_EB
                             env.BRANCH_VAL=env.CHANGE_BRANCH
-                            env.REF_RELEASE=sh(returnStdout: true, script: 'python get_cmsswRefBranch.py').trim()
+                            env.REF_RELEASE=sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
                             env.SCRAM_ARCH=sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
-                            env.BASE_REMOTE=sh(returnStdout: true, script: 'python get_remoteParam.py').trim()
+                            env.BASE_REMOTE=sh(returnStdout: true, script: 'python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
                             env.REMOTE=env.BASE_REMOTE
                             break
                     }
