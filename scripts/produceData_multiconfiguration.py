@@ -64,10 +64,11 @@ def main(subsetconfig, release):
     config = data["configuration"]
     for conf in config:
         # Read the configuration - key: value
-        #- ref: default 
+        #- ref: default
         #  test: bcstc
         for key, value in conf.items():
             # Do only for "test" or for "ref"
+            print("value=", value)
             if key==release:
               # Read the config file corresponding to key:value
               config_data=read_config(path, value)
