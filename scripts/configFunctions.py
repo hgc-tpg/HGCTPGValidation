@@ -63,8 +63,8 @@ def check_schema_paramValJob(config, filename):
 
     try:
       config_schema.validate(config)
-      print("Check the schema of the config file ", filename)
-      print("Subset configuration is valid.")
+      #print("Check the schema of the config file ", filename)
+      #print("Subset configuration is valid.")
     except SchemaErroras as se:
       print("The configuration format is not correct. Please check the file", filename)
       raise se
