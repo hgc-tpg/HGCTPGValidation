@@ -137,6 +137,7 @@ pipeline {
                                 env.REMOTE = env.BASE_REMOTE
                                 println(env.REF_BRANCH)
                                 println(env.REF_RELEASE)
+                                println(env.SCRAM_ARCH)
                                 println(env.BASE_REMOTE)
                                 println(env.REMOTE)
                             }
@@ -190,6 +191,7 @@ pipeline {
                         python --version
                         echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
                         echo 'LABEL_TEST = ' ${LABEL_TEST}
+                        echo 'SCRAM_ARCH = ' ${SCRAM_ARCH}
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
                         '''
                     }
