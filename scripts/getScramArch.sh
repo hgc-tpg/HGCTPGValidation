@@ -72,4 +72,4 @@ do
 done < "$input"
 # The printed SCRAM_ARCH value is used to fill the global variable SCRAM_ARCH in Jenkinsfile
 # Please, see the detailed information at the beginning of this file.
-echo $SCRAM_ARCH
+echo -n $SCRAM_ARCH
