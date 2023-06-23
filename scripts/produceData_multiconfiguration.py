@@ -71,7 +71,8 @@ def main(subsetconfig, release):
             print("value=", value)
             if key==release:
               # Read the config file corresponding to key:value
-              config_data=read_config(path, value)
+              # the config_type=1 is set for reading parameters for running CMSSW HGCal TPG code
+              config_data=read_config(path, value, 1)
               confName=config_data['shortName']
               # Generate and run the python configuration file with cmsDriver.py only if the file doesn't exist
               if os.path.exists(f"hgcal_tpg_validation_{confName}_{release}_USER.py"):
