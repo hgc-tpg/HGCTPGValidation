@@ -57,7 +57,7 @@ def check_schema_paramValJob(config, filename):
         "description": str,
         "parameters": {
             "cmsswRemote": str,
-            "cmsswRelease": str
+            "cmsswBranch": str
         }
     })
 

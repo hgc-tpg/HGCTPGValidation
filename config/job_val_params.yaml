@@ -4,4 +4,4 @@ description:
     validating the new development in the validation code
 parameters:
     cmsswRemote: hgc-tpg
-    cmsswRelease: CMSSW_12_5_2_patch1
+    cmsswBranch: hgc-tpg-CMSSW_12_5_2_patch1
