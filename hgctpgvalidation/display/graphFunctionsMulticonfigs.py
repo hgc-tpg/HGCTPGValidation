@@ -232,9 +232,9 @@ def createWebPageLite(ref_configname, test_configname, input_ref_file, input_tes
     wp.write("<br>\n")
 
     filePath='../HGCTPGValidation/config/'
-    test_configData=read_config(filePath, test_configname)
+    test_configData=read_config(filePath, test_configname, 1)
     test_description=test_configData['description']
-    ref_configData=read_config(filePath, ref_configname)
+    ref_configData=read_config(filePath, ref_configname, 1)
     ref_description=ref_configData['description']
 
     # Comment not needed informations
