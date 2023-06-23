@@ -115,7 +115,7 @@ def read_config(path, configuration, config_type):
     with open(filename) as f:
         try:
             config = yaml.safe_load(f)
-            print("Read validation configuration file.")
+            #print("Read validation configuration file.")
         except yaml.YAMLError as e:
             print("Error occured when loading the configuration file ", filename)
             print(e)
