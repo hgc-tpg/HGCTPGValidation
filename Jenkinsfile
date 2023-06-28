@@ -24,7 +24,7 @@ pipeline {
                             env.BASE_REMOTE=env.BASE_REMOTE_MAIN
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_MAIN
-                            env.BRANCH_VAL=env.BRANCH_VAL_MAIN
+                            env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_MAIN
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Automatic Validation - TEST':
@@ -32,7 +32,7 @@ pipeline {
                             env.BASE_REMOTE=env.BASE_REMOTE_TEST
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_TEST
-                            env.BRANCH_VAL=env.BRANCH_VAL_TEST
+                            env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_TEST
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Automatic Validation - TEST ebecheva':
@@ -40,7 +40,7 @@ pipeline {
                             env.BASE_REMOTE=env.BASE_REMOTE_EB
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_EB
-                            env.BRANCH_VAL=env.BRANCH_VAL_EB
+                            env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_EB
                             env.JOB_FLAG=0
                             break
                         case 'Job HGC TPG Automatic Validation - TEST jbsauvan':
@@ -48,7 +48,7 @@ pipeline {
                             env.BASE_REMOTE=env.BASE_REMOTE_JB
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_JB
-                            env.BRANCH_VAL=env.BRANCH_VAL_JB
+                            env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_JB
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Dev Validation':
@@ -57,7 +57,7 @@ pipeline {
                             env.REMOTE_HGCTPGVAL=env.CHANGE_FORK
                             env.REMOTE=env.CHANGE_FORK
                             env.DATA_DIR=env.DATA_DIR_VALTEST
-                            env.BRANCH_VAL=env.CHANGE_BRANCH
+                            env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
                             env.JOB_FLAG=1
                             break
                         case 'HGC TPG Dev Validation - ebecheva':
@@ -66,7 +66,7 @@ pipeline {
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.REMOTE=env.CHANGE_FORK
                             env.DATA_DIR=env.DATA_DIR_EB
-                            env.BRANCH_VAL=env.CHANGE_BRANCH
+                            env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
                             env.JOB_FLAG=1
                             break
                     }
@@ -74,7 +74,7 @@ pipeline {
                     println(env.REMOTE)
                     println(env.REMOTE_HGCTPGVAL)
                     println(env.DATA_DIR)
-                    println(env.BRANCH_VAL)
+                    println(env.BRANCH_HGCTPGVAL)
                     println(env.CHANGE_TARGET)
                     println(env.CHANGE_BRANCH)
                     println(env.CHANGE_URL)
@@ -107,7 +107,7 @@ pipeline {
                         then
                             rm -rf HGCTPGValidation
                         fi
-                        git clone -b ${BRANCH_VAL} https://github.com/${REMOTE_HGCTPGVAL}/HGCTPGValidation HGCTPGValidation
+                        git clone -b ${BRANCH_HGCTPGVAL} https://github.com/${REMOTE_HGCTPGVAL}/HGCTPGValidation HGCTPGValidation
                         source HGCTPGValidation/env_install.sh
                         pip install attrs
                         if [ -d "./test_dir" ] 
