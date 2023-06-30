@@ -69,6 +69,9 @@ pipeline {
                             env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
                             env.JOB_FLAG=1
                             break
+                        default: 
+                            println("The job name is unknown"); 
+                            break
                     }
                     println(env.BASE_REMOTE)
                     println(env.REMOTE)
