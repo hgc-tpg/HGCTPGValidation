@@ -51,7 +51,7 @@ pipeline {
                             env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_JB
                             env.JOB_FLAG=0
                             break
-                        case 'HGC TPG Dev Validation':
+                        case 'HGC TPG Dev Validation - TEST':
                             env.EMAIL_TO=env.EMAIL_TO_EB
                             env.BASE_REMOTE=env.BASE_REMOTE_MAIN
                             env.REMOTE_HGCTPGVAL=env.CHANGE_FORK
