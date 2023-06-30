@@ -25,6 +25,7 @@ pipeline {
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_MAIN
                             env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_MAIN
+                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_PROD
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Automatic Validation - TEST':
@@ -33,6 +34,7 @@ pipeline {
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_TEST
                             env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_TEST
+                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Automatic Validation - TEST ebecheva':
@@ -41,6 +43,7 @@ pipeline {
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_EB
                             env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_EB
+                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST_EB
                             env.JOB_FLAG=0
                             break
                         case 'Job HGC TPG Automatic Validation - TEST jbsauvan':
@@ -49,6 +52,7 @@ pipeline {
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_JB
                             env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_JB
+                            env.WEBPAGES_VAL=env.
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Dev Validation - TEST':
@@ -58,6 +62,7 @@ pipeline {
                             env.REMOTE=env.CHANGE_FORK
                             env.DATA_DIR=env.DATA_DIR_VALTEST
                             env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
+                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CODE_TEST
                             env.JOB_FLAG=1
                             break
                         case 'HGC TPG Dev Validation - ebecheva':
@@ -67,6 +72,7 @@ pipeline {
                             env.REMOTE=env.CHANGE_FORK
                             env.DATA_DIR=env.DATA_DIR_EB
                             env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
+                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST_EB
                             env.JOB_FLAG=1
                             break
                         default: 
@@ -247,13 +253,13 @@ pipeline {
             echo 'The job finished successfully.'
             mail to: "${EMAIL_TO}",
                  subject: "Jenkins job succeded: ${currentBuild.fullDisplayName}",
-                 body:  "The job finished successfully. \n\n Pull request: ${env.BRANCH_NAME} build number: #${env.BUILD_NUMBER} \n\n Title: ${env.CHANGE_TITLE} \n\n Author of the PR: ${env.CHANGE_AUTHOR} \n\n Target branch: ${env.CHANGE_TARGET} \n\n Feature branch: ${env.CHANGE_BRANCH} \n\n Check console output at ${env.BUILD_URL} \n\n and ${env.CHANGE_URL} to view the results.  \n\n The validation histograms are available at https://llrhgcaltpgvalidation.in2p3.fr/PR/ \n\n"
+                 body:  "The job finished successfully. \n\n Pull request: ${env.BRANCH_NAME} build number: #${env.BUILD_NUMBER} \n\n Title: ${env.CHANGE_TITLE} \n\n Author of the PR: ${env.CHANGE_AUTHOR} \n\n Target branch: ${env.CHANGE_TARGET} \n\n Feature branch: ${env.CHANGE_BRANCH} \n\n Check console output at ${env.BUILD_URL} \n\n and ${env.CHANGE_URL} to view the results.  \n\n The validation histograms are available at ${env.WEBPAGES_VAL} \n\n"
         }
         failure {
             echo 'Job failed'
             mail to: "${EMAIL_TO}",
                  subject: "Jenkins job failed: ${currentBuild.fullDisplayName}",
-                 body: "The compilation or the build steps failed. \n\n Pull request: ${env.BRANCH_NAME} build number: #${env.BUILD_NUMBER} \n\n Title: ${env.CHANGE_TITLE} \n\n Author of the PR: ${env.CHANGE_AUTHOR} \n\n Target branch: ${env.CHANGE_TARGET} \n\n Feature branch: ${env.CHANGE_BRANCH} \n\n Check console output at ${env.BUILD_URL} \n\n and ${env.CHANGE_URL} to view the results.  \n\n The validation histograms are available at https://llrhgcaltpgvalidation.in2p3.fr/PR/ \n\n"
+                 body: "The compilation or the build steps failed. \n\n Pull request: ${env.BRANCH_NAME} build number: #${env.BUILD_NUMBER} \n\n Title: ${env.CHANGE_TITLE} \n\n Author of the PR: ${env.CHANGE_AUTHOR} \n\n Target branch: ${env.CHANGE_TARGET} \n\n Feature branch: ${env.CHANGE_BRANCH} \n\n Check console output at ${env.BUILD_URL} \n\n and ${env.CHANGE_URL} to view the results.  \n\n The validation histograms are available at ${env.WEBPAGES_VAL} \n\n"
         }
     }
 }
