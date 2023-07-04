@@ -50,7 +50,25 @@ def check_schema_config(config, filename):
         print("The configuration format is not correct. Please check the file ", filename)
         raise se
 
+# Define the schema of the config for the Jenkins job
+# validating the validation code
+def check_schema_paramValJob(config, filename):
+    config_schema = Schema({
+        "description": str,
+        "parameters": {
+            "cmsswRemote": str,
+            "cmsswBranch": str
+        }
+    })
 
+    try:
+      config_schema.validate(config)
+      #print("Check the schema of the config file ", filename)
+      #print("Subset configuration is valid.")
+    except SchemaErroras as se:
+      print("The configuration format is not correct. Please check the file", filename)
+      raise se
+ 
 # Read the file with configurations sets
 def read_subset(path, config):
     filename = path + config + '.yaml'
@@ -89,17 +107,24 @@ def get_listOfConfigs(path, confSubsets):
 
 
 # Read the configuration file
-def read_config(path, configuration):
+# config_type = 1 config files with the parameters for cmsDriver.py
+# config_type = 2 config file with the parameters for the validation of the validation code 
+def read_config(path, configuration, config_type):
     filename = path + configuration + '.yaml'
 
     with open(filename) as f:
         try:
             config = yaml.safe_load(f)
-            print("Read validation configuration file.")
+            #print("Read validation configuration file.")
         except yaml.YAMLError as e:
             print("Error occured when loading the configuration file ", filename)
             print(e)
-
-    check_schema_config(config, filename)
+    
+    if (config_type == 1):
+        check_schema_config(config, filename)
+    elif (config_type == 2):
+        check_schema_paramValJob(config, filename)
+    else:
+        print("Please, check if there is a schema corresponding the configuration.")
 
     return config
