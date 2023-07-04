@@ -58,20 +58,14 @@ pipeline {
                         case 'HGC TPG Dev Validation - TEST':
                             env.EMAIL_TO=env.EMAIL_TO_EB
                             env.BASE_REMOTE=env.BASE_REMOTE_MAIN
-                            env.REMOTE_HGCTPGVAL=env.CHANGE_FORK
-                            env.REMOTE=env.CHANGE_FORK
                             env.DATA_DIR=env.DATA_DIR_VALTEST
-                            env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
                             env.WEBPAGES_VAL=env.WEBPAGES_VAL_CODE_TEST
                             env.JOB_FLAG=1
                             break
                         case 'HGC TPG Dev Validation - ebecheva':
                             env.EMAIL_TO=env.EMAIL_TO_EB
                             env.BASE_REMOTE=env.BASE_REMOTE_EB
-                            env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
-                            env.REMOTE=env.CHANGE_FORK
                             env.DATA_DIR=env.DATA_DIR_EB
-                            env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
                             env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST_EB
                             env.JOB_FLAG=1
                             break
@@ -79,11 +73,22 @@ pipeline {
                             println("The job name is unknown"); 
                             break
                     }
+                    
+                    env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
+                    
+                    if (env.CHANGE_FORK){
+                        env.REMOTE_HGCTPGVAL = env.CHANGE_FORK
+                    }
+                    else {
+                        env.REMOTE_HGCTPGVAL = env.BASE_REMOTE
+                    }
+                    println(env.REMOTE_HGCTPGVAL)
+                    println(env.BRANCH_HGCTPGVAL)
+                    
+                            
                     println(env.BASE_REMOTE)
                     println(env.REMOTE)
-                    println(env.REMOTE_HGCTPGVAL)
                     println(env.DATA_DIR)
-                    println(env.BRANCH_HGCTPGVAL)
                     println(env.CHANGE_TARGET)
                     println(env.CHANGE_BRANCH)
                     println(env.CHANGE_URL)
@@ -146,6 +151,7 @@ pipeline {
                                 env.CHANGE_BRANCH = env.REF_BRANCH
                                 env.CHANGE_TARGET = env.REF_BRANCH
                                 env.REMOTE = env.BASE_REMOTE
+
                                 println(env.REF_BRANCH)
                                 println(env.REF_RELEASE)
                                 println(env.SCRAM_ARCH)
