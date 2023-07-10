@@ -80,8 +80,7 @@ def main(subsetconfig, release):
               else:
                 command = run_cmsDriver(config_data, release)
                 sourceCmd = ['bash', '-c', command]
-                sourceProc = subprocess.Popen(sourceCmd, stdout=logfile, stderr=logfile)
-                (out, err) = sourceProc.communicate() # wait for subprocess to finish
+                sourceProc = subprocess.run(sourceCmd, stdout=logfile, stderr=logfile, check=True, text=True)
             else:
               print("Do not run this configuration: ", key, ": ", value)
 
