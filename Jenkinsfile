@@ -13,6 +13,7 @@ pipeline {
     stages {
         stage('SetEnvVar'){
             steps{
+                sh '''
                 set +x
                 exec &> log_Jenkins
                 '''
