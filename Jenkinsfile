@@ -293,6 +293,9 @@ pipeline {
         }
     }
     post {
+        always {
+            archiveArtifacts artifacts: 'log_Jenkins', fingerprint: true
+        }
         success {
             echo 'The job finished successfully.'
             mail to: "${EMAIL_TO}",
