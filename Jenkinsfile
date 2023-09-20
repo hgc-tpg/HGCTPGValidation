@@ -13,6 +13,9 @@ pipeline {
     stages {
         stage('SetEnvVar'){
             steps{
+                sh '''
+                set +x
+                '''
                 script{
                     String s = env.JOB_NAME
                     s = s.substring(s.indexOf("/") + 1)
@@ -102,6 +105,7 @@ pipeline {
                     steps{
                         echo 'Clean the working environment.'
                         sh '''
+                        set +x
                         if [ -d "/data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID" ]
                         then
                             rm -rf /data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID
@@ -113,6 +117,7 @@ pipeline {
                     steps {
                         echo 'Install automatic validation package HGCTPGValidation.'
                         sh '''
+                        set +x
                         uname -a
                         whoami
                         pwd
@@ -136,18 +141,21 @@ pipeline {
                 }
                 stage('SetCMSSWEnvVar'){
                     steps{
+                        sh '''
+                        set +x
+                        '''
                         script{
                             if ( env.JOB_FLAG == 0 ){
-                                env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
-                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
+                                env.REF_RELEASE = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}; exit').trim()
+                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}; exit').trim();
                                 println(env.REF_RELEASE)
                                 println(env.SCRAM_ARCH)
                             } 
                             else {
-                                env.REF_BRANCH = sh(returnStdout: true, script: 'module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
-                                env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${REF_BRANCH}').trim()
-                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
-                                env.BASE_REMOTE = sh(returnStdout: true, script: 'module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
+                                env.REF_BRANCH = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py; exit').trim()
+                                env.REF_RELEASE = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; source ./HGCTPGValidation/scripts/extractReleaseName.sh ${REF_BRANCH}; exit').trim()
+                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}; exit').trim()
+                                env.BASE_REMOTE = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_remoteParam.py; exit').trim()
                                 env.CHANGE_BRANCH = env.REF_BRANCH
                                 env.CHANGE_TARGET = env.REF_BRANCH
                                 env.REMOTE = env.BASE_REMOTE
@@ -169,6 +177,7 @@ pipeline {
                     steps {
                         echo 'InstallCMSSW Test step..'
                         sh '''
+                        set +x
                         pwd
                         cd test_dir
                         if [ -z "$CHANGE_FORK" ]
@@ -185,6 +194,7 @@ pipeline {
                 stage('QualityChecks'){
                     steps{
                         sh '''
+                        set +x
                         source /cvmfs/cms.cern.ch/cmsset_default.sh
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
                         scram build code-checks
@@ -200,6 +210,7 @@ pipeline {
                 stage('Produce'){
                     steps {
                         sh '''
+                        set +x
                         pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
                         module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
@@ -221,6 +232,7 @@ pipeline {
                     steps {
                         echo 'InstallCMSSW Ref step..'
                         sh '''
+                        set +x
                         pwd
                         cd test_dir
                         ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
@@ -230,6 +242,7 @@ pipeline {
                 stage('Produce'){
                     steps {
                         sh '''
+                        set +x
                         pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
                         module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
@@ -246,6 +259,7 @@ pipeline {
         stage('Display') {
             steps {
                 sh '''
+                set +x
                 cd test_dir
                 source ../HGCTPGValidation/env_install.sh
                 echo $PWD
@@ -255,6 +269,9 @@ pipeline {
         }
     }
     post {
+        always {
+            archiveArtifacts artifacts: 'log_Jenkins', fingerprint: true
+        }
         success {
             echo 'The job finished successfully.'
             mail to: "${EMAIL_TO}",
