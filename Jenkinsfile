@@ -15,7 +15,6 @@ pipeline {
             steps{
                 sh '''
                 set +x
-                exec &> log_Jenkins
                 '''
                 script{
                     String s = env.JOB_NAME
@@ -98,9 +97,6 @@ pipeline {
                     println(env.CHANGE_URL)
                     println(env.CHANGE_FORK)
                 }
-                sh '''
-                exit
-                '''
             }  
         }
         stage('Initialize'){
@@ -110,12 +106,10 @@ pipeline {
                         echo 'Clean the working environment.'
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         if [ -d "/data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID" ]
                         then
                             rm -rf /data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID
                         fi
-                        exit
                         '''
                     }
                 }
@@ -124,7 +118,6 @@ pipeline {
                         echo 'Install automatic validation package HGCTPGValidation.'
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         uname -a
                         whoami
                         pwd
@@ -143,7 +136,6 @@ pipeline {
                         fi
                         mkdir test_dir
                         ls -lrt ..
-                        exit
                         '''
                     }
                 }
@@ -151,7 +143,6 @@ pipeline {
                     steps{
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         '''
                         script{
                             if ( env.JOB_FLAG == 0 ){
@@ -176,9 +167,6 @@ pipeline {
                                 println(env.REMOTE)
                             }
                         }
-                        sh '''
-                        exit
-                        '''
                     }
                 }
             }
@@ -190,7 +178,6 @@ pipeline {
                         echo 'InstallCMSSW Test step..'
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         pwd
                         cd test_dir
                         if [ -z "$CHANGE_FORK" ]
@@ -201,7 +188,6 @@ pipeline {
                         fi
                         echo 'REMOTE= ', $REMOTE
                         ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
-                        exit
                         '''
                     }
                 }
@@ -209,7 +195,6 @@ pipeline {
                     steps{
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         source /cvmfs/cms.cern.ch/cmsset_default.sh
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
                         scram build code-checks
@@ -219,7 +204,6 @@ pipeline {
                             echo "Code-checks or code-format failed."
                             exit 1;
                         fi
-                        exit
                         '''
                     }
                 }
@@ -227,7 +211,6 @@ pipeline {
                     steps {
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
                         module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
@@ -238,7 +221,6 @@ pipeline {
                         echo 'LABEL_TEST = ' ${LABEL_TEST}
                         echo 'SCRAM_ARCH = ' ${SCRAM_ARCH}
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
-                        exit
                         '''
                     }
                 }
@@ -251,11 +233,9 @@ pipeline {
                         echo 'InstallCMSSW Ref step..'
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         pwd
                         cd test_dir
                         ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
-                        exit
                         '''
                     }
                 }           
@@ -263,7 +243,6 @@ pipeline {
                     steps {
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
                         module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
@@ -272,7 +251,6 @@ pipeline {
                         python --version
                         echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF}
-                        exit
                         '''            
                     }
                 }
@@ -282,12 +260,10 @@ pipeline {
             steps {
                 sh '''
                 set +x
-                exec &>> log_Jenkins
                 cd test_dir
                 source ../HGCTPGValidation/env_install.sh
                 echo $PWD
                 python ../HGCTPGValidation/scripts/displayHistos.py --subsetconfig ${CONFIG_SUBSET} --refdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src --testdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src --datadir ${DATA_DIR} --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
-                exit
                 '''            
             }
         }
