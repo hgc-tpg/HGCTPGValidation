@@ -74,20 +74,23 @@ pipeline {
                             break
                     }
                     
-                    env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
+                    if (env.JOB_FLAG=='1'){
+                        
+                        env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
+                        
+                        if (env.CHANGE_FORK){
+                            env.REMOTE_HGCTPGVAL = env.CHANGE_FORK
+                        }
+                        else {
+                            env.REMOTE_HGCTPGVAL = env.BASE_REMOTE
+                        }
+                    }
                     
-                    if (env.CHANGE_FORK){
-                        env.REMOTE_HGCTPGVAL = env.CHANGE_FORK
-                    }
-                    else {
-                        env.REMOTE_HGCTPGVAL = env.BASE_REMOTE
-                    }
                     println(env.REMOTE_HGCTPGVAL)
                     println(env.BRANCH_HGCTPGVAL)
                     
-                            
+                    
                     println(env.BASE_REMOTE)
-                    println(env.REMOTE)
                     println(env.DATA_DIR)
                     println(env.CHANGE_TARGET)
                     println(env.CHANGE_BRANCH)
