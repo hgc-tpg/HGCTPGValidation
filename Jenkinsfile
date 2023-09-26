@@ -140,11 +140,20 @@ pipeline {
                 stage('SetCMSSWEnvVar'){
                     steps{
                         script{
-                            if ( env.JOB_FLAG == 0 ){
+                            if ( env.JOB_FLAG == '0' ){
                                 env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
                                 env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
+                                
+                                if (env.CHANGE_FORK){
+                                    env.REMOTE = env.CHANGE_FORK
+                                }
+                                else {
+                                    env.REMOTE = env.BASE_REMOTE
+                                }
+                                
                                 println(env.REF_RELEASE)
                                 println(env.SCRAM_ARCH)
+                                println(env.REMOTE)
                             } 
                             else {
                                 env.REF_BRANCH = sh(returnStdout: true, script: 'module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
@@ -174,13 +183,6 @@ pipeline {
                         sh '''
                         pwd
                         cd test_dir
-                        if [ -z "$CHANGE_FORK" ]
-                        then
-                            export REMOTE=$BASE_REMOTE
-                        else
-                            export REMOTE=$CHANGE_FORK
-                        fi
-                        echo 'REMOTE= ', $REMOTE
                         ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
                         '''
                     }
