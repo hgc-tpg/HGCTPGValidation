@@ -77,6 +77,7 @@ pipeline {
                     if (env.JOB_FLAG=='1'){
                         
                         env.BRANCH_HGCTPGVAL=env.CHANGE_BRANCH
+                        env.CHANGE_TARGET_HGCTPGVAL=env.CHANGE_TARGET
                         
                         if (env.CHANGE_FORK){
                             env.REMOTE_HGCTPGVAL = env.CHANGE_FORK
