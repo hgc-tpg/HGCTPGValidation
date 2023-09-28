@@ -261,6 +261,15 @@ pipeline {
         }
     }
     post {
+        always {
+            script{
+                if ( env.JOB_FLAG=='1' ) {    
+                    env.CHANGE_BRANCH = env.BRANCH_HGCTPGVAL
+                    env.CHANGE_TARGET = env.CHANGE_TARGET_HGCTPGVAL
+                    println( "Validation of the validation: Set the original name of CHANGE_BRANCH => " + env.CHANGE_BRANCH )
+                }
+            }
+        }
         success {
             echo 'The job finished successfully.'
             mail to: "${EMAIL_TO}",
