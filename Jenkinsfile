@@ -52,7 +52,7 @@ pipeline {
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
                             env.DATA_DIR=env.DATA_DIR_JB
                             env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_JB
-                            env.WEBPAGES_VAL=env.
+                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST_JB
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Dev Validation - TEST':
