@@ -19,7 +19,7 @@ pipeline {
                     s = s.substring(0, s.indexOf("/"));
                     println(s);
                     switch(s){
-                       case 'HGC TPG Automatic Validation':
+                       case 'HGC TPG CMSSW Validation':
                             env.EMAIL_TO=env.EMAIL_TO_MAIN
                             env.BASE_REMOTE=env.BASE_REMOTE_MAIN
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
@@ -46,7 +46,7 @@ pipeline {
                             env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST_EB
                             env.JOB_FLAG=0
                             break
-                        case 'Job HGC TPG Automatic Validation - TEST jbsauvan':
+                        case 'HGC TPG Automatic Validation - TEST jbsauvan':
                             env.EMAIL_TO=env.EMAIL_TO_JB
                             env.BASE_REMOTE=env.BASE_REMOTE_JB
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
@@ -55,7 +55,7 @@ pipeline {
                             env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST_JB
                             env.JOB_FLAG=0
                             break
-                        case 'HGC TPG Dev Validation - TEST':
+                        case 'HGC TPG Validation Validation':
                             env.EMAIL_TO=env.EMAIL_TO_MAIN
                             env.BASE_REMOTE=env.BASE_REMOTE_MAIN
                             env.DATA_DIR=env.DATA_DIR_VALTEST
