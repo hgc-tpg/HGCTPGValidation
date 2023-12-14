@@ -32,7 +32,9 @@ scramv1 p -n ${relversion}_HGCalTPGValidation_$label CMSSW $relversion
 cd ${relversion}_HGCalTPGValidation_$label/src
 echo $PWD
 eval `scramv1 runtime -sh`
-git cms-merge-topic $remote:$branch
-git checkout -b local_$branch $remote/$branch
+# Get the reference (target) branch from the base remote
 git cms-merge-topic $baseremote:$branch_ref
+git checkout -b local_$branch_ref $baseremote/$branch_ref
+# Merge the change branch into the reference branch
+git cms-merge-topic $remote:$branch
 scram b -j8
