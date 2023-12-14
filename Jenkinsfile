@@ -20,53 +20,53 @@ pipeline {
                     println(s);
                     switch(s){
                        case 'HGC TPG CMSSW Validation':
-                            env.EMAIL_TO=env.EMAIL_TO_MAIN
-                            env.BASE_REMOTE=env.BASE_REMOTE_MAIN
+                            env.EMAIL_TO=env.HGCTPG_EMAIL_TO_MAIN
+                            env.BASE_REMOTE=env.HGCTPG_BASE_REMOTE_MAIN
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
-                            env.DATA_DIR=env.DATA_DIR_MAIN
-                            env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_MAIN
-                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_PROD
+                            env.DATA_DIR=env.HGCTPG_DATA_DIR_MAIN
+                            env.BRANCH_HGCTPGVAL=env.HGCTPG_BRANCH_VAL_MAIN
+                            env.WEBPAGES_VAL=env.HGCTPG_WEBPAGES_VAL_CMSSW_PROD
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Automatic Validation - TEST':
-                            env.EMAIL_TO=env.EMAIL_TO_EB
-                            env.BASE_REMOTE=env.BASE_REMOTE_TEST
+                            env.EMAIL_TO=env.HGCTPG_EMAIL_TO_EB
+                            env.BASE_REMOTE=env.HGCTPG_BASE_REMOTE_TEST
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
-                            env.DATA_DIR=env.DATA_DIR_TEST
-                            env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_TEST
-                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST
+                            env.DATA_DIR=env.HGCTPG_DATA_DIR_TEST
+                            env.BRANCH_HGCTPGVAL=env.HGCTPG_BRANCH_VAL_TEST
+                            env.WEBPAGES_VAL=env.HGCTPG_WEBPAGES_VAL_CMSSW_TEST
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Automatic Validation - TEST ebecheva':
-                            env.EMAIL_TO=env.EMAIL_TO_EB
-                            env.BASE_REMOTE=env.BASE_REMOTE_EB
+                            env.EMAIL_TO=env.HGCTPG_EMAIL_TO_EB
+                            env.BASE_REMOTE=env.HGCTPG_BASE_REMOTE_EB
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
-                            env.DATA_DIR=env.DATA_DIR_EB
-                            env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_EB
-                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST_EB
+                            env.DATA_DIR=env.HGCTPG_DATA_DIR_EB
+                            env.BRANCH_HGCTPGVAL=env.HGCTPG_BRANCH_VAL_EB
+                            env.WEBPAGES_VAL=env.HGCTPG_WEBPAGES_VAL_CMSSW_TEST_EB
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Automatic Validation - TEST jbsauvan':
-                            env.EMAIL_TO=env.EMAIL_TO_JB
-                            env.BASE_REMOTE=env.BASE_REMOTE_JB
+                            env.EMAIL_TO=env.HGCTPG_EMAIL_TO_JB
+                            env.BASE_REMOTE=env.HGCTPG_BASE_REMOTE_JB
                             env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
-                            env.DATA_DIR=env.DATA_DIR_JB
-                            env.BRANCH_HGCTPGVAL=env.BRANCH_VAL_JB
-                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST_JB
+                            env.DATA_DIR=env.HGCTPG_DATA_DIR_JB
+                            env.BRANCH_HGCTPGVAL=env.HGCTPG_BRANCH_VAL_JB
+                            env.WEBPAGES_VAL=env.HGCTPG_WEBPAGES_VAL_CMSSW_TEST_JB
                             env.JOB_FLAG=0
                             break
                         case 'HGC TPG Validation Validation':
-                            env.EMAIL_TO=env.EMAIL_TO_MAIN
-                            env.BASE_REMOTE=env.BASE_REMOTE_MAIN
-                            env.DATA_DIR=env.DATA_DIR_VALTEST
-                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CODE_TEST
+                            env.EMAIL_TO=env.HGCTPG_EMAIL_TO_MAIN
+                            env.BASE_REMOTE=env.HGCTPG_BASE_REMOTE_MAIN
+                            env.DATA_DIR=env.HGCTPG_DATA_DIR_VALTEST
+                            env.WEBPAGES_VAL=env.HGCTPG_WEBPAGES_VAL_CODE_TEST
                             env.JOB_FLAG=1
                             break
                         case 'HGC TPG Dev Validation - ebecheva':
-                            env.EMAIL_TO=env.EMAIL_TO_EB
-                            env.BASE_REMOTE=env.BASE_REMOTE_EB
-                            env.DATA_DIR=env.DATA_DIR_EB
-                            env.WEBPAGES_VAL=env.WEBPAGES_VAL_CMSSW_TEST_EB
+                            env.EMAIL_TO=env.HGCTPG_EMAIL_TO_EB
+                            env.BASE_REMOTE=env.HGCTPG_BASE_REMOTE_EB
+                            env.DATA_DIR=env.HGCTPG_DATA_DIR_EB
+                            env.WEBPAGES_VAL=env.HGCTPG_WEBPAGES_VAL_CMSSW_TEST_EB
                             env.JOB_FLAG=1
                             break
                         default: 
