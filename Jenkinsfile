@@ -13,6 +13,9 @@ pipeline {
     stages {
         stage('SetEnvVar'){
             steps{
+                sh '''
+                exec &>> log_Jenkins
+                '''
                 script{
                     String s = env.JOB_NAME
                     s = s.substring(s.indexOf("/") + 1)
@@ -106,6 +109,7 @@ pipeline {
                     steps{
                         echo 'Clean the working environment.'
                         sh '''
+                        exec &>> log_Jenkins
                         if [ -d "/data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID" ]
                         then
                             rm -rf /data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID
@@ -117,6 +121,7 @@ pipeline {
                     steps {
                         echo 'Install automatic validation package HGCTPGValidation.'
                         sh '''
+                        exec &>> log_Jenkins
                         uname -a
                         whoami
                         pwd
@@ -141,6 +146,9 @@ pipeline {
                 stage('SetCMSSWEnvVar'){
                     steps{
                         script{
+                            sh '''
+                            exec &>> log_Jenkins
+                            '''
                             if ( env.JOB_FLAG == '0' ){
                                 env.REF_RELEASE = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
                                 env.SCRAM_ARCH = sh(returnStdout: true, script: 'source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
@@ -191,6 +199,7 @@ pipeline {
                 stage('QualityChecks'){
                     steps{
                         sh '''
+                        exec &>> log_Jenkins
                         source /cvmfs/cms.cern.ch/cmsset_default.sh
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
                         scram build code-checks
@@ -206,6 +215,7 @@ pipeline {
                 stage('Produce'){
                     steps {
                         sh '''
+                        exec &>> log_Jenkins
                         pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
                         module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
@@ -227,6 +237,7 @@ pipeline {
                     steps {
                         echo 'InstallCMSSW Ref step..'
                         sh '''
+                        exec &>> log_Jenkins
                         pwd
                         cd test_dir
                         ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
@@ -236,6 +247,7 @@ pipeline {
                 stage('Produce'){
                     steps {
                         sh '''
+                        exec &>> log_Jenkins
                         pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
                         module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
@@ -252,6 +264,7 @@ pipeline {
         stage('Display') {
             steps {
                 sh '''
+                exec &>> log_Jenkins
                 cd test_dir
                 source ../HGCTPGValidation/env_install.sh
                 echo $PWD
@@ -269,6 +282,7 @@ pipeline {
                     println( "Validation of the validation: Set the original name of CHANGE_BRANCH => " + env.CHANGE_BRANCH )
                 }
             }
+            archiveArtifacts artifacts: 'log_Jenkins', fingerprint: true
         }
         success {
             echo 'The job finished successfully.'
