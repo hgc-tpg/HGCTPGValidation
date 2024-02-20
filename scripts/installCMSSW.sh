@@ -14,19 +14,19 @@
 set -e
 
 export SCRAM_ARCH=$1
-echo $SCRAM_ARCH
+echo "SCRAM_ARCH: " $SCRAM_ARCH
 relversion=$2
-echo $relversion
+echo "CMSSW version: " $relversion
 remote=$3
-echo $remote
+echo "Change remote: " $remote
 baseremote=$4
-echo $baseremote
+echo "Target remote: " $baseremote
 branch=$5
-echo $branch
+echo "Change branch: " $branch
 branch_ref=$6
-echo $branch_ref
+echo "Target branch: " $branch_ref
 label=$7
-echo $label
+echo "Label: " $label
 
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
