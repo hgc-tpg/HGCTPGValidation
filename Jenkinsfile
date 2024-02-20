@@ -21,7 +21,6 @@ pipeline {
                 else 
                     echo "log_Jenkins does not exist."
                 fi 
-                exec &>> log_Jenkins
                 echo '==> Set environment variables'
                 '''
                 script{
@@ -117,7 +116,6 @@ pipeline {
                     steps{
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         echo '==> Clean the working environment. ============================'
                         if [ -d "/data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID" ]
                         then
@@ -131,7 +129,6 @@ pipeline {
                     steps {
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         echo '==> Install automatic validation package HGCTPGValidation. ============================'
                         uname -a
                         whoami
@@ -160,12 +157,11 @@ pipeline {
                         script{
                             sh '''
                             set +x
-                            exec &>> log_Jenkins
                             echo 'echo ==> Set CMSSW environment variables. ============================'
                             '''
                             if ( env.JOB_FLAG == '0' ){
-                                env.REF_RELEASE = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
-                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
+                                env.REF_RELEASE = sh(returnStdout: true, script: 'set +x; source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
+                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'set +x; source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
                                 
                                 if (env.CHANGE_FORK){
                                     env.REMOTE = env.CHANGE_FORK
@@ -179,10 +175,10 @@ pipeline {
                                 println(env.REMOTE)
                             } 
                             else {
-                                env.REF_BRANCH = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
-                                env.REF_RELEASE = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; source ./HGCTPGValidation/scripts/extractReleaseName.sh ${REF_BRANCH}').trim()
-                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
-                                env.BASE_REMOTE = sh(returnStdout: true, script: 'set +x exec &>> log_Jenkins; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
+                                env.REF_BRANCH = sh(returnStdout: true, script: 'set +x; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
+                                env.REF_RELEASE = sh(returnStdout: true, script: 'set +x; source ./HGCTPGValidation/scripts/extractReleaseName.sh ${REF_BRANCH}').trim()
+                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'set +x; source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
+                                env.BASE_REMOTE = sh(returnStdout: true, script: 'set +x; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
                                 env.CHANGE_BRANCH = env.REF_BRANCH
                                 env.CHANGE_TARGET = env.REF_BRANCH
                                 env.REMOTE = env.BASE_REMOTE
@@ -196,7 +192,6 @@ pipeline {
                         }
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         echo '  '
                         '''
                     }
@@ -209,7 +204,6 @@ pipeline {
                     steps {
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         echo '==> Build CMSSW Test ========================='
                         echo '===> InstallCMSSW Test Step'
                         pwd
@@ -223,7 +217,6 @@ pipeline {
                     steps{
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         echo '===> Quality checks'
                         source /cvmfs/cms.cern.ch/cmsset_default.sh
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
@@ -242,7 +235,6 @@ pipeline {
                     steps {
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         echo '===> Produce test data.'
                         pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
@@ -266,7 +258,6 @@ pipeline {
                     steps {
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         echo '==> Build CMSSW Reference ======================='
                         echo '===> InstallCMSSW Ref'
                         pwd
@@ -280,7 +271,6 @@ pipeline {
                     steps {
                         sh '''
                         set +x
-                        exec &>> log_Jenkins
                         echo '===> Produce reference data.'
                         pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
@@ -300,7 +290,6 @@ pipeline {
             steps {
                 sh '''
                 set +x
-                exec &>> log_Jenkins
                 echo '==> Display ======================='
                 cd test_dir
                 source ../HGCTPGValidation/env_install.sh
