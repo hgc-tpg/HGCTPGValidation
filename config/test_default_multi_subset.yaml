@@ -2,7 +2,7 @@
 subsetName: default subset
 description: Default set of comparisons
 configuration: 
-- ref: default
+    - ref: defaults
       test: default
     - ref: bcstc
       test: bcstc
