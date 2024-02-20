@@ -15,6 +15,12 @@ pipeline {
             steps{
                 sh '''
                 set +x
+                if [ -f "log_Jenkins" ]; then
+                    echo "Remove the last created log_Jenkins."
+                    rm log_Jenkins
+                else 
+                    echo "log_Jenkins does not exist."
+                fi 
                 exec &>> log_Jenkins
                 echo '==> Set environment variables'
                 '''
