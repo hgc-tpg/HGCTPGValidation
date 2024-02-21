@@ -73,12 +73,20 @@ def check_schema_paramValJob(config, filename):
 def read_subset(path, config):
     filename = path + config + '.yaml'
 
-    with open(filename) as f:
-        try:
+    try:
+        with open(filename) as f:
             subset = yaml.safe_load(f)
-        except yaml.YAMLError as e:
-            print("Error occured when loading the file containing the configuration subsets file ", filename)
-            print(e)
+    except OSError as e:
+        print("")
+        print(f"=== Error occured when loading configuration subsets file {filename}.")
+        print("")
+        print(e)
+        raise e
+    except yaml.YAMLError as e:
+        print("")
+        print(f"=== Error parsing YAML file: {filename} ===")
+        print("")
+        print(e)
 
     check_schema_subset(subset, filename)
 
@@ -112,19 +120,26 @@ def get_listOfConfigs(path, confSubsets):
 def read_config(path, configuration, config_type):
     filename = path + configuration + '.yaml'
 
-    with open(filename) as f:
-        try:
+    try:
+        with open(filename) as f:
             config = yaml.safe_load(f)
-            #print("Read validation configuration file.")
-        except yaml.YAMLError as e:
-            print("Error occured when loading the configuration file ", filename)
-            print(e)
+    except OSError as e:
+        print("")
+        print(f"=== Error occured when loading configuration file {filename}.")
+        print("")
+        print(e)
+        raise e
+    except yaml.YAMLError as e:
+        print("")
+        print(f"=== Error parsing configuration YAML file: {filename}.")
+        print("")
+        print(e)
     
     if (config_type == 1):
         check_schema_config(config, filename)
     elif (config_type == 2):
         check_schema_paramValJob(config, filename)
     else:
-        print("Please, check if there is a schema corresponding the configuration.")
+        print("The config_type doesn't correspond to the defined validation types.")
 
     return config
