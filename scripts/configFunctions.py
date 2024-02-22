@@ -78,16 +78,14 @@ def read_subset(path, config):
             subset = yaml.safe_load(f)
     except OSError as e:
         print("")
-        print(f"=== Error occured when loading configuration subsets file {filename}.")
+        print(f"\n === Error occured when loading configuration subsets file {filename} ===  \n{e}")
         print("")
-        print(e)
-        raise e(f"=== Error occured when loading configuration subsets file {filename}.")
+        raise Exception(f"\n === Error occured when loading configuration subsets file {filename} === \n{e}")
     except yaml.YAMLError as e:
         print("")
-        print(f"=== Error parsing YAML file: {filename} ===")
+        print(f"\n === Error parsing YAML file: {filename} === \n{e} ")
         print("")
-        print(e)
-        raise e(f"=== Error parsing YAML file: {filename} ===")
+        raise Exception(f"\n === Error parsing YAML file: {filename} === \n{e}")
 
     check_schema_subset(subset, filename)
 
@@ -126,16 +124,14 @@ def read_config(path, configuration, config_type):
             config = yaml.safe_load(f)
     except OSError as e:
         print("")
-        print(f"=== Error occured when loading configuration file {filename}.")
+        print(f"\n === Error occured when loading configuration file {filename} === \n{e}")
         print("")
-        print(e)
-        raise e(f"=== Error occured when loading configuration file {filename}.")
+        raise Exception(f"=\n === Error occured when loading configuration file {filename} === \n{e}")
     except yaml.YAMLError as e:
         print("")
-        print(f"=== Error parsing configuration YAML file: {filename}.")
+        print(f"\n === Error parsing configuration YAML file: {filename} === \n{e}")
         print("")
-        print(e)
-        raise e(f"=== Error parsing configuration YAML file: {filename}.")
+        raise Exception(f"\n === Error parsing configuration YAML file: {filename} === \n{e}")
     
     if (config_type == 1):
         check_schema_config(config, filename)
