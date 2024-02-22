@@ -22,7 +22,7 @@ def check_schema_subset(config, filename):
       print("Subset configuration is valid.")
     except SchemaErroras as se:
       print("The configuration format is not correct. Please check the file", filename)
-      raise se
+      raise Exception(f"The configuration format is not correct. Please check the file {filename}")
       
 # Define the schema of the configuration data
 def check_schema_config(config, filename):
@@ -48,7 +48,7 @@ def check_schema_config(config, filename):
         config_schema.validate(config)
     except SchemaError as se:
         print("The configuration format is not correct. Please check the file ", filename)
-        raise se
+        raise Exception("The configuration format is not correct. Please check the file {filename}")
 
 # Define the schema of the config for the Jenkins job
 # validating the validation code
@@ -66,8 +66,8 @@ def check_schema_paramValJob(config, filename):
       #print("Check the schema of the config file ", filename)
       #print("Subset configuration is valid.")
     except SchemaErroras as se:
-      print("The configuration format is not correct. Please check the file", filename)
-      raise se
+      print("The configuration format is not correct. Please check the file ", filename)
+      raise Exception("The configuration format is not correct. Please check the file {filename}.")
  
 # Read the file with configurations sets
 def read_subset(path, config):
