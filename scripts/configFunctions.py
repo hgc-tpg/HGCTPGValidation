@@ -81,12 +81,13 @@ def read_subset(path, config):
         print(f"=== Error occured when loading configuration subsets file {filename}.")
         print("")
         print(e)
-        raise e
+        raise e(f"=== Error occured when loading configuration subsets file {filename}.")
     except yaml.YAMLError as e:
         print("")
         print(f"=== Error parsing YAML file: {filename} ===")
         print("")
         print(e)
+        raise e(f"=== Error parsing YAML file: {filename} ===")
 
     check_schema_subset(subset, filename)
 
@@ -128,12 +129,13 @@ def read_config(path, configuration, config_type):
         print(f"=== Error occured when loading configuration file {filename}.")
         print("")
         print(e)
-        raise e
+        raise e(f"=== Error occured when loading configuration file {filename}.")
     except yaml.YAMLError as e:
         print("")
         print(f"=== Error parsing configuration YAML file: {filename}.")
         print("")
         print(e)
+        raise e(f"=== Error parsing configuration YAML file: {filename}.")
     
     if (config_type == 1):
         check_schema_config(config, filename)
