@@ -20,7 +20,7 @@ def check_schema_subset(config, filename):
     try:
       config_schema.validate(config)
       print("Subset configuration is valid.")
-    except SchemaErroras as se:
+    except SchemaError as se:
       print("The configuration format is not correct. Please check the file", filename)
       raise Exception(f"The configuration format is not correct. Please check the file {filename}")
       
@@ -65,7 +65,7 @@ def check_schema_paramValJob(config, filename):
       config_schema.validate(config)
       #print("Check the schema of the config file ", filename)
       #print("Subset configuration is valid.")
-    except SchemaErroras as se:
+    except SchemaError as se:
       print("The configuration format is not correct. Please check the file ", filename)
       raise Exception("The configuration format is not correct. Please check the file {filename}.")
  
