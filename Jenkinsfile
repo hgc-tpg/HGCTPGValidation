@@ -11,10 +11,11 @@ pipeline {
         skipDefaultCheckout() 
     }
     stages {
-        stage('SetEnvVar'){
+        stage('Set environment variables'){
             steps{
                 sh '''
                 set +x
+                echo '==> Set environment variables'
                 exec >> log_Jenkins
                 if [ -f "log_Jenkins" ]; then
                     echo "Remove the last created log_Jenkins."
@@ -113,10 +114,11 @@ pipeline {
         }
         stage('Initialize'){
             stages{
-                stage('CleanEnv'){
+                stage('Clean the working environment'){
                     steps{
                         sh '''
                         set +x
+                        echo '==> Clean the working environment. ============================'
                         exec >> log_Jenkins
                         echo '==> Clean the working environment. ============================'
                         if [ -d "/data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID" ]
@@ -127,10 +129,11 @@ pipeline {
                         '''
                     }
                 }
-                stage('InstallAutoValidationPackage') {
+                stage('Install automatic validation package HGCTPGValidation') {
                     steps {
                         sh '''
                         set +x
+                        echo '==> Install automatic validation package HGCTPGValidation. ============================'
                         exec >> log_Jenkins
                         echo '==> Install automatic validation package HGCTPGValidation. ============================'
                         uname -a
@@ -155,11 +158,12 @@ pipeline {
                         '''
                     }
                 }
-                stage('SetCMSSWEnvVar'){
+                stage('Set CMSSW environment variables'){
                     steps{
                         script{
                             sh '''
                             set +x
+                            echo 'echo ==> Set CMSSW environment variables. ============================'
                             exec >> log_Jenkins
                             echo 'echo ==> Set CMSSW environment variables. ============================'
                             '''
@@ -203,12 +207,14 @@ pipeline {
                 }
             }
         }
-        stage('BuildCMSSWTest'){
+        stage('Build CMSSW Test release'){
             stages{
                 stage('Install'){
                     steps {
                         sh '''
                         set +x
+                        echo '==> Build CMSSW Test ========================='
+                        echo '===> InstallCMSSW Test Step'
                         exec >> log_Jenkins
                         echo '==> Build CMSSW Test ========================='
                         echo '===> InstallCMSSW Test Step'
@@ -219,10 +225,11 @@ pipeline {
                         '''
                     }
                 }
-                stage('QualityChecks'){
+                stage('Quality Checks'){
                     steps{
                         sh '''
                         set +x
+                        echo '===> Quality checks'
                         exec >> log_Jenkins
                         echo '===> Quality checks'
                         source /cvmfs/cms.cern.ch/cmsset_default.sh
@@ -242,6 +249,7 @@ pipeline {
                     steps {
                         sh '''
                         set +x
+                        echo '===> Produce test data.'
                         exec >> log_Jenkins
                         echo '===> Produce test data.'
                         pwd
@@ -260,12 +268,14 @@ pipeline {
                 }
             }
         }
-        stage('BuildCMSSWRef'){
+        stage('Build CMSSW Ref release'){
             stages{
                 stage('Install'){
                     steps {
                         sh '''
                         set +x
+                        echo '==> Build CMSSW Reference ======================='
+                        echo '===> InstallCMSSW Ref'
                         exec >> log_Jenkins
                         echo '==> Build CMSSW Reference ======================='
                         echo '===> InstallCMSSW Ref'
@@ -280,6 +290,7 @@ pipeline {
                     steps {
                         sh '''
                         set +x
+                        echo '===> Produce reference data.'
                         exec >> log_Jenkins
                         echo '===> Produce reference data.'
                         pwd
@@ -300,6 +311,7 @@ pipeline {
             steps {
                 sh '''
                 set +x
+                echo '==> Display ======================='
                 exec >> log_Jenkins
                 echo '==> Display ======================='
                 cd test_dir
