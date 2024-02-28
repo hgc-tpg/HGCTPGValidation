@@ -19,7 +19,6 @@ def check_schema_subset(config, filename):
 
     try:
       config_schema.validate(config)
-      #print(f"\n\n === Subset configuration {filename} is valid. === \n\n")
     except SchemaError as se:
       print(f"\n\n === The configuration format is not correct. Please check the file {filename}. === \n\n {se}")
       raise Exception(f"\n\n === The configuration format is not correct. Please check the file {filename}. === \n\n {se}")
@@ -46,7 +45,6 @@ def check_schema_config(config, filename):
 
     try:
         config_schema.validate(config)
-        #print(f"\n\n === The configuration {filename} is valid. === \n\n")
     except SchemaError as se:
         print(f"\n\n === The configuration format is not correct. Please check the file {filename}. === \n\n {se}")
         raise Exception(f"\n\n The configuration format is not correct. Please check the file {filename}. === \n\n {se}")
@@ -64,7 +62,6 @@ def check_schema_paramValJob(config, filename):
 
     try:
       config_schema.validate(config)
-      #print(f"\n\n === The configuration {filename} is valid. === \n\n")
     except SchemaError as se:
       print(f"\n\n === The configuration format is not correct. Please check the file {filename}. === \n\n {se}")
       raise Exception(f"\n\n === The configuration format is not correct. Please check the file {filename}. === \n\n {se}")
@@ -119,7 +116,6 @@ def read_config(path, configuration, config_type):
     try:
         with open(filename) as f:
             config = yaml.safe_load(f)
-            #print(f"\n\n === The configuration {filename} was loaded successfully. === \n\n")
     except OSError as e:
         print(f"\n\n === Error occured when loading configuration file {filename}. === \n\n {e}")
         raise Exception(f"\n\n === Error occured when loading configuration file {filename} === \n\n {e}")
