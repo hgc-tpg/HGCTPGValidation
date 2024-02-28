@@ -73,7 +73,6 @@ def read_subset(path, config):
     try:
         with open(filename) as f:
             subset = yaml.safe_load(f)
-            #print(f"\n\n === The subset configuration {filename} was loaded successfully. === \n\n")
     except OSError as e:
         print(f"\n\n === Error occured when loading configuration subsets file {filename}. === \n\n {e}")
         raise Exception(f"\n\n === Error occured when loading configuration subsets file {filename}. === \n\n {e}")
