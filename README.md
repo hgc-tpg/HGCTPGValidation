@@ -1,10 +1,9 @@
 # HGCTPGValidation
 Tool for running automatically the HGCAL TPG validation
 
-## General presentation
-This is a Python package, CMSSW independent, used to
+The code is organized in a CMSSW independent package, used to
 * Run Jenkins continuous integration for HGCal TPG validation. Two different jobs allow us 
-    * to validate the HGCAL trigger primitives code in https://github.com/hgc-tpg/cmssw/..../L1Trigger/L1THGCal of CMSSW framework.
+    * to validate the HGCAL trigger primitives code in the package L1Trigger/L1THGCal of the  CMSSW framework (https://github.com/hgc-tpg/cmssw/).
     * to validate the validation code itself https://github.com/hgc-tpg/HGCTPGValidation.
 * Run standalone validation
 
