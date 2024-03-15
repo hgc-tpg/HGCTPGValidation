@@ -1,5 +1,5 @@
 # HGCTPGValidation
-Tool for running automatically the HGCAL TPG validation
+This is a tool for running automatically the validation of the HGCAL TPG code.
 
 The code is organized in a CMSSW independent package, used to
 * Run Jenkins continuous integration for HGCal TPG validation. Two different jobs allow us 
