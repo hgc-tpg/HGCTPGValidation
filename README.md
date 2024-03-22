@@ -11,7 +11,7 @@ The code is organized in a CMSSW independent package, used to
 
 The package is organized in several directories:
 * hgctpgvalidation: contains python programs for display step
-* config: the HGCal TPG simulation uses a set of configuration YAML files, they are used during the validation process
+* config: contains a set of YAML files defining different HGCAL TPG configurations used during the validation process
 * data: the histograms to be compared are listed in HGCALTriggerPrimitivesHistos.txt file
 * scripts: this directory contains all the necessary scripts for installing CMSSW environment, producing data, generating and displaying the histograms. There are some additional helper script allowing to extract the release name the SCRAM_ARCH. 
 
