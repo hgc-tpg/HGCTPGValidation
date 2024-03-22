@@ -1,5 +1,7 @@
-# HGCTPGValidation
+# HGC TPG Validation
+
 This is a tool for running automatically the validation of the HGCAL TPG code.
+The goal is to validate the Pull Requests proposing changes to be merged into hgc-tpg/cmssw. The validation performs a comparison of the objects produced by the HGCAL TPG code between the source branch and the target branch. It also checks the quality of the code.  
 
 The code is organized in a CMSSW independent package, used to
 * Run Jenkins continuous integration for HGCal TPG validation. Two different jobs allow us 
@@ -8,8 +10,8 @@ The code is organized in a CMSSW independent package, used to
 * Run standalone validation
 
 The package is organized in several directories:
-* hgctpgvalidation: contain python programs for display step
-* config: YAML configuration files allows users to customise the HGCAL TPG simulation
+* hgctpgvalidation: contains python programs for display step
+* config: the HGCal TPG simulation uses a set of configuration YAML files, they are used during the validation process
 * data: the histograms to be compared are listed in HGCALTriggerPrimitivesHistos.txt file
 * scripts: this directory contains all the necessary scripts for installing CMSSW environment, producing data, generating and displaying the histograms. There are some additional helper script allowing to extract the release name the SCRAM_ARCH. 
 
