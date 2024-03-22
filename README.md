@@ -14,5 +14,5 @@ The package is organized in several directories:
 * scripts: this directory contains all the necessary scripts for installing CMSSW environment, producing data, generating and displaying the histograms. There are some additional helper script allowing to extract the release name the SCRAM_ARCH. 
 
 More detailed information can be found at the wiki pages:
-https://github.com/hgc-tpg/HGCTPGValidation/wiki/Jenkins-continuous-integration-for-HGCal-TPG-validation
+[https://github.com/hgc-tpg/HGCTPGValidation/wiki/Jenkins-continuous-integration-for-HGCal-TPG-validation](https://github.com/hgc-tpg/HGCTPGValidation/wiki)https://github.com/hgc-tpg/HGCTPGValidation/wiki
 
