@@ -241,6 +241,7 @@ def createWebPageLite(ref_configname, test_configname, input_ref_file, input_tes
     
     # get time 
     # dd/mm/YY H:M:S
+    now = datetime.now()
     time = now.strftime("%d/%m/%Y %H:%M:%S")
 
     # Comment not needed informations
