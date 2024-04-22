@@ -418,6 +418,11 @@ def createWebPageLite(ref_configname, test_configname, input_ref_file, input_tes
                 
                 histo_2 = h2.Get(histo_name)
                 histo_1 = h1.Get(histo_name)
+                
+                # Change the name of the histograms
+                histo_2.SetName(histo_name + " - ref")
+                histo_1.SetName(histo_name + " - test")
+                
                 gif_name = webdir + '/' + histo_name + ".gif"
                 gif_name_index = histo_name + ".gif"
                 createPicture2(histo_1, histo_2, "1", "1", gif_name, cnv, "lin")
