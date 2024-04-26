@@ -71,9 +71,8 @@ def	extractTimeMemoryInfos(namefile, dirname):
                     indicator = line.split(" ")
                     print(f"{indicator[4]} {indicator[5]}")
                     f1.writelines(f"{indicator[4]} {indicator[5]}")
-                    # Read Time summary information
+                # Read Time summary information
                 if " Time Summary:" in line:
-                    #f1.writelines(line)
                     # Read 18 lines starting from " Time Summary:"
                     lines_cache = islice(f, 2, 5, None)
                     for current_line in lines_cache:
@@ -214,7 +213,6 @@ def main(configset, refdir, testdir, datadir, prnumber, prtitle):
         print("The data directory for the PR ", prdir, "already exists. It will be deleted.")
         mess = "The data directory for the PR " + prdir + "already exists. It will be deleted."
         logfile.write(mess)
-        #os.system("ls -lrt " + prdir)
         os.system("rm -rf " + prdir)
     else:
         print("The data directory for the PR ", prdir, "doesn't exist. It will be created")
