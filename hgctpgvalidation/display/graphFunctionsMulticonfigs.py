@@ -190,10 +190,30 @@ def createPicture2(histo1, histo2, scaled, err, filename, cnv, axisFormat):
     
     return
 
-def createWebPageLite(ref_configname, test_configname, input_ref_file, input_test_file, path_1, path_2, cnv, webdir): # simplified version of createWebPage()
+def createWebPageLite(refconfigname, testconfigname, refdir, testdir, imgdir):
     print('Start creating web pages, ', ref_configname, ' - ' , test_configname)
-    print(input_test_file)
-    print(input_ref_file)
+    
+    # graphical initialization
+    initRootStyle()
+    cnv = TCanvas("canvas")
+    
+    if os.path.exists(imgdir):
+      print("The path " + imgdir + "exists. Will be deleted.")
+      os.system("rm -rf " + imgdir)
+      
+    os.system("mkdir " + imgdir)
+    os.system("mkdir " + imgdir + "/img")
+    
+    # Files names
+    filename_ref = "/DQM_V0001_validation_HGCAL_TPG_" + refconfigname + "_ref_R000000001.root"
+    filename_test = "/DQM_V0001_validation_HGCAL_TPG_" + testconfigname + "_test_R000000001.root"
+    input_ref_file = refdir + filename_ref
+    input_test_file = testdir + filename_test
+    path_1 = 'DQMData/Run 1/HGCALTPG/Run summary'
+    path_2 = path_1
+    print('input_ref_file=', input_ref_file)
+    print('input_test_file=', input_test_file)
+    
     f_test = ROOT.TFile(input_test_file)
     h1 = getHisto(f_test, path_1)
     h1.ls()
