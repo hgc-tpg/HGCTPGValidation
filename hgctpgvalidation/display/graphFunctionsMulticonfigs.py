@@ -191,7 +191,7 @@ def createPicture2(histo1, histo2, scaled, err, filename, cnv, axisFormat):
     return
 
 def createWebPageLite(refconfigname, testconfigname, refdir, testdir, imgdir):
-    print('Start creating web pages, ', ref_configname, ' - ' , test_configname)
+    print('Start creating web pages, ', refconfigname, ' - ' , testconfigname)
     
     # graphical initialization
     initRootStyle()
