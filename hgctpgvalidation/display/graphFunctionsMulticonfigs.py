@@ -226,13 +226,13 @@ def createWebPageLite(refconfigname, testconfigname, refdir, testdir, imgdir):
     CMP_TITLE = ' HGCAL Trigger Primitives Validation '
     CMP_RED_FILE = input_test_file
     CMP_BLUE_FILE = input_ref_file
-    CMP_INDEX_FILE_DIR = webdir + '/index.html'
+    CMP_INDEX_FILE_DIR = imgdir + '/index.html'
                      
-    MEM_REP_REF = './MemoryReport_' + ref_configname + '_ref.log'
-    MEM_REP_TEST = './MemoryReport_' + test_configname + '_test.log'
+    MEM_REP_REF = './MemoryReport_' + refconfigname + '_ref.log'
+    MEM_REP_TEST = './MemoryReport_' + testconfigname + '_test.log'
     
-    shutil.copy2('../HGCTPGValidation/data/img/up.gif', webdir+ '/img')
-    shutil.copy2('../HGCTPGValidation/data/img/point.gif', webdir+ '/img')
+    shutil.copy2('../HGCTPGValidation/data/img/up.gif', imgdir+ '/img')
+    shutil.copy2('../HGCTPGValidation/data/img/point.gif', imgdir+ '/img')
     image_up = './img/up.gif'
     image_point = './img/point.gif'
     
@@ -254,9 +254,9 @@ def createWebPageLite(refconfigname, testconfigname, refdir, testdir, imgdir):
     wp.write("<br>\n")
 
     filePath='../HGCTPGValidation/config/'
-    test_configData=read_config(filePath, test_configname, 1)
+    test_configData=read_config(filePath, testconfigname, 1)
     test_description=test_configData['description']
-    ref_configData=read_config(filePath, ref_configname, 1)
+    ref_configData=read_config(filePath, refconfigname, 1)
     ref_description=ref_configData['description']
     
     # get time 
@@ -270,9 +270,9 @@ def createWebPageLite(refconfigname, testconfigname, refdir, testdir, imgdir):
         wp.write(", and the " + CMP_RED_FILE + " histograms are in red.") # new release red in OvalFile
     else:
         wp.write("<h3><p><font color='black'> Generated " + time + "</h3><p>")
-        wp.write("<h3><p><font color='red'> Test: " + test_configname + "</h3>")
+        wp.write("<h3><p><font color='red'> Test: " + testconfigname + "</h3>")
         wp.write("<p>" + test_description )
-        wp.write("<h3><p><font color='blue'> Ref: " + ref_configname + "</h3>" )
+        wp.write("<h3><p><font color='blue'> Ref: " + refconfigname + "</h3>" )
         wp.write("<p>" + ref_description )
         wp.write("<p><font color='black'>=====================")
     #    wp.write("<p>In all plots below " + test_configname)
@@ -443,12 +443,12 @@ def createWebPageLite(refconfigname, testconfigname, refdir, testdir, imgdir):
                 histo_2.SetName(histo_name + " - ref")
                 histo_1.SetName(histo_name + " - test")
                 
-                gif_name = webdir + '/' + histo_name + ".gif"
+                gif_name = imgdir + '/' + histo_name + ".gif"
                 gif_name_index = histo_name + ".gif"
                 createPicture2(histo_1, histo_2, "1", "1", gif_name, cnv, "lin")
                 # Make histo in log
                 #if (histo_1.GetMaximum() > 0 and histo_1.GetMinimum() >= 0):
-                #    gif_name_log = webdir + '/' + histo_name + "_log.gif"
+                #    gif_name_log = imgdir + '/' + histo_name + "_log.gif"
                 #    gif_name_log_index = histo_name + "_log.gif"
                 #    createPicture2(histo_1, histo_2, "1", "1", gif_name_log, cnv, "log")
 
