@@ -13,4 +13,4 @@ parameters:
     procModifiers: empty
     filein: file:/data_CMS_upgrade/data_jenkins/Phase2Fall22DRMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_125X_mcRun4_realistic_v2_ext1-v1/000c5e5f-78f7-44ee-95fe-7b2f2c2e2312.root
     customise: L1Trigger/L1THGCal/customLayer1.custom_layer1_truncationfw
-    customise_commands: ''
+    customise_commands: "process.L1THGCalTrigPrimValidation.Clusters = cms.InputTag(\'l1tHGCalBackEndLayer1Producer:HGCalBackendLayer1ProcessorTruncationFw\');"
