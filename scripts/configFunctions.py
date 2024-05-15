@@ -6,7 +6,7 @@ import os
 import sys
 import subprocess
 
-from schema import Schema, SchemaError
+from schema import Schema, Optional, SchemaError
 
 # Define the schema of the subset config file
 def check_schema_subset(config, filename):
