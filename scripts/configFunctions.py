@@ -65,11 +65,13 @@ def check_schema_paramValJob(config, filename):
     })
 
     try:
-      config_schema.validate(config)
+      validated_config_schema = config_schema.validate(config)
     except SchemaError as se:
       print(f"\n\n === The configuration format is not correct. Please check the file {filename}. === \n\n {se}")
       raise Exception(f"\n\n === The configuration format is not correct. Please check the file {filename}. === \n\n {se}")
- 
+    
+    return validated_config_schema
+    
 # Read the file with configurations sets
 def read_subset(path, config):
     filename = path + config + '.yaml'
