@@ -38,10 +38,10 @@ def check_schema_config(config, filename):
             "geometry": str,
             "era": str,
             "inputCommands": str,
-            "procModifiers": str,
+            Optional("procModifiers", default='empty'): str,
             "filein": str,
-            "customise": str,
-            "customise_commands": str
+            Optional("customise", default="empty"): str,
+            Optional("customise_commands", default=''): str
         }
     })
 
