@@ -80,12 +80,12 @@ def	extractTimeMemoryInfos(namefile, dirname):
                     for current_line in lines_cache:
                         indicator = current_line.split(" ")
                         if (indicator[2])=="Avg":
-                            print(indicator[6] + " s")
-                            f1.write(indicator[6]  + " s")
+                            print(indicator[6].strip() + " s")
+                            f1.write(indicator[6].strip()  + " s")
                         else:
-                            print(indicator[5] + " s")
-                            f1.write(indicator[5] + " s")
-            f1.write(max(RSS_values) + " Mbytes")
+                            print(indicator[5].strip() + " s")
+                            f1.write(indicator[5].strip() + " s")
+            f1.write(max(RSS_values) + "Mbytes")
             
 # Extract Time information for all modules
 #find . -name "out_ref.log" | xargs grep "TimeModule>" > TimingInfo_ref.txt
