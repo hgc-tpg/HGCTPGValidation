@@ -261,7 +261,8 @@ pipeline {
                         echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
                         echo 'LABEL_TEST = ' ${LABEL_TEST}
                         echo 'SCRAM_ARCH = ' ${SCRAM_ARCH}
-                        python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
+                        python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST} &
+                        get_rss_memory.sh $! 10
                         echo '      '
                         '''
                     }
@@ -300,7 +301,8 @@ pipeline {
                         module load python/3.9.9
                         python --version
                         echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
-                        python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF}
+                        python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF} &
+                        get_rss_memory.sh $! 10
                         echo '      '
                         '''
                     }
