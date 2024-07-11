@@ -30,7 +30,7 @@ while true; do
         if [ -e /proc/$PID/status ]; then
             echo "Free memory (RSS) for process $1 (PID: $PID): ${RSS} kB"
         else
-            echo "ProduceData_multiconfiguration.py process finished."
+            echo "ProduceData_multiconfiguration.py process finished. PID = $PID"
             break;
         fi
     fi
