@@ -27,11 +27,8 @@ while true; do
         echo "Process $PID not found."
     else
         # Get the RSS (Resident Set Size) memory usage
-        cp /proc/$PID/status ./status_${PID}
-        ps
         echo "Get RSS value "
         RSS=$(grep -i vmrss /proc/$PID/status | awk '{print $2}')
-        echo "===> RSS memory ${RSS}"
         if [ "${RSS}" -gt "${RSS_limit}" ]; then
             kill -9 $PID;
             echo "===> RSS memory ${RSS} > RSS limit ${RSS_limit}";
