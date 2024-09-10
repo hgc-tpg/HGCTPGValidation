@@ -51,10 +51,10 @@ while true; do
     else
         # Get the RSS (Resident Set Size) memory usage
         RSS=$(grep -i vmrss /proc/$PID/status | awk '{print $2}')
-        echo "Free memory (RSS) for process PID=$PID: ${RSS} kB"
+        echo "Free memory (RSS) for process PID=$PID: $(( ${RSS} / 1000 )) GB"
         
         if [ "${RSS}" -gt "${RSS_limit}" ]; then
-            echo "===> RSS memory ${RSS} > RSS limit ${RSS_limit}" 1>&2 &&
+            echo "===> RSS memory $(( ${RSS} / 1000 )) GB > RSS limit $(( ${RSS_limit} / 1000 )) GB"  1>&2 &&
             kill -9 $PID &&
             exit 1;
         fi  
