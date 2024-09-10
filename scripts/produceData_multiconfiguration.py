@@ -47,7 +47,7 @@ def run_cmsDriver(configdata, release):
     --filein {filein} \
     --no_output \
     {customise} \
-    --customise_commands {customiseCommand}"
+    --customise_commands {customiseCommand} & ../../../HGCTPGValidation/scripts/get_rss_memory.sh $! 10 1000000"
     
     pprint.pprint(command)
     return command
@@ -80,7 +80,7 @@ def main(subsetconfig, release):
               else:
                 command = run_cmsDriver(config_data, release)
                 sourceCmd = ['bash', '-c', command]
-                sourceProc = subprocess.run(sourceCmd, stdout=logfile, stderr=logfile, check=True, text=True)
+                sourceProc = subprocess.run(sourceCmd, check=True, text=True)
             else:
               print("Do not run this configuration: ", key, ": ", value)
 
