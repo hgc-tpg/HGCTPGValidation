@@ -8,6 +8,8 @@
 # 2nd argument: interval in seconds
 # 3th argument: memory limit
 
+DEBUG=0
+
 # Check if the PID of the last process is provided
 if [ -z "$1" ]; then
     echo "Usage: $0 PID INTERVALL RSS_LIMIT"
@@ -47,7 +49,7 @@ while true; do
     
     if [ -z "$PID" ] || [ ! -e /proc/$PID/status ] ; then
         echo "Process $PID not found."
-        exit 1;
+        break;
     else
         # Get the RSS (Resident Set Size) memory usage
         RSS=$(grep -i vmrss /proc/$PID/status | awk '{print $2}')
