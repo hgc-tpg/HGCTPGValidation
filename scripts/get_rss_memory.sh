@@ -49,12 +49,12 @@ fi
 if [ -z "$PID" ] ; then
     echo "Process $PID not found!"
     exit 1;
-else
+fi
     
 while true; do
     
     if [ ! -e /proc/$PID/status ] ; then
-        echo "Process with $PID already finished!"
+        echo "Process $PID already finished!"
         break;
     else
         # Get the RSS (Resident Set Size) memory usage
