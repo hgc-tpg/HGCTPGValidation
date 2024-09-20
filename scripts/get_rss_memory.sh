@@ -8,7 +8,7 @@
 # 2nd argument: interval in seconds
 # 3th argument: memory limit
 
-DEBUG=0
+DEBUG=1
 
 # Check if the PID of the last process is provided
 if [ -z "$1" ]; then
@@ -35,21 +35,26 @@ RSS_limit=$3
 # Wait the process cmsRun starts running
 sleep 20
 
+# Get PID for the process "cmsRun" and the user "jenkins"
+p_all=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print}')
+PID=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print $1}')
+
+if [ "$DEBUG" = "1" ] ; then
+    echo "LastProcess PID= " $1
+    ps
+    echo "=== > Information about the process (PID user name_process): " $p_all
+    echo "PID=" $PID
+fi
+    
+if [ -z "$PID" ] ; then
+    echo "Process $PID not found!"
+    exit 1;
+else
+    
 while true; do
-   
-    # Get PID for the process "cmsRun" and the user "jenkins"
-    p_all=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print}')
-    PID=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print $1}')
     
-    if [ "$DEBUG" = "1" ] ; then
-        echo "LastProcess PID= " $1
-        ps
-        echo "=== > Information about the process (PID user name_process): " $p_all
-        echo "PID=" $PID
-    fi
-    
-    if [ -z "$PID" ] || [ ! -e /proc/$PID/status ] ; then
-        echo "Process $PID not found!"
+    if [ ! -e /proc/$PID/status ] ; then
+        echo "Process with $PID already finished!"
         break;
     else
         # Get the RSS (Resident Set Size) memory usage
