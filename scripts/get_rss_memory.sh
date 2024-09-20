@@ -12,19 +12,19 @@ DEBUG=0
 
 # Check if the PID of the last process is provided
 if [ -z "$1" ]; then
-    echo "Usage: $0 PID INTERVALL RSS_LIMIT"
-    exit 1
-fi
-
-# Check if the limit RSS is provided
-if [ -z "$2" ]; then
-    echo "Usage: $0 PID INTERVALL RSS_LIMIT"
+    echo "Usage: $0 PID INTERVAL RSS_LIMIT"
     exit 1
 fi
 
 # Check if the Interval (in s) is provided
+if [ -z "$2" ]; then
+    echo "Usage: $0 PID INTERVAL RSS_LIMIT"
+    exit 1
+fi
+
+# Check if the limit RSS is provided
 if [ -z "$3" ]; then
-    echo "Usage: $0 PID INTERVALL RSS_LIMIT"
+    echo "Usage: $0 PID INTERVAL RSS_LIMIT"
     exit 1
 fi
 
