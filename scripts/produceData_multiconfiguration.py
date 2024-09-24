@@ -68,8 +68,8 @@ def main(subsetconfig, release):
         #  test: bcstc
         for key, value in conf.items():
             # Do only for "test" or for "ref"
-            print("value=", value)
             if key==release:
+              print("Configuration: ", key, ": ", value)
               # Read the config file corresponding to key:value
               # the config_type=1 is set for reading parameters for running CMSSW HGCal TPG code
               config_data=read_config(path, value, 1)
@@ -78,11 +78,12 @@ def main(subsetconfig, release):
               if os.path.exists(f"hgcal_tpg_validation_{confName}_{release}_USER.py"):
                 print("Python file for the config ", value, ":", key, "was already created.")  
               else:
+                print("Running on config: ", key, ": ", value)
                 command = run_cmsDriver(config_data, release)
                 sourceCmd = ['bash', '-c', command]
                 sourceProc = subprocess.run(sourceCmd, check=True, text=True)
             else:
-              print("Do not run this configuration: ", key, ": ", value)
+              print("Go for the next configuration.")
 
 if __name__ == "__main__":
     import optparse
