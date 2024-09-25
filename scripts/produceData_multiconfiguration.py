@@ -35,6 +35,10 @@ def run_cmsDriver(configdata, release):
     # else --customise {customiseUser}
     customise = f'{"" if customiseUser=="empty" else f"--customise {customiseUser}"}'
     
+    INTERVAL=int(10)
+    RSS_limit=int(10000000)
+    print("INTERVAL=", INTERVAL)
+    print("RSS_limit=", RSS_limit)
     command = f"echo $PWD; source /cvmfs/cms.cern.ch/cmsset_default.sh; eval `scramv1 runtime -sh`; \
     cmsDriver.py hgcal_tpg_validation_{configName}_{release} -n {str(nbEvents)} \
     --mc --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW \
@@ -47,7 +51,7 @@ def run_cmsDriver(configdata, release):
     --filein {filein} \
     --no_output \
     {customise} \
-    --customise_commands {customiseCommand} & ../../../HGCTPGValidation/scripts/get_rss_memory.sh $! 10 10000000"
+    --customise_commands {customiseCommand} & ../../../HGCTPGValidation/scripts/get_rss_memory.sh $! {INTERVAL} {RSS_limit}"
     
     pprint.pprint(command)
     return command
