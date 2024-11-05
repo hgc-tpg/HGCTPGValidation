@@ -51,7 +51,7 @@ def run_cmsDriver(configdata, release):
     --filein {filein} \
     --no_output \
     {customise} \
-    --customise_commands {customiseCommand} & ../../../HGCTPGValidation/scripts/get_rss_memory.sh $! {INTERVAL} {RSS_limit}"
+    --customise_commands {customiseCommand}"
     
     pprint.pprint(command)
     return command
