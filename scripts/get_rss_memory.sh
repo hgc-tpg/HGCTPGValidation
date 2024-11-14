@@ -32,15 +32,14 @@ fi
 INTERVAL=$2
 RSS_limit=$3
 
-# testing
 echo "STARTS get_rss_memory"
 
 # Waiting for the process cmsRun to be run
+# Max waiting time = 300s
 i=0
 limit_time=300
 while true; do
     
-    echo "i = " $i
     PID=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print $1}')
     
     if [ -z "$PID" ] && [ $i -lt $limit_time ] ; then
@@ -54,10 +53,10 @@ while true; do
         p_all=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print}')
         echo "=== > Information about the process (PID user name_process): " $p_all
         echo "PID=" $PID
-        break
+        break;
     fi
 done
-    
+
 while true; do
     
     if [ ! -e /proc/$PID/status ] ; then
