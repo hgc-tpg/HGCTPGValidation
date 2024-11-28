@@ -55,7 +55,10 @@ while true; do
         # We select the process "cmsRun" and the use "jenkins"
         p_all=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print}')
         echo "=== > Information about the process (PID user name_process): " $p_all
-        echo "PID=" $PID
+        
+        # Prints the number of cmsRun processes corresponding to the user "jenkins"
+        p_all_nb=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk 'END {print NR}')
+        echo "The number of the cmsRun processes is " $p_all_nb
         break;
     fi
 done
