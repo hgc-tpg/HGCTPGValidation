@@ -37,9 +37,10 @@ echo "STARTS get_rss_memory"
 # Waiting for the process cmsRun to be run
 # Max waiting time = 120s
 i=0
-limit_time=120
+limit_time=120 # in seconds
 while true; do
     
+    # Get the PID for the process "cmsRun" and the use "jenkins"
     PID=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print $1}')
     
     if [ -z "$PID" ] && [ $i -lt $limit_time ] ; then
@@ -50,13 +51,15 @@ while true; do
         echo "WARNING: The PID for the process cmsRun has not been found." 1>&2 &&
         exit 0;
     else
+        # Prints the pid, user name and the command name
+        # We select the process "cmsRun" and the use "jenkins"
         p_all=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print}')
         echo "=== > Information about the process (PID user name_process): " $p_all
         echo "PID=" $PID
         break;
     fi
 done
- 
+
 while true; do
     
     if [ ! -e /proc/$PID/status ] ; then
