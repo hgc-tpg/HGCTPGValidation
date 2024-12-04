@@ -48,7 +48,7 @@ while true; do
     if [ -z "$PID" ] && [ $i -lt $limit_time ] ; then
        sleep 10
        echo "Waiting for the process cmsRun to be run."
-       i = $i + 10
+       i=$((i+10))
     elif [ -z "$PID" ] && [ $i -ge $limit_time ] ; then
         echo "WARNING: The PID for the process cmsRun has not been found." 1>&2 &&
         exit 0;
