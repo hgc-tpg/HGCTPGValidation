@@ -40,7 +40,7 @@ echo "STARTS get_rss_memory"
 i=0
 limit_time=120 # in seconds
 while true; do
-    
+    ps
     # Get the PID for the process "cmsRun" and the use "jenkins" and corresponding to $PID_process
     PID=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | grep $PID_process | awk '{print $1}')
     
