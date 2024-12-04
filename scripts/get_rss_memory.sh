@@ -29,6 +29,7 @@ if [ -z "$3" ]; then
 fi
 
 # Get the PID of the process
+PID_process=$1
 INTERVAL=$2
 RSS_limit=$3
 
