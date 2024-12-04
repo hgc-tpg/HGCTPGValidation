@@ -44,6 +44,7 @@ while true; do
     # Get the PID for the process "cmsRun" and the use "jenkins" and corresponding to $PID_process
     PID=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | grep $PID_process | awk '{print $1}')
     
+    # Waiting for the PID process to be run until the limit time is over
     if [ -z "$PID" ] && [ $i -lt $limit_time ] ; then
        sleep 10
        echo "Waiting for the process cmsRun to be run."
@@ -52,6 +53,8 @@ while true; do
         echo "WARNING: The PID for the process cmsRun has not been found." 1>&2 &&
         exit 0;
     else
+        # The PID process has been found
+        
         # Prints the pid, user name and the command name
         # We select the process "cmsRun" and the use "jenkins"
         p_all=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | grep $PID_process | awk '{print}')
@@ -60,10 +63,12 @@ while true; do
         # Prints the number of cmsRun processes corresponding to the user "jenkins"
         p_all_nb=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | grep $PID_process | awk 'END {print NR}')
         echo "The number of the cmsRun processes is " $p_all_nb
+        
         break;
     fi
 done
 
+# Starts monitoring the RSS memory of the process
 while true; do
     
     if [ ! -e /proc/$PID/status ] ; then
