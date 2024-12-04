@@ -41,8 +41,8 @@ i=0
 limit_time=120 # in seconds
 while true; do
     
-    # Get the PID for the process "cmsRun" and the use "jenkins"
-    PID=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print $1}')
+    # Get the PID for the process "cmsRun" and the use "jenkins" and corresponding to $PID_process
+    PID=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | grep $PID_process | awk '{print $1}')
     
     if [ -z "$PID" ] && [ $i -lt $limit_time ] ; then
        sleep 10
@@ -54,11 +54,11 @@ while true; do
     else
         # Prints the pid, user name and the command name
         # We select the process "cmsRun" and the use "jenkins"
-        p_all=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk '{print}')
+        p_all=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | grep $PID_process | awk '{print}')
         echo "=== > Information about the process (PID user name_process): " $p_all
         
         # Prints the number of cmsRun processes corresponding to the user "jenkins"
-        p_all_nb=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | awk 'END {print NR}')
+        p_all_nb=$(ps -eo pid,user,comm | grep cmsRun | grep jenkins | grep $PID_process | awk 'END {print NR}')
         echo "The number of the cmsRun processes is " $p_all_nb
         break;
     fi
