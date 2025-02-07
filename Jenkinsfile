@@ -331,6 +331,32 @@ pipeline {
                     env.CHANGE_TARGET = env.CHANGE_TARGET_HGCTPGVAL
                     println( "Validation of the validation: Set the original name of CHANGE_BRANCH => " + env.CHANGE_BRANCH )
                 }
+                
+                def message = ""
+                if (currentBuild.result == 'SUCCESS') {
+                    message = "Validation succeded!!!"
+                } else if (currentBuild.result == 'FAILURE') {
+                    message = "Validation failed!!!"
+                }
+                
+                withEnv(["MESSAGE=${message}","url=${env.CHANGE_URL}"]) {
+                    sh'set +x exec >> log_Jenkins; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python /data/jenkins/workspace/create_token.py > /tmp/github_token'
+                    sh '''
+                        set +x
+                        url_comments1="${url/pull/issues}/comments"
+                        url_comments2="${url_comments1/github.com/api.github.com/repos}"
+                        GITHUB_ACCESS_TOKEN=$(cat /tmp/github_token)
+                        if [[ -z "${GITHUB_ACCESS_TOKEN}" ]]; then
+                            echo 'The github access token has not been generated.'
+                        else
+                            curl -X POST -H "Authorization: Bearer $GITHUB_ACCESS_TOKEN " \
+                            -H "Accept: application/vnd.github+json" \
+                             -d "{\\"body\\": \\"$MESSAGE\\" }"  \
+                            $url_comments2
+                        fi
+                        rm -f /tmp/github_token
+                    '''
+                }
             }
             archiveArtifacts artifacts: 'log_Jenkins', fingerprint: true
         }
