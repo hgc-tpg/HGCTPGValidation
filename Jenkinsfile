@@ -334,7 +334,7 @@ pipeline {
                 
                 def message = ""
                 if (currentBuild.result == 'SUCCESS') {
-                    message = "Validation succeded!!!" + "<br>" + "The validation histograms are available at ${env.CHANGE_TITLE}" + "<br>" + "Author of the PR: ${env.CHANGE_AUTHOR}" + "<br>" + "Target branch: ${env.CHANGE_TARGET}" + "<br>" + "Feature branch: ${env.CHANGE_BRANCH}" + "<br>" + "Check console output at ${env.BUILD_URL}." + "<br>" + "The validation histograms are available at ${env.WEBPAGES_VAL}list_config.php?pr=/PR$CHANGE_ID"
+                    message = "Validation succeded!!!" + "<br>" + "The validation histograms are available at ${env.CHANGE_TITLE}" + "<br>" + "Author of the PR: ${env.CHANGE_AUTHOR}" + "<br>" + "Target branch: ${env.CHANGE_TARGET}" + "<br>" + "Feature branch: ${env.CHANGE_BRANCH}" + "<br>" + "The validation histograms are available at ${env.WEBPAGES_VAL}list_config.php?pr=/PR$CHANGE_ID"
                 } else if (currentBuild.result == 'FAILURE') {
                     message = "Validation failed!!!"
                 }
