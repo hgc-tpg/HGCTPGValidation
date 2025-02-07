@@ -334,7 +334,7 @@ pipeline {
                 
                 def message = ""
                 if (currentBuild.result == 'SUCCESS') {
-                    message = "Validation succeded!!!"
+                    message = "Validation succeded!!! The validation histograms are available at ${env.WEBPAGES_VAL}"
                 } else if (currentBuild.result == 'FAILURE') {
                     message = "Validation failed!!!"
                 }
