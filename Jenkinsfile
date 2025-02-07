@@ -340,10 +340,15 @@ pipeline {
                 }
                 
                 withEnv(["MESSAGE=${message}","url=${env.CHANGE_URL}"]) {
+                    // Generate a token, the command "set +x" is mandatory
                     sh'set +x exec >> log_Jenkins; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python /data/jenkins/workspace/create_token_hgc-tpg.py > /tmp/github_token'
                     sh '''
+                        # This command is mandatory
                         set +x
+                        # Compose the url to be used for printing the message in the GitHub PR thread
+                        # In the string "url" replace "pull" with "issues" and add at the end "comments"
                         url_comments1="${url/pull/issues}/comments"
+                        # In the string "url_comments1" replace "github.com" with "api.github.com/repos"
                         url_comments2="${url_comments1/github.com/api.github.com/repos}"
                         GITHUB_ACCESS_TOKEN=$(cat /tmp/github_token)
                         if [[ -z "${GITHUB_ACCESS_TOKEN}" ]]; then
