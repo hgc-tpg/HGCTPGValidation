@@ -336,7 +336,8 @@ pipeline {
                 if (currentBuild.result == 'SUCCESS') {
                     message = "The validation checks have passed." + "<br>" + "The comparison histograms are available [here](${env.WEBPAGES_VAL}list_config.php?pr=/PR$CHANGE_ID)"
                 } else if (currentBuild.result == 'FAILURE') {
-                    message = "Validation failed!!!"
+                    message = "Some of the validation checks have failed." + "<br>" + "More details can be found [here](${env.CHANGE_URL}/checks)"
+                
                 }
                 
                 withEnv(["MESSAGE=${message}","url=${env.CHANGE_URL}"]) {
