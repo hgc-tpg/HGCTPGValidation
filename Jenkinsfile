@@ -331,6 +331,38 @@ pipeline {
                     env.CHANGE_TARGET = env.CHANGE_TARGET_HGCTPGVAL
                     println( "Validation of the validation: Set the original name of CHANGE_BRANCH => " + env.CHANGE_BRANCH )
                 }
+                
+                def message = ""
+                if (currentBuild.result == 'SUCCESS') {
+                    message = "The validation checks have passed." + "<br>" + "The comparison histograms are available [here](${env.WEBPAGES_VAL}list_config.php?pr=/PR$CHANGE_ID)"
+                } else if (currentBuild.result == 'FAILURE') {
+                    message = "Some of the validation checks have failed." + "<br>" + "More details can be found [here](${env.CHANGE_URL}/checks)"
+                
+                }
+                
+                withEnv(["MESSAGE=${message}","url=${env.CHANGE_URL}"]) {
+                    // Generate a token, the command "set +x" is mandatory
+                    sh'set +x exec >> log_Jenkins; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python /data/jenkins/workspace/create_token_hgc-tpg.py > /tmp/github_token'
+                    sh '''
+                        # This command is mandatory
+                        set +x
+                        # Compose the url to be used for printing the message in the GitHub PR thread
+                        # In the string "url" replace "pull" with "issues" and add at the end "comments"
+                        url_comments1="${url/pull/issues}/comments"
+                        # In the string "url_comments1" replace "github.com" with "api.github.com/repos"
+                        url_comments2="${url_comments1/github.com/api.github.com/repos}"
+                        GITHUB_ACCESS_TOKEN=$(cat /tmp/github_token)
+                        if [[ -z "${GITHUB_ACCESS_TOKEN}" ]]; then
+                            echo 'The github access token has not been generated.'
+                        else
+                            curl -X POST -H "Authorization: Bearer $GITHUB_ACCESS_TOKEN " \
+                            -H "Accept: application/vnd.github+json" \
+                             -d "{\\"body\\": \\"$MESSAGE\\" }"  \
+                            $url_comments2
+                        fi
+                        rm -f /tmp/github_token
+                    '''
+                }
             }
             archiveArtifacts artifacts: 'log_Jenkins', fingerprint: true
         }
@@ -338,7 +370,7 @@ pipeline {
             echo 'The job finished successfully.'
             mail to: "${EMAIL_TO}",
                  subject: "Jenkins job succeded: ${currentBuild.fullDisplayName}",
-                 body:  "The job finished successfully. \n\n Pull request: ${env.BRANCH_NAME} build number: #${env.BUILD_NUMBER} \n\n Title: ${env.CHANGE_TITLE} \n\n Author of the PR: ${env.CHANGE_AUTHOR} \n\n Target branch: ${env.CHANGE_TARGET} \n\n Feature branch: ${env.CHANGE_BRANCH} \n\n Check console output at ${env.BUILD_URL} \n\n and ${env.CHANGE_URL} to view the results.  \n\n The validation histograms are available at ${env.WEBPAGES_VAL} \n\n"
+                 body:  "The job finished successfully. \n\n Pull request: ${env.BRANCH_NAME} build number: #${env.BUILD_NUMBER} \n\n Title: ${env.CHANGE_TITLE} \n\n Author of the PR: ${env.CHANGE_AUTHOR} \n\n Target branch: ${env.CHANGE_TARGET} \n\n Feature branch: ${env.CHANGE_BRANCH} \n\n Check console output at ${env.BUILD_URL} \n\n and ${env.CHANGE_URL} to view the results.  \n\n The validation histograms are available at ${env.WEBPAGES_VAL}list_config.php?pr=/PR$CHANGE_ID \n\n"
         }
         failure {
             echo 'Job failed'
