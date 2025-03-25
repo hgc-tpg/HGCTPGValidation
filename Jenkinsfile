@@ -81,6 +81,21 @@ pipeline {
                             env.WEBPAGES_VAL=env.HGCTPG_WEBPAGES_VAL_CMSSW_TEST_EB
                             env.JOB_FLAG=1
                             break
+                        case 'HGC TPG Validation - org':
+                            env.EMAIL_TO=env.HGCTPG_EMAIL_TO_EB
+                            env.BASE_REMOTE=env.HGCTPG_BASE_REMOTE_EB_org
+                            env.DATA_DIR=env.HGCTPG_DATA_DIR_EB
+                            env.WEBPAGES_VAL=env.HGCTPG_WEBPAGES_VAL_CMSSW_TEST_EB
+                            env.JOB_FLAG=1
+                            break
+                        case 'CMSSW Dev Validation - org':
+                            env.EMAIL_TO=env.HGCTPG_EMAIL_TO_EB
+                            env.BASE_REMOTE=env.HGCTPG_BASE_REMOTE_EB_org
+                            env.REMOTE_HGCTPGVAL=env.BASE_REMOTE
+                            env.DATA_DIR=env.HGCTPG_DATA_DIR_EB
+                            env.BRANCH_HGCTPGVAL='Jenkins-feature-modularJenkinsfile'
+                            env.WEBPAGES_VAL=env.HGCTPG_WEBPAGES_VAL_CMSSW_TEST_EB
+                            env.JOB_FLAG=0    
                         default: 
                             println("The job name is unknown"); 
                             break
