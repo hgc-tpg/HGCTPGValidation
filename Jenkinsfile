@@ -129,21 +129,6 @@ pipeline {
         }
         stage('Initialize'){
             stages{
-                stage('Clean the working environment'){
-                    steps{
-                        sh '''
-                        set +x
-                        echo '==> Clean the working environment. ============================'
-                        exec >> log_Jenkins
-                        echo '==> Clean the working environment. ============================'
-                        if [ -d "/data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID" ]
-                        then
-                            rm -rf /data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID
-                        fi
-                        echo '   '
-                        '''
-                    }
-                }
                 stage('Install automatic validation package HGCTPGValidation') {
                     steps {
                         sh '''
@@ -169,6 +154,21 @@ pipeline {
                         fi
                         mkdir test_dir
                         ls -lrt ..
+                        echo '   '
+                        '''
+                    }
+                }
+                stage('Clean the working environment'){
+                    steps{
+                        sh '''
+                        set +x
+                        echo '==> Clean the working environment. ============================'
+                        exec >> log_Jenkins
+                        echo '==> Clean the working environment. ============================'
+                        if [ -d "/data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID" ]
+                        then
+                            rm -rf /data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID
+                        fi
                         echo '   '
                         '''
                     }
@@ -205,7 +205,7 @@ pipeline {
                                 env.CHANGE_BRANCH = env.REF_BRANCH
                                 env.CHANGE_TARGET = env.REF_BRANCH
                                 env.REMOTE = env.BASE_REMOTE
-
+                                
                                 println(env.REF_BRANCH)
                                 println(env.REF_RELEASE)
                                 println(env.SCRAM_ARCH)
@@ -222,45 +222,82 @@ pipeline {
                 }
             }
         }
-        stage('Build CMSSW Test release'){
+        //stage('Build CMSSW Test release'){
+        //    stages{
+        stage('Install CMSSW Test release'){
+            steps {
+                sh '''
+                set +x
+                echo '==> Build CMSSW Test ========================='
+                echo '===> InstallCMSSW Test Step'
+                exec >> log_Jenkins
+                echo '==> Build CMSSW Test ========================='
+                echo '===> InstallCMSSW Test Step'
+                pwd
+                cd test_dir
+                ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
+                echo '     '
+                '''
+            }
+        }
+        stage('Quality Checks'){
+            steps{
+                sh '''
+                set +x
+                echo '===> Quality checks'
+                exec >> log_Jenkins
+                echo '===> Quality checks'
+                source /cvmfs/cms.cern.ch/cmsset_default.sh
+                cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
+                scram build code-checks
+                scram build code-format
+                GIT_STATUS=`git status --porcelain`
+                if [ ! -z "$GIT_STATUS" ]; then
+                    echo "Code-checks or code-format failed."
+                    exit 1;
+                fi
+                echo '    '
+                '''
+            }
+        }
+        stage('Compare with CMSSW Ref Release'){
             stages{
-                stage('Install'){
+                stage('Install Ref Release'){
                     steps {
                         sh '''
                         set +x
-                        echo '==> Build CMSSW Test ========================='
-                        echo '===> InstallCMSSW Test Step'
+                        echo '==> Build CMSSW Reference ======================='
+                        echo '===> InstallCMSSW Ref'
                         exec >> log_Jenkins
-                        echo '==> Build CMSSW Test ========================='
-                        echo '===> InstallCMSSW Test Step'
+                        echo '==> Build CMSSW Reference ======================='
+                        echo '===> InstallCMSSW Ref'
                         pwd
                         cd test_dir
-                        ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
-                        echo '     '
+                        ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
+                        echo '      '
                         '''
                     }
                 }
-                stage('Quality Checks'){
-                    steps{
+                stage('Produce Ref'){
+                    steps {
                         sh '''
                         set +x
-                        echo '===> Quality checks'
+                        echo '===> Produce reference data.'
                         exec >> log_Jenkins
-                        echo '===> Quality checks'
-                        source /cvmfs/cms.cern.ch/cmsset_default.sh
-                        cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
-                        scram build code-checks
-                        scram build code-format
-                        GIT_STATUS=`git status --porcelain`
-                        if [ ! -z "$GIT_STATUS" ]; then
-                            echo "Code-checks or code-format failed."
-                            exit 1;
-                        fi
-                        echo '    '
+                        echo '===> Produce reference data.'
+                        pwd
+                        cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
+                        module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
+                        module purge
+                        module load python/3.9.9
+                        python --version
+                        echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
+                        python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF}
+                        echo '      '
                         '''
                     }
                 }
-                stage('Produce'){
+                stage('Produce Test'){
                     steps {
                         sh '''
                         set +x
@@ -277,45 +314,6 @@ pipeline {
                         echo 'LABEL_TEST = ' ${LABEL_TEST}
                         echo 'SCRAM_ARCH = ' ${SCRAM_ARCH}
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
-                        echo '      '
-                        '''
-                    }
-                }
-            }
-        }
-        stage('Build CMSSW Ref release'){
-            stages{
-                stage('Install'){
-                    steps {
-                        sh '''
-                        set +x
-                        echo '==> Build CMSSW Reference ======================='
-                        echo '===> InstallCMSSW Ref'
-                        exec >> log_Jenkins
-                        echo '==> Build CMSSW Reference ======================='
-                        echo '===> InstallCMSSW Ref'
-                        pwd
-                        cd test_dir
-                        ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
-                        echo '      '
-                        '''
-                    }
-                }           
-                stage('Produce'){
-                    steps {
-                        sh '''
-                        set +x
-                        echo '===> Produce reference data.'
-                        exec >> log_Jenkins
-                        echo '===> Produce reference data.'
-                        pwd
-                        cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
-                        module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
-                        module purge
-                        module load python/3.9.9
-                        python --version
-                        echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
-                        python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF}
                         echo '      '
                         '''
                     }
