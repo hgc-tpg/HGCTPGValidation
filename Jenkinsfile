@@ -185,6 +185,7 @@ pipeline {
                             if ( env.JOB_FLAG == '0' ){
                                 env.REF_RELEASE = sh(returnStdout: true, script: 'set +x exec >> log_Jenkins; source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
                                 env.SCRAM_ARCH = sh(returnStdout: true, script: 'set +x exec >> log_Jenkins; source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
+                                env.TEST_RELEASE = env.REF_RELEASE
                                 
                                 if (env.CHANGE_FORK){
                                     env.REMOTE = env.CHANGE_FORK
@@ -194,6 +195,7 @@ pipeline {
                                 }
                                 
                                 println(env.REF_RELEASE)
+                                println(env.TEST_RELEASE)
                                 println(env.SCRAM_ARCH)
                                 println(env.REMOTE)
                             } 
@@ -205,9 +207,11 @@ pipeline {
                                 env.CHANGE_BRANCH = env.REF_BRANCH
                                 env.CHANGE_TARGET = env.REF_BRANCH
                                 env.REMOTE = env.BASE_REMOTE
+                                env.TEST_RELEASE = env.REF_RELEASE
                                 
                                 println(env.REF_BRANCH)
                                 println(env.REF_RELEASE)
+                                println(env.TEST_RELEASE)
                                 println(env.SCRAM_ARCH)
                                 println(env.BASE_REMOTE)
                                 println(env.REMOTE)
