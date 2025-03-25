@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This code is to use with Jenkins jobs triggering on Github Pull Request in the repository https://github.com/hgc-tpg
-# ./installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
+# ./installCMSSW_global.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
 
 # $1 SCRAM_ARCH
 # $2 release name
@@ -10,6 +10,14 @@
 # $5 branch name (corresponds to the branch containing the changes)
 # $6 reference branch name (this is the target or base branch to which the change could be merged, it is in https://github.com/hgc-tpg repository)
 # $7 label "ref" or "test"
+
+set +x
+echo '==> Build CMSSW Test ========================='
+echo '===> InstallCMSSW Test Step'
+exec >> log_Jenkins
+echo '==> Build CMSSW Test ========================='
+echo '===> InstallCMSSW Test Step'
+cd test_dir
 
 set -e
 
@@ -42,4 +50,5 @@ git checkout -b local_$branch_ref $baseremote/$branch_ref
 git cms-merge-topic $remote:$branch
 # Compile
 scram b -j8
+
 

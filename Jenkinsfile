@@ -218,20 +218,10 @@ pipeline {
                 }
             }
         }
-        //stage('Build CMSSW Test release'){
-        //    stages{
         stage('Install CMSSW Test release'){
             steps {
                 sh '''
-                set +x
-                echo '==> Build CMSSW Test ========================='
-                echo '===> InstallCMSSW Test Step'
-                exec >> log_Jenkins
-                echo '==> Build CMSSW Test ========================='
-                echo '===> InstallCMSSW Test Step'
-                pwd
-                cd test_dir
-                ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
+                ./HGCTPGValidation/scripts/installCMSSW_global.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
                 echo '     '
                 '''
             }
@@ -261,15 +251,7 @@ pipeline {
                 stage('Install Ref Release'){
                     steps {
                         sh '''
-                        set +x
-                        echo '==> Build CMSSW Reference ======================='
-                        echo '===> InstallCMSSW Ref'
-                        exec >> log_Jenkins
-                        echo '==> Build CMSSW Reference ======================='
-                        echo '===> InstallCMSSW Ref'
-                        pwd
-                        cd test_dir
-                        ../HGCTPGValidation/scripts/installCMSSW.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
+                        ./HGCTPGValidation/scripts/installCMSSW_global.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
                         echo '      '
                         '''
                     }
