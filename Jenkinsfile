@@ -335,6 +335,18 @@ pipeline {
                 '''
             }
         }
+        stage('Geom Check') {
+            steps {
+                echo '==> Geom Check'
+                script{
+                    try{
+                        sh'./HGCTPGValidation/scripts/geom_check.sh ${TEST_RELEASE} ${LABEL_TEST}'
+                    } catch (e){
+                        echo "An error occured in Geom testing stage: ${e}"
+                    }
+                }
+            }
+        }
     }
     post {
         always {
