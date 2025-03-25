@@ -161,15 +161,7 @@ pipeline {
                 stage('Clean the working environment'){
                     steps{
                         sh '''
-                        set +x
-                        echo '==> Clean the working environment. ============================'
-                        exec >> log_Jenkins
-                        echo '==> Clean the working environment. ============================'
-                        if [ -d "/data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID" ]
-                        then
-                            rm -rf /data/jenkins/workspace/${DATA_DIR}/PR$CHANGE_ID
-                        fi
-                        echo '   '
+                        ./HGCTPGValidation/scripts/clean_environment.sh ${DATA_DIR} PR$CHANGE_ID
                         '''
                     }
                 }
