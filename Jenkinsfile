@@ -283,21 +283,21 @@ pipeline {
                         '''
                     }
                 }
-            }
-        }
-        stage('Display') {
-            steps {
-                sh '''
-                set +x
-                echo '==> Display ======================='
-                exec >> log_Jenkins
-                echo '==> Display ======================='
-                cd test_dir
-                source ../HGCTPGValidation/env_install.sh
-                echo $PWD
-                python ../HGCTPGValidation/scripts/displayHistos.py --subsetconfig ${CONFIG_SUBSET} --refdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src --testdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src --datadir ${DATA_DIR} --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
-                echo '      '
-                '''
+                stage('Display') {
+                    steps {
+                        sh '''
+                        set +x
+                        echo '==> Display ======================='
+                        exec >> log_Jenkins
+                        echo '==> Display ======================='
+                        cd test_dir
+                        source ../HGCTPGValidation/env_install.sh
+                        echo $PWD
+                        python ../HGCTPGValidation/scripts/displayHistos.py --subsetconfig ${CONFIG_SUBSET} --refdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src --testdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src --datadir ${DATA_DIR} --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
+                        echo '      '
+                        '''
+                    }
+                }
             }
         }
         stage('Geom Check') {
