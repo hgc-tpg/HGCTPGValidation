@@ -174,40 +174,23 @@ pipeline {
                             exec >> log_Jenkins
                             echo 'echo ==> Set CMSSW environment variables. ============================'
                             '''
-                            if ( env.JOB_FLAG == '0' ){
-                                env.REF_RELEASE = sh(returnStdout: true, script: 'set +x exec >> log_Jenkins; source ./HGCTPGValidation/scripts/extractReleaseName.sh ${CHANGE_TARGET}').trim()
-                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'set +x exec >> log_Jenkins; source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
-                                env.TEST_RELEASE = env.REF_RELEASE
-                                
-                                if (env.CHANGE_FORK){
-                                    env.REMOTE = env.CHANGE_FORK
-                                }
-                                else {
-                                    env.REMOTE = env.BASE_REMOTE
-                                }
-                                
-                                println(env.REF_RELEASE)
-                                println(env.TEST_RELEASE)
-                                println(env.SCRAM_ARCH)
-                                println(env.REMOTE)
-                            } 
-                            else {
-                                env.REF_BRANCH = sh(returnStdout: true, script: 'set +x exec >> log_Jenkins; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_cmsswRefBranch.py').trim()
-                                env.REF_RELEASE = sh(returnStdout: true, script: 'set +x exec >> log_Jenkins; source ./HGCTPGValidation/scripts/extractReleaseName.sh ${REF_BRANCH}').trim()
-                                env.SCRAM_ARCH = sh(returnStdout: true, script: 'set +x exec >> log_Jenkins; source ./HGCTPGValidation/scripts/getScramArch.sh ${REF_RELEASE}').trim()
-                                env.BASE_REMOTE = sh(returnStdout: true, script: 'set +x exec >> log_Jenkins; module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/; module purge; module load python/3.9.9; python ./HGCTPGValidation/scripts/get_remoteParam.py').trim()
-                                env.CHANGE_BRANCH = env.REF_BRANCH
-                                env.CHANGE_TARGET = env.REF_BRANCH
-                                env.REMOTE = env.BASE_REMOTE
-                                env.TEST_RELEASE = env.REF_RELEASE
-                                
-                                println(env.REF_BRANCH)
-                                println(env.REF_RELEASE)
-                                println(env.TEST_RELEASE)
-                                println(env.SCRAM_ARCH)
-                                println(env.BASE_REMOTE)
-                                println(env.REMOTE)
+                            try {
+                                def set_var = load './HGCTPGValidation/scripts/set_CMSSW_env_variables.groovy'
+                                set_var.run(env.JOB_FLAG, env.CHANGE_FORK, env.BASE_REMOTE)
+                            } catch (e) {
+                                echo "Error during loading or execution: ${e}"
                             }
+                            println("The environment variables are:")
+                            
+                            echo "The variables are:"
+                            echo "JOB_FLAG: ${JOB_FLAG}"
+                            echo "CHANGE_BRANCH: ${CHANGE_BRANCH}"
+                            echo "CHANGE_TARGET: ${CHANGE_TARGET}"
+                            echo "REF_RELEASE: ${REF_RELEASE}"
+                            echo "TEST_RELEASE: ${TEST_RELEASE}"
+                            echo "SCRAM_ARCH: ${SCRAM_ARCH}"
+                            echo "BASE_REMOTE: ${BASE_REMOTE}"
+                            echo "REMOTE: ${REMOTE}"
                         }
                         sh '''
                         set +x
