@@ -337,7 +337,7 @@ pipeline {
                     '''
                 }
             }
-            archiveArtifacts artifacts: 'log_Jenkins', fingerprint: true
+            archiveArtifacts artifacts: 'log_Jenkins, test_dir/${TEST_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src/test_triggergeom.root', fingerprint: true
         }
         success {
             echo 'The job finished successfully.'
