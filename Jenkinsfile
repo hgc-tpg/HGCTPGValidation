@@ -315,7 +315,7 @@ pipeline {
                     '''
                 }
             }
-            archiveArtifacts artifacts: 'log_Jenkins', fingerprint: true
+            archiveArtifacts artifacts: 'log_Jenkins, test_dir/**/src/test_triggergeom.root'', fingerprint: true
         }
         success {
             echo 'The job finished successfully.'
