@@ -15,6 +15,15 @@ set +x
 echo '==> Clean the working environment. ============================'
 exec >> log_Jenkins
 echo '==> Clean the working environment. ============================'
+
+# Remove the test_dir that contains the ROOT files from the CMSSW test and ref simulations
+if [ -d "./test_dir" ]
+then
+    echo "Directory test_dir exists."
+    rm -rf test_dir
+fi
+
+# Remove the directory containing the images with histograms
 if [ -d "/data/jenkins/workspace/${DATA_DIR}/$PRCHANGE_ID" ]
 then
     echo 'Remove the old directory ' /data/jenkins/workspace/${DATA_DIR}/${PRCHANGE_ID}
