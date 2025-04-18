@@ -285,7 +285,7 @@ pipeline {
                     try{
                         sh'./HGCTPGValidation/scripts/geom_check.sh ${TEST_RELEASE} ${LABEL_TEST}'
                     } catch (e){
-                        echo "An error occured in Geom testing stage: ${e}"
+                        error("An error occured in Geom testing stage: ${e}")
                     }
                 }
             }
@@ -315,7 +315,7 @@ pipeline {
                     '''
                 }
             }
-            archiveArtifacts artifacts: 'log_Jenkins', fingerprint: true
+            archiveArtifacts artifacts: 'log_Jenkins, test_dir/**/src/test_triggergeom.root', fingerprint: true
         }
         success {
             echo 'The job finished successfully.'
