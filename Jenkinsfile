@@ -8,7 +8,8 @@ pipeline {
         CONFIG_SUBSET = 'default_multi_subset'
     }
     options {
-        skipDefaultCheckout() 
+        skipDefaultCheckout()
+        buildDiscarder logRotator(artifactDaysToKeepStr: '7', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '')
     }
     stages {
         stage('Set environment variables'){
