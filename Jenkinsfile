@@ -304,6 +304,16 @@ pipeline {
                     println( "Validation of the validation: Set the original name of CHANGE_BRANCH => " + env.CHANGE_BRANCH )
                 }
                 
+                // Comments
+                def commentCauses = currentBuild.getBuildCauses("com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestCommentCause")
+                if (commentCauses) {
+                    for (def commentCause : commentCauses) {
+                        echo("""Comment Author: ${commentCause.commentAuthor}, Body: "${commentCause.commentBody}" (${commentCause.commentUrl})""")
+                    }
+                } else {
+                    echo("Build was not started by a PR comment")
+                }
+                
                 def message = ""
                 if (currentBuild.result == 'SUCCESS') {
                     message = "The validation checks have passed." + "<br>" + "The comparison histograms are available [here](${env.WEBPAGES_VAL}list_config.php?pr=/PR$CHANGE_ID)"
