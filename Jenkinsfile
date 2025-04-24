@@ -2,6 +2,9 @@ pipeline {
     agent {
         label 'llrgrhgtrig.in2p3.fr'
     }
+    triggers {
+        pollSCM('H/1 * * * *') // Poll every 1 minute
+    }
     environment {
         LABEL_TEST='test'
         LABEL_REF='ref'
