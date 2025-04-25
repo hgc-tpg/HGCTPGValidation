@@ -249,8 +249,6 @@ pipeline {
                         module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
                         module purge
                         module load python/3.9.9
-                        python --version
-                        echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF}
                         echo '      '
                         '''
@@ -263,15 +261,10 @@ pipeline {
                         echo '===> Produce test data.'
                         exec >> log_Jenkins
                         echo '===> Produce test data.'
-                        pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
                         module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
                         module purge
                         module load python/3.9.9
-                        python --version
-                        echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
-                        echo 'LABEL_TEST = ' ${LABEL_TEST}
-                        echo 'SCRAM_ARCH = ' ${SCRAM_ARCH}
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
                         echo '      '
                         '''
@@ -286,7 +279,6 @@ pipeline {
                         echo '==> Display ======================='
                         cd test_dir
                         source ../HGCTPGValidation/env_install.sh
-                        echo $PWD
                         python ../HGCTPGValidation/scripts/displayHistos.py --subsetconfig ${CONFIG_SUBSET} --refdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src --testdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src --datadir ${DATA_DIR} --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
                         echo '      '
                         '''
