@@ -155,6 +155,10 @@ pipeline {
                 stage('Clean the working environment'){
                     steps{
                         sh '''
+                        set +x
+                        echo 'echo ==> Clean the working environment. ============================'
+                        exec >> log_Jenkins
+                        echo 'echo ==> Clean the working environment. ============================'
                         ./HGCTPGValidation/scripts/clean_environment.sh ${DATA_DIR} PR$CHANGE_ID
                         mkdir test_dir
                         '''
@@ -199,6 +203,10 @@ pipeline {
         stage('Install CMSSW Test release'){
             steps {
                 sh '''
+                set +x
+                echo 'echo ==> Install CMSSW Test release. ============================'
+                exec >> log_Jenkins
+                echo 'echo ==> Install CMSSW Test release. ============================'
                 ./HGCTPGValidation/scripts/installCMSSW_global.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
                 echo '     '
                 '''
@@ -207,6 +215,10 @@ pipeline {
         stage('Quality Checks'){
             steps{
                 sh '''
+                set +x
+                echo 'echo ==> Quality Checks. ============================'
+                exec >> log_Jenkins
+                echo 'echo ==> Quality Checks. ============================'
                 ./HGCTPGValidation/scripts/quality_checks.sh ${REF_RELEASE} ${LABEL_TEST}
                 '''
             }
@@ -216,6 +228,10 @@ pipeline {
                 stage('Install Ref Release'){
                     steps {
                         sh '''
+                        set +x
+                        echo 'echo ==> Install Ref Release. ============================'
+                        exec >> log_Jenkins
+                        echo 'echo ==> Install Ref Release. ============================'
                         ./HGCTPGValidation/scripts/installCMSSW_global.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
                         echo '      '
                         '''
@@ -280,7 +296,12 @@ pipeline {
         }
         stage('Geom Check') {
             steps {
-                echo '==> Geom Check'
+                sh '''
+                set +x
+                echo '==> Geom Check ======================='
+                exec >> log_Jenkins
+                echo '==> Geom Check ======================='
+                '''
                 script{
                     try{
                         sh'./HGCTPGValidation/scripts/geom_check.sh ${TEST_RELEASE} ${LABEL_TEST}'
