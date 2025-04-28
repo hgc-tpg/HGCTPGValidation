@@ -316,13 +316,12 @@ pipeline {
                 }
                 
                 // Detecting whether a build was started by the trigger in a script
-                def triggerCause = currentBuild.rawBuild.getCause(org.jenkinsci.plugins.pipeline.github.trigger.IssueCommentCause)
-                if (triggerCause) {
-                    echo("Build was started by ${triggerCause.userLogin}, who wrote: " +
-                    "\"${triggerCause.comment}\", which matches the " +
-                    "\"${triggerCause.triggerPattern}\" trigger pattern.")
+                if(currentBuild.upstreamBuilds){
+                    print("Parent")
+                    print(currentBuild.upstreamBuilds[0].getBuildCauses()[0].userId)
                 } else {
-                    echo('Build was not started by a trigger')
+                    print("No parent")
+                    print(currentBuild.getBuildCauses()[0].userId)
                 }
                 
                 def message = ""
