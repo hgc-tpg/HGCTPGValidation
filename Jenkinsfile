@@ -147,7 +147,6 @@ pipeline {
                         fi
                         git clone -b ${BRANCH_HGCTPGVAL} https://github.com/${REMOTE_HGCTPGVAL}/HGCTPGValidation HGCTPGValidation
                         source HGCTPGValidation/env_install.sh
-                        pip install attrs
                         ls -lrt ..
                         echo '   '
                         '''
@@ -156,6 +155,10 @@ pipeline {
                 stage('Clean the working environment'){
                     steps{
                         sh '''
+                        set +x
+                        echo 'echo ==> Clean the working environment. ============================'
+                        exec >> log_Jenkins
+                        echo 'echo ==> Clean the working environment. ============================'
                         ./HGCTPGValidation/scripts/clean_environment.sh ${DATA_DIR} PR$CHANGE_ID
                         mkdir test_dir
                         '''
@@ -200,6 +203,10 @@ pipeline {
         stage('Install CMSSW Test release'){
             steps {
                 sh '''
+                set +x
+                echo 'echo ==> Install CMSSW Test release. ============================'
+                exec >> log_Jenkins
+                echo 'echo ==> Install CMSSW Test release. ============================'
                 ./HGCTPGValidation/scripts/installCMSSW_global.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
                 echo '     '
                 '''
@@ -208,6 +215,10 @@ pipeline {
         stage('Quality Checks'){
             steps{
                 sh '''
+                set +x
+                echo 'echo ==> Quality Checks. ============================'
+                exec >> log_Jenkins
+                echo 'echo ==> Quality Checks. ============================'
                 ./HGCTPGValidation/scripts/quality_checks.sh ${REF_RELEASE} ${LABEL_TEST}
                 '''
             }
@@ -217,6 +228,10 @@ pipeline {
                 stage('Install Ref Release'){
                     steps {
                         sh '''
+                        set +x
+                        echo 'echo ==> Install Ref Release. ============================'
+                        exec >> log_Jenkins
+                        echo 'echo ==> Install Ref Release. ============================'
                         ./HGCTPGValidation/scripts/installCMSSW_global.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
                         echo '      '
                         '''
@@ -234,8 +249,6 @@ pipeline {
                         module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
                         module purge
                         module load python/3.9.9
-                        python --version
-                        echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF}
                         echo '      '
                         '''
@@ -248,15 +261,10 @@ pipeline {
                         echo '===> Produce test data.'
                         exec >> log_Jenkins
                         echo '===> Produce test data.'
-                        pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
                         module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
                         module purge
                         module load python/3.9.9
-                        python --version
-                        echo ' CONFIG_SUBSET = ' ${CONFIG_SUBSET}
-                        echo 'LABEL_TEST = ' ${LABEL_TEST}
-                        echo 'SCRAM_ARCH = ' ${SCRAM_ARCH}
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
                         echo '      '
                         '''
@@ -271,7 +279,6 @@ pipeline {
                         echo '==> Display ======================='
                         cd test_dir
                         source ../HGCTPGValidation/env_install.sh
-                        echo $PWD
                         python ../HGCTPGValidation/scripts/displayHistos.py --subsetconfig ${CONFIG_SUBSET} --refdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src --testdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src --datadir ${DATA_DIR} --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
                         echo '      '
                         '''
@@ -281,7 +288,12 @@ pipeline {
         }
         stage('Geom Check') {
             steps {
-                echo '==> Geom Check'
+                sh '''
+                set +x
+                echo '==> Geom Check ======================='
+                exec >> log_Jenkins
+                echo '==> Geom Check ======================='
+                '''
                 script{
                     try{
                         sh'./HGCTPGValidation/scripts/geom_check.sh ${TEST_RELEASE} ${LABEL_TEST}'
