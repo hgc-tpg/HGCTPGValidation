@@ -314,6 +314,36 @@ pipeline {
                     echo("Build was not started by a PR comment")
                 }
                 
+                // Labels
+                def labelCauses = currentBuild.getBuildCauses("com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestLabelCause")
+                if (labelCauses) {
+                    for (def labelCause : labelCauses) {
+                        echo("""Label Author: ${labelCause.labellingAuthor}, Label: "${labelCause.label}" (${labelCause.labelUrl})""")
+                    }
+                } else {
+                    echo("Build was not started by a PR label")
+                }
+                
+                // Reviews
+                def reviewCauses = currentBuild.getBuildCauses("com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestReviewCause")
+                if (reviewCauses) {
+                    for (def reviewCause : reviewCauses) {
+                        echo("""Review Author: ${reviewCause.reviewAuthor} (${reviewCause.pullRequestUrl})""")
+                    }
+                } else {
+                    echo("Build was not started by a PR review")
+                }
+                
+                // Updates
+                def updateCauses = currentBuild.getBuildCauses("com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestUpdateCause")
+                if (updateCauses) {
+                    for (def updateCause : updateCauses) {
+                        echo("""Update Author: ${updateCause.updateAuthor} (${updateCause.pullRequestUrl})""")
+                    }
+                } else {
+                    echo("Build was not started by a PR update")
+                }
+                
                 // Detecting whether a build was started by the trigger in a script
                 if(currentBuild.upstreamBuilds){
                     print("Parent")
