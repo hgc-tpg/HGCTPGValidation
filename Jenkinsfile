@@ -3,7 +3,6 @@ pipeline {
         label 'llrgrhgtrig.in2p3.fr'
     }
     triggers {
-        pollSCM('H/1 * * * *') // Poll every 1 minute
         issueCommentTrigger('.*Build*')
     }
     environment {
