@@ -28,6 +28,7 @@ pipeline {
                     echo "log_Jenkins does not exist."
                 fi 
                 echo '==> Set environment variables'
+                echo 'Start testing webhooks'
                 '''
                 script{
                     String s = env.JOB_NAME
