@@ -204,6 +204,7 @@ pipeline {
         stage('Install CMSSW Test release'){
             steps {
                 sh '''
+                echo "Testing"
                 ./HGCTPGValidation/scripts/installCMSSW_global.sh $SCRAM_ARCH $REF_RELEASE $REMOTE $BASE_REMOTE $CHANGE_BRANCH $CHANGE_TARGET ${LABEL_TEST}
                 echo '     '
                 '''
