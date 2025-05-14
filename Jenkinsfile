@@ -2,9 +2,7 @@ pipeline {
     agent {
         label 'llrgrhgtrig.in2p3.fr'
     }
-    triggers {
-        issueCommentTrigger('.*Build*')
-    }
+    
     environment {
         LABEL_TEST='test'
         LABEL_REF='ref'
