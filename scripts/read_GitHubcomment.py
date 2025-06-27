@@ -81,7 +81,7 @@ def main(tmpFile, defaultSubsetFile):
     
     # Go through all parsed blocks
     parsed_blocks = [yaml.load(block) for block in yaml_blocks]
-    for block in parsed_blocks[1:]: # Skip the first block that do not contain configuration 
+    for block in parsed_blocks: # Skip the first block that do not contain configuration 
         if "shortName" in block: # process the new configurations
             update_configs(block, default_data)
         elif "subsetName" in block: # process the subset configuration
