@@ -5,7 +5,6 @@ pipeline {
     environment {
         LABEL_TEST='test'
         LABEL_REF='ref'
-        CONFIG_SUBSET = 'default_multi_subset'
     }
     options {
         skipDefaultCheckout()
@@ -114,10 +113,11 @@ pipeline {
                             env.REMOTE_HGCTPGVAL = env.BASE_REMOTE
                         }
                     }
+                    env.CONFIG_SUBSET = 'default_multi_subset'
                     
+                    println(env.CONFIG_SUBSET)
                     println(env.REMOTE_HGCTPGVAL)
                     println(env.BRANCH_HGCTPGVAL)
-                    
                     
                     println(env.BASE_REMOTE)
                     println(env.DATA_DIR)
@@ -196,6 +196,49 @@ pipeline {
                         exec >> log_Jenkins
                         echo '  '
                         '''
+                    }
+                }
+                stage('Update the configuration'){
+                    when {
+                        expression {
+                            // Only run this stage if the build was triggered by a PR comment that contains new customise parameter
+                            def causes = currentBuild.getBuildCauses('com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestCommentCause')
+                            return causes && (causes[0].commentBody?.contains("Jenkins") || causes[0].commentBody?.contains("test"))
+                        }
+                    }
+                    steps {
+                        echo 'Update configuration on GitHub PR comment!'
+                        
+                        script{
+                            // Comments
+                            def commentCauses = currentBuild.getBuildCauses('com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestCommentCause')
+                            if (commentCauses) {
+                                for (def commentCause : commentCauses) {
+                                    echo("""Comment Author: ${commentCause.commentAuthor}, Body: "${commentCause.commentBody}" (${commentCause.commentUrl})""")
+                                    def comment = commentCauses[0].commentBody
+                                    writeFile file: 'comment.tmp', text: comment
+                                    env.COMMENT=comment
+                                    echo "PR Comment: ${comment}"
+                                }
+                            } else {
+                                echo("Build was not started by a PR comment")
+                            }
+                            env.CONFIG_SUBSET_GITHUB = sh(
+                            returnStdout: true,
+                            script: '''
+                                set +x
+                                cd test_dir
+                                source ../../myenvPython399/bin/activate
+                                module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
+                                module purge
+                                module load python/3.9.9; 
+                                python ../HGCTPGValidation/scripts/read_GitHubcomment.py --fileGitHub comment.tmp --fileSubset default_multi_subset.yaml
+                                '''
+                            ).trim()
+                            println(env.CONFIG_SUBSET_GITHUB)
+                            env.CONFIG_SUBSET = env.CONFIG_SUBSET_GITHUB
+                            println(env.CONFIG_SUBSET)
+                        }
                     }
                 }
             }
