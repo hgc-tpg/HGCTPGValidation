@@ -113,7 +113,7 @@ pipeline {
                             env.REMOTE_HGCTPGVAL = env.BASE_REMOTE
                         }
                     }
-                    CONFIG_SUBSET = 'default_multi_subset'
+                    env.CONFIG_SUBSET = 'default_multi_subset'
                     
                     println(env.CONFIG_SUBSET)
                     println(env.REMOTE_HGCTPGVAL)
