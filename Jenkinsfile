@@ -5,7 +5,6 @@ pipeline {
     environment {
         LABEL_TEST='test'
         LABEL_REF='ref'
-        CONFIG_SUBSET = 'default_multi_subset'
     }
     options {
         skipDefaultCheckout()
@@ -114,10 +113,11 @@ pipeline {
                             env.REMOTE_HGCTPGVAL = env.BASE_REMOTE
                         }
                     }
+                    CONFIG_SUBSET = 'default_multi_subset'
                     
+                    println(env.CONFIG_SUBSET)
                     println(env.REMOTE_HGCTPGVAL)
                     println(env.BRANCH_HGCTPGVAL)
-                    
                     
                     println(env.BASE_REMOTE)
                     println(env.DATA_DIR)
