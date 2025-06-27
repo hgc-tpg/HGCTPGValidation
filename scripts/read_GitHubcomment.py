@@ -87,7 +87,7 @@ def main(tmpFile, defaultSubsetFile):
         elif "subsetName" in block: # process the subset configuration
             update_subsets(block, default_data, defaultSubsetFile)
         else:
-            print("Warning: YAML block missing shortName or subsetName")
+            print("default_multi_subset.yaml")
 
 if __name__ == "__main__":
     import optparse
