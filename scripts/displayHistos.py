@@ -45,9 +45,12 @@ def	extractTimeMemoryInfos(namefile, dirname):
     print("Extract Time&Memory information from ", namefile)
         
     # Output file MemoryReport_ref.log or MemoryReport_test.log
-    indicator = namefile.split("_")
-    #outputfile = f"MemoryReport_{indicator[1]}_{indicator[2]}"
-    outputfile = "MemoryReport_" + indicator[1] + "_" + indicator[2]
+    # Split only at the first "_"
+    indicator = namefile.split("_", 1)
+    if len(indicator):
+        outputfile = f"MemoryReport_{indicator[1]}"
+    else:
+        print("Please check the name of the ", namefile)
     print("oututfile = ", outputfile)
     
     # Input file out_ref.log or out_test.log
