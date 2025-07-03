@@ -3,7 +3,6 @@
 # The second one is the new subsets configuration file
 # Usage: python read_GitHubcomment.py --fileGitHub comment.tmp --fileSubset default_multi_subset.yaml
 
-# same code as read_GitHubcomment_5bis.py but create two function for managing config and subsets
 # use ruamel.yaml because it keeps the formatting 
 # when using dump function
 from ruamel.yaml import YAML
