@@ -235,9 +235,12 @@ pipeline {
                                 python ../HGCTPGValidation/scripts/read_GitHubcomment.py --fileGitHub comment.tmp --fileSubset default_multi_subset.yaml
                                 '''
                             ).trim()
-                            println(env.CONFIG_SUBSET_GITHUB)
-                            env.CONFIG_SUBSET = env.CONFIG_SUBSET_GITHUB
-                            println(env.CONFIG_SUBSET)
+                            if (!env.CONFIG_SUBSET_GITHUB) {
+                                error("ERROR: Required environment variable CONFIG_SUBSET is not set.")
+                            }else{
+                                env.CONFIG_SUBSET = env.CONFIG_SUBSET_GITHUB
+                                echo "CONFIG_SUBSET is set to: ${env.CONFIG_SUBSET_GITHUB}"
+                            }
                         }
                     }
                 }
