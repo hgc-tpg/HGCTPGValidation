@@ -86,6 +86,8 @@ def main(tmpFile, defaultSubsetFile):
                 update_configs(block, default_data)
             elif "subsetName" in block: # process the subset configuration
                 update_subsets(block, default_data, defaultSubsetFile)
+            else:
+                raise Exception(f"\n\n The new configurations are not correct.\n Please check the spelling of the key words shortName and subsetName in the PR comment.\n\n")
     else:
         print("default_multi_subset")
 
