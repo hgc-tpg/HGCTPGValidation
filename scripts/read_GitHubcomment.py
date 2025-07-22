@@ -45,10 +45,10 @@ def update_configs(new_data, default_data):
 def update_subsets(new_data, default_data, defaultSubsetFile):
     # Get the name of the new subset
     newSubsetName = new_data.get("subsetName")
-    newSubsetDescription = new_data.get("description")
+    newSubsetDescription = new_data.get("description", "Configuration provided by user")
     # Get the new couple of subsets
     newSubset = new_data.get("configuration")
-            
+    
     # Get the configuration defined in default_multi_subset.yaml
     # and replace the subsetname and the description
     with open(f"../HGCTPGValidation/config/{defaultSubsetFile}", "r") as file:
