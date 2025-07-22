@@ -31,10 +31,10 @@ def update_configs(new_data, default_data):
         
     default_data['parameters'] = new_params
     
-    # Merge top-level keys (optional)
-    for key in ["shortName", "longName", "description"]:
-        if key in new_data:
-            default_data[key] = new_data[key]
+    # Merge header keys
+    default_data["shortName"] = new_data.get("shortName")
+    default_data["longName"] = new_data.get("longName", new_data.get("shortName"))
+    default_data["description"] = new_data.get("description", "Configuration provided by user")
     
     # Write the new configurations into separated files
     filename = f"{new_data['shortName']}.yaml"
