@@ -13,6 +13,7 @@ from ruamel.yaml.constructor import ConstructorError
 yaml = YAML()
 yaml.explicit_start = True
 yaml.preserve_quotes = True  # Optional: preserve quoting style
+yaml.strict = True  # be strict about syntax 
 yaml.indent(mapping=4, sequence=6, offset=4)
     
 def update_configs(new_data, default_data):
@@ -90,6 +91,8 @@ def main(tmpFile, defaultSubsetFile):
         raise Exception(f"\n\n YAML ParserError: the configuration from the PR comment has a syntax issue (ex. different quotation marks). \n\n {e}")
     except ConstructorError as e:
         raise Exception(f"\n\n YAML ConstructorError: an object could not be constructed properly from the PR comment.\n\n {e}")
+    except YAMLError as e:
+        raise Exception(f"\n\n General YAML Error.\n\n {e}")
     except Exception as e:
         raise Exception(f"\n\n An unexpected error occurred while reading the PR comment. \n\n {e}")
 
