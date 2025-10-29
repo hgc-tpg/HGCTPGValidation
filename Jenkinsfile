@@ -203,7 +203,7 @@ pipeline {
                         expression {
                             // Only run this stage if the build was triggered by a PR comment that contains new customise parameter
                             def causes = currentBuild.getBuildCauses('com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestCommentCause')
-                            return causes && (causes[0].commentBody?.contains("Jenkins") || causes[0].commentBody?.contains("test"))
+                            return causes && (causes[0].commentBody?.contains("Jenkins") && causes[0].commentBody?.contains("test"))
                         }
                     }
                     steps {
