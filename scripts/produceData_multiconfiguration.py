@@ -109,8 +109,8 @@ def main(subsetconfig, release):
                 res = subprocess.run(['bash', '-c', command], text=True)
                 status=res.returncode
                 print("status=", status)
-                # If the satus of cmsDriver no_exec is 0 we run cmsDriver
-                # If there is a problème
+                # If the status of cmsDriver with no_exec option is 0
+                # then we call again run_cmsDriver and complete the full simulation
                 if status == 0:
                     command = run_cmsDriver(config_data, release, 0)
                     subprocess.run(['bash', '-c', command], check=True, text=True)
