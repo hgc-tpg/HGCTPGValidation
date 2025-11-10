@@ -42,37 +42,25 @@ def run_cmsDriver(configdata, release, exec_flag):
     RSS_limit=int(10000000)
     print("INTERVAL=", INTERVAL)
     print("RSS_limit=", RSS_limit)
-    if (exec_flag == 1):
-        # cmsDriver no_exec
-        command = f"echo $PWD; echo 'START cmsDriver noExec'; source /cvmfs/cms.cern.ch/cmsset_default.sh; eval `scramv1 runtime -sh`; \
-        cmsDriver.py hgcal_tpg_validation_{configName}_{release} -n {str(nbEvents)} \
-        --mc --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW \
-        --conditions {conditions} \
-        --beamspot {beamspot} \
-        --step USER:Validation/HGCalValidation/hgcalRunEmulatorValidationTPG_cff.hgcalTPGRunEmulatorValidation \
-        --geometry {geometry} --era {era} \
-        --inputCommands {inputCommands} \
-        {procMod} \
-        --filein {filein} \
-        --no_output \
-        --no_exec \
-        {customise} \
-        --customise_commands {customiseCommand}"
-        
-    else:
-        command = f"echo $PID; echo $PWD; source /cvmfs/cms.cern.ch/cmsset_default.sh; eval `scramv1 runtime -sh`; \
-        cmsDriver.py hgcal_tpg_validation_{configName}_{release} -n {str(nbEvents)} \
-        --mc --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW \
-        --conditions {conditions} \
-        --beamspot {beamspot} \
-        --step USER:Validation/HGCalValidation/hgcalRunEmulatorValidationTPG_cff.hgcalTPGRunEmulatorValidation \
-        --geometry {geometry} --era {era} \
-        --inputCommands {inputCommands} \
-        {procMod} \
-        --filein {filein} \
-        --no_output \
-        {customise} \
-        --customise_commands {customiseCommand} & ../../../HGCTPGValidation/scripts/get_rss_memory.sh $! {INTERVAL} {RSS_limit}"
+    
+    command_gen = f"echo $PWD; echo 'START cmsDriver noExec'; source /cvmfs/cms.cern.ch/cmsset_default.sh; eval `scramv1 runtime -sh`; \
+    cmsDriver.py hgcal_tpg_validation_{configName}_{release} -n {str(nbEvents)} \
+    --mc --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW \
+    --conditions {conditions} \
+    --beamspot {beamspot} \
+    --step USER:Validation/HGCalValidation/hgcalRunEmulatorValidationTPG_cff.hgcalTPGRunEmulatorValidation \
+    --geometry {geometry} --era {era} \
+    --inputCommands {inputCommands} \
+    {procMod} \
+    --filein {filein} \
+    --no_output \
+    {customise} \
+    --customise_commands {customiseCommand}"
+    
+    command_1 = f'{command_gen} --no_exec'
+    command_0 = f'{command_gen} & ../../../HGCTPGValidation/scripts/get_rss_memory.sh $! {INTERVAL} {RSS_limit}'
+    
+    command = f'{ command_1 if exec_flag==1 else command_0 }'
     
     pprint.pprint(command)
     return command
