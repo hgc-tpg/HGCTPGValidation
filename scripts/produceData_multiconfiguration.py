@@ -43,7 +43,7 @@ def run_cmsDriver(configdata, release, exec_flag):
     print("INTERVAL=", INTERVAL)
     print("RSS_limit=", RSS_limit)
     
-    command_gen = f"echo $PWD; echo 'START cmsDriver noExec'; source /cvmfs/cms.cern.ch/cmsset_default.sh; eval `scramv1 runtime -sh`; \
+    command_gen = f"echo $PWD; source /cvmfs/cms.cern.ch/cmsset_default.sh; eval `scramv1 runtime -sh`; \
     cmsDriver.py hgcal_tpg_validation_{configName}_{release} -n {str(nbEvents)} \
     --mc --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW \
     --conditions {conditions} \
