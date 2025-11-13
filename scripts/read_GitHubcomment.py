@@ -7,11 +7,17 @@
 # when using dump function
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap
+from ruamel.yaml.scanner import ScannerError
+from ruamel.yaml.parser import ParserError
+from ruamel.yaml.constructor import ConstructorError
 yaml = YAML()
 yaml.explicit_start = True
 yaml.preserve_quotes = True  # Optional: preserve quoting style
+yaml.strict = True  # be strict about syntax 
 yaml.indent(mapping=4, sequence=6, offset=4)
-    
+
+import re
+
 def update_configs(new_data, default_data):
     if 'parameters' in default_data and 'parameters' in new_data:
         default_params = default_data['parameters']
@@ -28,10 +34,10 @@ def update_configs(new_data, default_data):
         
     default_data['parameters'] = new_params
     
-    # Merge top-level keys (optional)
-    for key in ["shortName", "longName", "description"]:
-        if key in new_data:
-            default_data[key] = new_data[key]
+    # Merge header keys
+    default_data["shortName"] = new_data.get("shortName")
+    default_data["longName"] = new_data.get("longName", new_data.get("shortName"))
+    default_data["description"] = new_data.get("description", "Configuration provided by user")
     
     # Write the new configurations into separated files
     filename = f"{new_data['shortName']}.yaml"
@@ -42,17 +48,21 @@ def update_configs(new_data, default_data):
 def update_subsets(new_data, default_data, defaultSubsetFile):
     # Get the name of the new subset
     newSubsetName = new_data.get("subsetName")
-    newSubsetDescription = new_data.get("description")
+    newSubsetDescription = new_data.get("description", "Configuration provided by user")
     # Get the new couple of subsets
     newSubset = new_data.get("configuration")
-            
+    
+    # Read the subset configuration file as a string
+    with open(f"../HGCTPGValidation/config/{defaultSubsetFile}", "r") as file:
+        # Removes newlines and spaces to avoid problems when writing the new subset pairs
+        subsetConfig = file.read().strip()
+    
     # Get the configuration defined in default_multi_subset.yaml
     # and replace the subsetname and the description
-    with open(f"../HGCTPGValidation/config/{defaultSubsetFile}", "r") as file:
-        defaultConfig = yaml.load(file)
-        defaultConfig["subsetName"] = newSubsetName
-        defaultConfig["description"] = newSubsetDescription
-             
+    defaultConfig = yaml.load(subsetConfig)
+    defaultConfig["subsetName"] = newSubsetName
+    defaultConfig["description"] = newSubsetDescription
+    
     # New file name
     filename = f"{new_data['subsetName'].replace(' ', '_')}.yaml"
     with open(f"../HGCTPGValidation/config/{filename}","w") as f:
@@ -60,11 +70,19 @@ def update_subsets(new_data, default_data, defaultSubsetFile):
         yaml.explicit_start = False # Needed in order to not use --- before the new set of configurations
         yaml.dump(newSubset, f)
     
-    # Printing the new subset name will overwrite the environment variable CONFIG_SUBSET
-    print(newSubsetName)
+    # The new subset name will overwrite the environment variable CONFIG_SUBSET
+    return(newSubsetName)
     
-def main(tmpFile, defaultSubsetFile):
+def extract_yaml_block(comment):
+    # Match text between ```yaml and ```
+    match = re.search(r"```yaml\s*(.*?)\s*```", comment, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    else:
+        return None
 
+def main(tmpFile, defaultSubsetFile):
+    
     # Load the default.yaml
     with open(f"../HGCTPGValidation/config/default.yaml", "r") as file:
         default_data = yaml.load(file)
@@ -72,22 +90,40 @@ def main(tmpFile, defaultSubsetFile):
     # Read the comment from GitHub
     with open(f"../{tmpFile}", "r") as file:
         config = file.read()
-    # Remove the ``` at the end of the string
-    fc=config.strip("\n```")
     
-    # Split on '---' and filter out empty parts
-    yaml_blocks = [part.strip() for part in fc.split('---') if part.strip()]
+    # Default subset name is used if there is no a new subset in the GitHub comment
+    subsetName = "default_multi_subset"
     
-    # Go through all parsed blocks
-    parsed_blocks = [yaml.load(block) for block in yaml_blocks]
-    if len(parsed_blocks) > 1:
-        for block in parsed_blocks[1:]: # Skip the first block that do not contain configuration 
-            if "shortName" in block: # process the new configurations
-                update_configs(block, default_data)
-            elif "subsetName" in block: # process the subset configuration
-                update_subsets(block, default_data, defaultSubsetFile)
-    else:
-        print("default_multi_subset")
+    # Extract the yaml block from comment
+    yaml_block = extract_yaml_block(config)
+    if (yaml_block):
+        # Split on '---' and filter out empty parts
+        yaml_blocks = [part.strip() for part in yaml_block.split('---') if part.strip()]
+        
+        # Go through all parsed blocks
+        try:
+            parsed_blocks = [yaml.load(block) for block in yaml_blocks]
+        except ScannerError as e:
+            raise Exception(f"\n\n YAML ScannerError: likely caused by an invalid character or bad indentation in the PR comment. \n\n {e}")
+        except ParserError as e:
+            raise Exception(f"\n\n YAML ParserError: the configuration from the PR comment has a syntax issue (ex. different quotation marks). \n\n {e}")
+        except ConstructorError as e:
+            raise Exception(f"\n\n YAML ConstructorError: The YAML parser could not create a Python representation from the YAML element (scalar, list, mapping, or tagged object).\n\n {e}")
+        except YAMLError as e:
+            raise Exception(f"\n\n General YAML Error.\n\n {e}")
+        except Exception as e:
+            raise Exception(f"\n\n An unexpected error occurred while reading the PR comment. \n\n {e}")
+        
+        if len(parsed_blocks) >= 1:
+            for block in parsed_blocks[0:]:
+                if "shortName" in block: # process the new configurations
+                    update_configs(block, default_data)
+                elif "subsetName" in block: # process the subset configuration
+                    subsetName = update_subsets(block, default_data, defaultSubsetFile)
+                else:
+                    raise Exception(f"\n\n The new configurations are not correct.\n Please check the spelling of the key words shortName and subsetName in the PR comment.\n\n")
+    
+    print(subsetName)
 
 if __name__ == "__main__":
     import optparse
