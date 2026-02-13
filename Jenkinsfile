@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'llrgrhgtrig.in2p3.fr'
+        label 'llrgrhgtrig02.in2p3.fr'
     }
     environment {
         LABEL_TEST='test'
