@@ -228,10 +228,7 @@ pipeline {
                             script: '''
                                 set +x
                                 cd test_dir
-                                source ../../myenvPython399/bin/activate
-                                module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
-                                module purge
-                                module load python/3.9.9; 
+                                source HGCTPGValidation/env_install.sh
                                 python ../HGCTPGValidation/scripts/read_GitHubcomment.py --fileGitHub comment.tmp --fileSubset default_multi_subset.yaml
                                 '''
                             ).trim()
@@ -292,9 +289,7 @@ pipeline {
                         echo '===> Produce reference data.'
                         pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
-                        module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
-                        module purge
-                        module load python/3.9.9
+                        source HGCTPGValidation/env_install.sh
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF}
                         echo '      '
                         '''
@@ -308,9 +303,7 @@ pipeline {
                         exec >> log_Jenkins
                         echo '===> Produce test data.'
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
-                        module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
-                        module purge
-                        module load python/3.9.9
+                        source HGCTPGValidation/env_install.sh
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
                         echo '      '
                         '''
