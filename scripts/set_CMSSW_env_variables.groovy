@@ -3,9 +3,9 @@
 // This script is used in the Jenkinsfile pipeline, in the stage 'Set CMSSW environment variables'
 // Usage:
 // def set_var = load './HGCTPGValidation/scripts/set_CMSSW_env_variables.groovy'
-// set_var.run(env.JOB_FLAG, env.CHANGE_FORK, env.BASE_REMOTE)
+// set_var.run(env.JOB_FLAG, env.CHANGE_FORK, env.CHANGE_TARGET, env.BASE_REMOTE)
 
-def run(String JOB_FLAG, String CHANGE_FORK, String BASE_REMOTE) {
+def run(String JOB_FLAG, String CHANGE_FORK, String CHANGE_TARGET, String BASE_REMOTE) {
     println('Input variables in the run function')
     println("JOB_FLAG=${JOB_FLAG}")
     println("CHANGE_FORK=${CHANGE_FORK}")
