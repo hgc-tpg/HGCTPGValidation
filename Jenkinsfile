@@ -175,7 +175,7 @@ pipeline {
                             '''
                             try {
                                 def set_var = load './HGCTPGValidation/scripts/set_CMSSW_env_variables.groovy'
-                                set_var.run(env.JOB_FLAG, env.CHANGE_FORK, env.BASE_REMOTE)
+                                set_var.run(env.JOB_FLAG, env.CHANGE_FORK, env.CHANGE_TARGET, env.BASE_REMOTE)
                             } catch (e) {
                                 echo "Error during loading or execution: ${e}"
                             }
