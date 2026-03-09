@@ -10,6 +10,6 @@ parameters:
     geometry: ExtendedRun4D110
     era: Phase2C17I13M9
     inputCommands: '"keep *"'
-    filein: file:/data_CMS_upgrade/data_jenkins/Phase2Fall22DRMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_125X_mcRun4_realistic_v2_ext1-v1/000c5e5f-78f7-44ee-95fe-7b2f2c2e2312.root
+    filein: file:/data_CMS_upgrade/data_jenkins/Phase2Spring24DIGIRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_Trk1GeV_140X_mcRun4_realistic_v4-v2/00c7f40e-b44e-4eea-a86b-def8f7d82b0e.root
     customise: L1Trigger/L1THGCal/customLayer1.custom_layer1_latestfw
     customise_commands: "process.L1THGCalTrigPrimValidation.Clusters = process.l1tHGCalBackEndLayer2Producer.InputCluster;"
