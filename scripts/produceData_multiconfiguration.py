@@ -58,7 +58,7 @@ def run_cmsDriver(configdata, release, exec_flag):
     --customise_commands {customiseCommand}"
     
     command_1 = f'{command_gen} --no_exec'
-    command_0 = f'{command_gen} & ../../../HGCTPGValidation/scripts/get_rss_memory.sh $! {INTERVAL} {RSS_limit}'
+    command_0 = f'set -euo; {command_gen} & ../../../HGCTPGValidation/scripts/get_rss_memory.sh $! {INTERVAL} {RSS_limit}'
     
     command = f'{ command_1 if exec_flag==1 else command_0 }'
     
