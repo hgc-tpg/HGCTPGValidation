@@ -2,7 +2,7 @@
 shortName: default
 longName: Default configuration testing
 description: |
-    Testing Default TPG configuration, without any customization
+    Default TPG configuration, without any customization
 parameters:
     nbOfEvents: 50
     conditions: auto:phase2_realistic_T35
@@ -15,7 +15,7 @@ parameters:
 shortName: s1fw
 longName: "Stage 1 firmware emulator testing"
 description: |
-    Teesting Using the latest Stage 1 firmware emulator instead of the default passthrough in Stage 1
+    Using the latest Stage 1 firmware emulator instead of the default passthrough in Stage 1
 parameters:
     nbOfEvents: 50
     conditions: auto:phase2_realistic_T35
@@ -30,7 +30,7 @@ parameters:
 shortName: bcstc
 longName: BC+STC testing
 description: |
-    Testing Custom front-end algorithm: BestChoice in CE-E and STC in CE-H
+    Custom front-end algorithm: BestChoice in CE-E and STC in CE-H
 parameters:
     nbOfEvents: 50
     conditions: auto:phase2_realistic_T35
@@ -44,7 +44,7 @@ parameters:
 shortName: newProcessors
 longName: New processors
 description: |
-    Testing Activation of the new processors based on standalone algorithms
+    Activation of the new processors based on standalone algorithms
 parameters:
     nbOfEvents: 50
     conditions: auto:phase2_realistic_T35
