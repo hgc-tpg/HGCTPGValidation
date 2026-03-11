@@ -56,9 +56,7 @@ then
 fi
 
 ## Produce
-module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
-module purge
-module load python/3.9.9
+source ../../../HGCTPGValidation/env_install.sh
 python --version
 
 python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label $LABEL_TEST
@@ -73,9 +71,7 @@ pwd
 ## Produce
 pwd
 cd ${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
-module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
-module purge
-module load python/3.9.9
+source ../../../HGCTPGValidation/env_install.sh
 python --version
 python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label $LABEL_REF
 cd ../..

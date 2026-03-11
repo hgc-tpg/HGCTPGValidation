@@ -175,7 +175,7 @@ pipeline {
                             '''
                             try {
                                 def set_var = load './HGCTPGValidation/scripts/set_CMSSW_env_variables.groovy'
-                                set_var.run(env.JOB_FLAG, env.CHANGE_FORK, env.BASE_REMOTE)
+                                set_var.run(env.JOB_FLAG, env.CHANGE_FORK, env.CHANGE_TARGET, env.BASE_REMOTE)
                             } catch (e) {
                                 echo "Error during loading or execution: ${e}"
                             }
@@ -228,10 +228,7 @@ pipeline {
                             script: '''
                                 set +x
                                 cd test_dir
-                                source ../../myenvPython399/bin/activate
-                                module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
-                                module purge
-                                module load python/3.9.9; 
+                                source ../HGCTPGValidation/env_install.sh
                                 python ../HGCTPGValidation/scripts/read_GitHubcomment.py --fileGitHub comment.tmp --fileSubset default_multi_subset.yaml
                                 '''
                             ).trim()
@@ -292,9 +289,7 @@ pipeline {
                         echo '===> Produce reference data.'
                         pwd
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
-                        module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
-                        module purge
-                        module load python/3.9.9
+                        source ../../../HGCTPGValidation/env_install.sh
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF}
                         echo '      '
                         '''
@@ -308,9 +303,7 @@ pipeline {
                         exec >> log_Jenkins
                         echo '===> Produce test data.'
                         cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
-                        module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
-                        module purge
-                        module load python/3.9.9
+                        source ../../../HGCTPGValidation/env_install.sh
                         python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
                         echo '      '
                         '''
