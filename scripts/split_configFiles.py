@@ -11,32 +11,37 @@ yaml.preserve_quotes = True  # Optional: preserve quoting style
 yaml.strict = True  # be strict about syntax 
 yaml.indent(mapping=4, sequence=6, offset=4)
 
+import os
 import re
 
 def main(releaseName):
     print(releaseName)
+    fileName = f"../HGCTPGValidation/config/config_{releaseName}.yaml"
     # Load the default.yaml
-    with open(f"../HGCTPGValidation/config/{releaseName}.yaml", "r") as file:
-        configs = file.read()
-        
-    # Split on '---' and filter out empty parts
-    yaml_blocks = [part.strip() for part in configs.split('---') if part.strip()]
-        
-    # Go through all parsed blocks
-    try:
-        parsed_blocks = [yaml.load(block) for block in yaml_blocks]
-    except Exception as e:
-        raise Exception(f"\n\n An unexpected error occurred while reading the configurations. \n\n {e}")
-    
-    if len(parsed_blocks) >= 1:
-        for block in parsed_blocks[0:]:
-            # Write the new configurations into separated files
-            filename = f"{block['shortName']}.yaml"
-            print(filename)
-            with open(f"../HGCTPGValidation/config/{filename}", "w") as file:
-                yaml.explicit_start = True
-                yaml.dump(block, file)
-    
+    if os.path.exists(fileName):
+	    with open(f"../HGCTPGValidation/config/{releaseName}.yaml", "r") as file:
+	        configs = file.read()
+	        
+	    # Split on '---' and filter out empty parts
+	    yaml_blocks = [part.strip() for part in configs.split('---') if part.strip()]
+	        
+	    # Go through all parsed blocks
+	    try:
+	        parsed_blocks = [yaml.load(block) for block in yaml_blocks]
+	    except Exception as e:
+	        raise Exception(f"\n\n An unexpected error occurred while reading the configurations. \n\n {e}")
+	    
+	    if len(parsed_blocks) >= 1:
+	        for block in parsed_blocks[0:]:
+	            # Write the new configurations into separated files
+	            filename = f"{block['shortName']}.yaml"
+	            print(filename)
+	            with open(f"../HGCTPGValidation/config/{filename}", "w") as file:
+	                yaml.explicit_start = True
+	                yaml.dump(block, file)
+    else:
+        print(f"WARNING: The global configuration {fileName} doesn't exist. The default configurations files will be used.")
+
 if __name__ == "__main__":
     import optparse
     import importlib
