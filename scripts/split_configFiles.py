@@ -19,7 +19,7 @@ def main(releaseName):
     fileName = f"../HGCTPGValidation/config/config_{releaseName}.yaml"
     # Load the default.yaml
     if os.path.exists(fileName):
-	    with open(f"../HGCTPGValidation/config/{releaseName}.yaml", "r") as file:
+	    with open(fileName, "r") as file:
 	        configs = file.read()
 	        
 	    # Split on '---' and filter out empty parts
