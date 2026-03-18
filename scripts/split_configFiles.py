@@ -17,7 +17,6 @@ def main(releaseName):
     print(releaseName)
     # Load the default.yaml
     with open(f"../HGCTPGValidation/config/{releaseName}.yaml", "r") as file:
-        #configs = yaml.load(file)
         configs = file.read()
         
     # Split on '---' and filter out empty parts
