@@ -198,6 +198,19 @@ pipeline {
                         '''
                     }
                 }
+                stage('Set config files for specific release'){
+                    steps{
+                    sh '''
+                    set +x
+                    echo '===> Set config files for specific release.'
+                    exec >> log_Jenkins
+                    echo '===> Set config files for specific release.'
+                    cd test_dir
+                    source ../HGCTPGValidation/env_install.sh
+                    python ../HGCTPGValidation/scripts/split_configFiles.py --releaseName ${REF_RELEASE}
+                    '''
+                    }
+                }
                 stage('Update the configuration'){
                     when {
                         expression {

@@ -1,0 +1,56 @@
+---
+shortName: default
+longName: Default configuration testing
+description: |
+    Default TPG configuration, without any customization
+parameters:
+    nbOfEvents: 50
+    conditions: auto:phase2_realistic_T21
+    beamspot: VtxSmearedHLLHC14TeV
+    geometry: ExtendedRun4D110
+    era: Phase2C17I13M9
+    inputCommands: '"keep *"'
+    filein: file:/data_CMS_upgrade/data_jenkins/Phase2Spring24DIGIRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_Trk1GeV_140X_mcRun4_realistic_v4-v2/00c7f40e-b44e-4eea-a86b-def8f7d82b0e.root
+---
+shortName: s1fw
+longName: "Stage 1 firmware emulator testing"
+description: |
+    Using the latest Stage 1 firmware emulator instead of the default passthrough in Stage 1
+parameters:
+    nbOfEvents: 50
+    conditions: auto:phase2_realistic_T21
+    beamspot: VtxSmearedHLLHC14TeV
+    geometry: ExtendedRun4D110
+    era: Phase2C17I13M9
+    inputCommands: '"keep *"'
+    filein: file:/data_CMS_upgrade/data_jenkins/Phase2Spring24DIGIRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_Trk1GeV_140X_mcRun4_realistic_v4-v2/00c7f40e-b44e-4eea-a86b-def8f7d82b0e.root
+    customise: L1Trigger/L1THGCal/customLayer1.custom_layer1_latestfw
+    customise_commands: "process.L1THGCalTrigPrimValidation.Clusters = process.l1tHGCalBackEndLayer2Producer.InputCluster;"
+---
+shortName: bcstc
+longName: BC+STC testing
+description: |
+    Custom front-end algorithm: BestChoice in CE-E and STC in CE-H
+parameters:
+    nbOfEvents: 50
+    conditions: auto:phase2_realistic_T21
+    beamspot: VtxSmearedHLLHC14TeV
+    geometry: ExtendedRun4D110
+    era: Phase2C17I13M9
+    inputCommands: '"keep *"'
+    filein: file:/data_CMS_upgrade/data_jenkins/Phase2Spring24DIGIRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_Trk1GeV_140X_mcRun4_realistic_v4-v2/00c7f40e-b44e-4eea-a86b-def8f7d82b0e.root
+    customise: L1Trigger/L1THGCal/customTriggerCellSelect.custom_triggercellselect_mixedBestChoiceSuperTriggerCell_decentralized
+---
+shortName: newProcessors
+longName: New processors
+description: |
+    Activation of the new processors based on standalone algorithms
+parameters:
+    nbOfEvents: 50
+    conditions: auto:phase2_realistic_T21
+    beamspot: VtxSmearedHLLHC14TeV
+    geometry: ExtendedRun4D110
+    era: Phase2C17I13M9
+    inputCommands: '"keep *","drop l1tTkPrimaryVertexs_L1TkPrimaryVertex__RECO"'
+    filein: file:/data_CMS_upgrade/data_jenkins/Phase2Spring24DIGIRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_Trk1GeV_140X_mcRun4_realistic_v4-v2/00c7f40e-b44e-4eea-a86b-def8f7d82b0e.root
+    customise: L1Trigger/L1THGCal/customNewProcessors.custom_clustering_standalone,L1Trigger/L1THGCal/customNewProcessors.custom_tower_standalone,L1Trigger/L1THGCalUtilities/customNtuples.custom_ntuples_standalone_clustering,L1Trigger/L1THGCalUtilities/customNtuples.custom_ntuples_standalone_tower
