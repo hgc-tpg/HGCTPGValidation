@@ -205,13 +205,9 @@ pipeline {
                     echo '===> Set config files for specific release.'
                     exec >> log_Jenkins
                     echo '===> Set config files for specific release.'
-                    if [ config_${REF_RELEASE}.yaml ]; then
-                        cd test_dir
-                        source ../HGCTPGValidation/env_install.sh
-                        python ../HGCTPGValidation/scripts/split_configFiles.py --releaseName ${REF_RELEASE}
-                    else
-                        echo 'WARNING: '
-                    fi
+                    cd test_dir
+                    source ../HGCTPGValidation/env_install.sh
+                    python ../HGCTPGValidation/scripts/split_configFiles.py --releaseName ${REF_RELEASE}
                     '''
                     }
                 }
