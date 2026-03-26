@@ -12,6 +12,7 @@ from datetime import datetime
 from sys import argv
 argv.append( '-b-' )
 import ROOT
+from ROOT import kWhite, kBlue, kBlack, kRed, gStyle, TCanvas, gPad 
 ROOT.gROOT.SetBatch(True)
 ROOT.gErrorIgnoreLevel = ROOT.kWarning # remove info like : Info in <TCanvas::Print>: gif file gifs/h_ele_vertexPhi.gif has been created
 argv.remove( '-b-' )
