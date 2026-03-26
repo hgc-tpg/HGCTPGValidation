@@ -148,7 +148,7 @@ def createPicture2(histo1, histo2, scaled, err, filename, cnv, axisFormat):
     # Define the ratio plot between histo1 and histo2
     pad2 = ROOT.TPad("pad2", "pad2", 0, 0.05, 1, 0.25)
     pad2.SetTopMargin(0.025)
-    pad2.SetBottomMargin(0.2)
+    pad2.SetBottomMargin(0.4)
     pad2.SetGridy()
     pad2.Draw()
     pad2.cd()
