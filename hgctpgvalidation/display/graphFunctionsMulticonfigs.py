@@ -450,53 +450,6 @@ def createWebPageLite(refconfigname, testconfigname, refdir, testdir, imgdir):
     
     wp.write( "</tr></table>\n" )
     wp.close()
-        
+    
     return
-    
-def testExtension(histoName, histoPrevious):
-    after = "" # $histoName
-    common = ""
-    
-    if '_' in histoName:
-        afters = histoName.split('_')
-        before = afters[0]
-        nMax = len(afters)
-        
-        if ( afters[nMax - 1] == "endcaps" ):
-            after = "endcaps"
-            for i in range(1, nMax-1):
-                before += "_" + afters[i]
-        elif ( afters[nMax - 1] == "barrel" ):
-            after = "barrel"
-            for i in range(1, nMax-1):
-                before += "_" + afters[i]
-        else:
-            if ( histoPrevious == "" ):
-                before = histoName
-                after = "" 
-                common = histoName
-            else:
-                avant =  afters[0]
-                after = ""
-                for i in range(1, nMax-1):
-                    avant += "_" + afters[i]
-                    if avant == histoPrevious:
-                        before = avant
-                        common = histoPrevious
-                        break
-                for j in range(nMax-1, nMax):
-                    after += "_" + afters[j]
-                after = after[1:]
-                
-    else: # no _ in histoName
-        before = histoName
-        common = histoName
-    
-    return [after, before, common]
-
-def checkRecompInName(name):
-    if re.search('recomp', name):
-        return True
-    else:
-        return False
 
