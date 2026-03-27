@@ -1,6 +1,10 @@
 #! /usr/bin/env python
 #-*-coding: utf-8 -*-
 
+# This module includes code originally written by Arnaud Chiron (version 2018).
+# Modifications and integration by E. Becheva for the HGCal Trigger Primitive validation.
+# Used with permission.
+
 import os,sys,subprocess
 import urllib
 # python3
