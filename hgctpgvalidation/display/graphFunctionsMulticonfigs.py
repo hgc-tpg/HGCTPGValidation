@@ -1,6 +1,10 @@
 #! /usr/bin/env python
 #-*-coding: utf-8 -*-
 
+# This module includes code originally written by Arnaud Chiron (version 2018).
+# Modifications and integration by E. Becheva for the HGCal Trigger Primitive validation.
+# Used with permission.
+
 import os,sys,subprocess
 import urllib
 # python3
@@ -31,8 +35,6 @@ def getHisto(file, path):
 
 def RenderHisto(histo, canvas):
 
-    if ("ELE_LOGY" in histo.GetOption() and histo.GetMaximum() > 0):
-        canvas.SetLogy(1)
     histo_name_flag = 1 ; # use 0 to switch off
     if ( histo.InheritsFrom("TH2") ):
         gStyle.SetPalette(1)
@@ -98,8 +100,6 @@ def createPicture2(histo1, histo2, scaled, err, filename, cnv, axisFormat):
         histo2.Scale(rescale_factor)
     if (histo2.GetMaximum() > histo1.GetMaximum()):
         histo1.SetMaximum(histo2.GetMaximum() * 1.1)
-    if (filename == "h_ele_charge"):
-       n_ele_charge = histo1.GetEntries()
        
     cnv.SetCanvasSize(960, 900)
     cnv.Clear()
@@ -282,12 +282,6 @@ def createWebPageLite(refconfigname, testconfigname, refdir, testdir, imgdir):
         wp.write("<h3><p><font color='blue'> Ref: " + refconfigname + "</h3>" )
         wp.write("<p>" + ref_description )
         wp.write("<p><font color='black'>=====================")
-    #    wp.write("<p>In all plots below " + test_configname)
-    #    wp.write(", the <b><font color='red'> " + CMP_RED_FILE + " </font></b> histograms are in red") # new release red in OvalFile
-    #    wp.write(", and the <b><font color='blue'> " + CMP_BLUE_FILE + " </font></b> histograms are in blue.") # ref release blue in OvalFile
-    #wp.write(" Some more details") # 
-    #wp.write(", <a href=\"" + CMP_CONFIG + "\">specification</a> of histograms") # histos list .txt file
-    #wp.write(", <a href=\"gifs/\">images</a> of histograms" + "." )
     wp.write("</p>\n")
 
     # filling the title array & dict
@@ -336,13 +330,7 @@ def createWebPageLite(refconfigname, testconfigname, refdir, testdir, imgdir):
             histo_name = short_histo_names[0].strip().replace('\n', ' ').replace('\r', '')
             print('!!!!! histo_name = ',histo_name)
             short_histo_name = histo_name.replace("h_", "")
-            if "ele_" in short_histo_name:
-                short_histo_name = short_histo_name.replace("ele_", "")
-            if "scl_" in short_histo_name:
-                short_histo_name = short_histo_name.replace("scl_", "")
-            if "bcl_" in short_histo_name:
-                short_histo_name = short_histo_name.replace("bcl_", "")
-                   
+            
             otherTextToWrite += "<a href=\"#" + short_histo_name + "\"><font color=\'blue\'>" + short_histo_name + "</font></a>" + "&nbsp;\n"
                     
             otherTextToWrite += "<br>"
@@ -453,70 +441,15 @@ def createWebPageLite(refconfigname, testconfigname, refdir, testdir, imgdir):
                 gif_name = imgdir + '/' + histo_name + ".gif"
                 gif_name_index = histo_name + ".gif"
                 createPicture2(histo_1, histo_2, "1", "1", gif_name, cnv, "lin")
-                # Make histo in log
-                #if (histo_1.GetMaximum() > 0 and histo_1.GetMinimum() >= 0):
-                #    gif_name_log = imgdir + '/' + histo_name + "_log.gif"
-                #    gif_name_log_index = histo_name + "_log.gif"
-                #    createPicture2(histo_1, histo_2, "1", "1", gif_name_log, cnv, "log")
-
+                
                 wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
                 wp.write( "<td>" )
                 wp.write( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>" )
                 wp.write( "<a href=\"" + gif_name_index + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name_index + "\"></a>" )
-                # For histo in log
-                #if (histo_1.GetMaximum() > 0 and histo_1.GetMinimum() >= 0):
-                #    wp.write( "</td><td><a href=\"" + gif_name_log_index + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name_log_index + "\"></a>" )
                 wp.write( "</td></tr><tr valign=\"top\">\n" )
     
     wp.write( "</tr></table>\n" )
     wp.close()
-        
+    
     return
-    
-def testExtension(histoName, histoPrevious):
-    after = "" # $histoName
-    common = ""
-    
-    if '_' in histoName:
-        afters = histoName.split('_')
-        before = afters[0]
-        nMax = len(afters)
-        
-        if ( afters[nMax - 1] == "endcaps" ):
-            after = "endcaps"
-            for i in range(1, nMax-1):
-                before += "_" + afters[i]
-        elif ( afters[nMax - 1] == "barrel" ):
-            after = "barrel"
-            for i in range(1, nMax-1):
-                before += "_" + afters[i]
-        else:
-            if ( histoPrevious == "" ):
-                before = histoName
-                after = "" 
-                common = histoName
-            else:
-                avant =  afters[0]
-                after = ""
-                for i in range(1, nMax-1):
-                    avant += "_" + afters[i]
-                    if avant == histoPrevious:
-                        before = avant
-                        common = histoPrevious
-                        break
-                for j in range(nMax-1, nMax):
-                    after += "_" + afters[j]
-                after = after[1:]
-                
-    else: # no _ in histoName
-        before = histoName
-        common = histoName
-    
-    return [after, before, common]
-
-def checkRecompInName(name):
-    if re.search('recomp', name):
-        return True
-    else:
-        return False
 
