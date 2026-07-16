@@ -82,7 +82,7 @@ def update_subsets(new_data, default_data, defaultSubsetFile):
         yaml.dump(newSubset, f)
     
     # The new subset name will overwrite the environment variable CONFIG_SUBSET
-    return(newSubsetName)q
+    return(newSubsetName)
     
 def extract_yaml_block(comment):
     # Match text between ```yaml and ```
