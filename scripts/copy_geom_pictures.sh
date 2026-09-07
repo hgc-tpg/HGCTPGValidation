@@ -19,7 +19,7 @@ pwd
 MAX_WAIT=3600
 SECONDS=0
 
-GEOM_CHECK_DIR = "Geom_check"
+GEOM_CHECK_DIR="Geom_check"
 
 while [ ! -d "../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}" ]
 do
