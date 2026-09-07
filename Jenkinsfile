@@ -310,7 +310,9 @@ pipeline {
                 {
                 ./HGCTPGValidation/scripts/check_command_status.sh $statusInstallTest $STAGE_NAME
                 } >> log_Jenkins 2> >(tee -a log_Jenkins 1>&2)
+                
                 '''
+                
             }
         }
         stage('Quality_Checks'){
@@ -335,155 +337,194 @@ pipeline {
                 '''
             }
         }
-        stage('Compare_with_CMSSW_Ref_Release'){
-            stages{
-                stage('Install Ref Release'){
-                    steps {
-                        sh '''#!/usr/bin/env bash
-                        {
-                        set +x
-                        echo '==> Install Ref Release ============================'
-                        } >> log_Jenkins 1>&2> >(tee -a log_Jenkins 1>&2)
-                        '''
-                        sh '''#!/usr/bin/env bash
-                        {
-                        set +x
-                        ./HGCTPGValidation/scripts/installCMSSW_global.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
-                        statusInstallRef=$?
-                        } >> log_Jenkins 2> >(tee -a log_Jenkins >&2) # the stderr is redirected to log_Jenkins and to stderr
-                        
-                        # If the script installCMSSW_global.sh fails, the pipeline stops
-                        {
-                        ./HGCTPGValidation/scripts/check_command_status.sh $statusInstallRef $STAGE_NAME
-                        } >> log_Jenkins 2> >(tee -a log_Jenkins 1>&2)
-                        '''
+        stage('Parallel tasks'){
+            parallel{
+                stage('Compare_with_CMSSW_Ref_Release'){
+                    stages{
+                        stage('Install Ref Release'){
+                            steps {
+                                sh '''#!/usr/bin/env bash
+                                {
+                                set +x
+                                echo '==> Install Ref Release ============================'
+                                } >> log_Jenkins 1>&2> >(tee -a log_Jenkins 1>&2)
+                                '''
+                                sh '''#!/usr/bin/env bash
+                                {
+                                set +x
+                                ./HGCTPGValidation/scripts/installCMSSW_global.sh $SCRAM_ARCH $REF_RELEASE $BASE_REMOTE $BASE_REMOTE $CHANGE_TARGET $CHANGE_TARGET ${LABEL_REF}
+                                statusInstallRef=$?
+                                } >> log_Jenkins 2> >(tee -a log_Jenkins >&2) # the stderr is redirected to log_Jenkins and to stderr
+                                
+                                # If the script installCMSSW_global.sh fails, the pipeline stops
+                                {
+                                ./HGCTPGValidation/scripts/check_command_status.sh $statusInstallRef $STAGE_NAME
+                                } >> log_Jenkins 2> >(tee -a log_Jenkins 1>&2)
+                                '''
+                            }
+                        }
+                        stage('Produce_Ref'){
+                            steps {
+                                sh '''#!/usr/bin/env bash
+                                {
+                                set +x
+                                echo '\n==> Produce reference data ======================='
+                                
+                                if [ -f "out_err" ]; then
+                                    echo "Remove the last created out_err."
+                                    rm out_err
+                                fi
+                                } >> log_Jenkins 1>&2> >(tee -a log_Jenkins 1>&2)
+                                '''
+                                sh '''#!/usr/bin/env bash
+                                {
+                                set +x
+                                cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
+                                source ../../../HGCTPGValidation/env_install.sh
+                                
+                                echo "CONFIG_SUBSET=" ${CONFIG_SUBSET}
+                                echo "label=" ${LABEL_REF}
+                                python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF}
+                                statusProduceRef=$?
+                                } >> log_Jenkins 2> >(tee -a log_Jenkins out_err)
+                                
+                                # Move to the top directory
+                                cd ../../../
+                                
+                                # If the script produceData_multiconfiguration.py fails, the pipeline stops
+                                {
+                                ./HGCTPGValidation/scripts/check_command_status.sh $statusProduceRef $STAGE_NAME
+                                } >> log_Jenkins 2> >(tee -a log_Jenkins 1>&2)
+                                '''
+                            }
+                        }
+                        stage('Produce_Test'){
+                            steps {
+                                sh '''#!/usr/bin/env bash
+                                {
+                                set +x
+                                echo '\n==> Produce test data ======================='
+                                if [ -f "out_err" ]; then
+                                    echo "Remove the last created out_err."
+                                    rm out_err
+                                fi
+                                } >> log_Jenkins 1>&2> >(tee -a log_Jenkins 1>&2)
+                                '''
+                                sh '''#!/usr/bin/env bash
+                                {
+                                set +x
+                                cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
+                                source ../../../HGCTPGValidation/env_install.sh
+                                
+                                echo "CONFIG_SUBSET=" ${CONFIG_SUBSET}
+                                echo "label=" ${LABEL_TEST}
+                                python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
+                                statusProduceTest=$?
+                                } >> log_Jenkins 2> >(tee -a log_Jenkins out_err)
+                                
+                                # Move to the top directory
+                                cd ../../../
+                                
+                                # If the script produceData_multiconfiguration.py fails, the pipeline stops
+                                {
+                                ./HGCTPGValidation/scripts/check_command_status.sh $statusProduceTest $STAGE_NAME
+                                } >> log_Jenkins 2> >(tee -a log_Jenkins 1>&2)
+                                '''
+                            }
+                        }
+                        stage('Display') {
+                            steps {
+                                sh '''#!/usr/bin/env bash
+                                {
+                                set +x
+                                echo '\n==> Display ======================='
+                                } >> log_Jenkins 1>&2> >(tee -a log_Jenkins 1>&2)
+                                '''
+                                sh '''#!/usr/bin/env bash
+                                {
+                                set +x
+                                cd test_dir
+                                source ../HGCTPGValidation/env_install.sh
+                                
+                                echo "CONFIG_SUBSET=" ${CONFIG_SUBSET}
+                                echo "REF_DIR" ${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
+                                echo "TEST_DIR" ${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
+                                echo "DATA_DIR" ${DATA_DIR}
+                                echo "PR_NUMBER" $CHANGE_ID
+                                echo "PR_TITLE" "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
+                                python ../HGCTPGValidation/scripts/displayHistos.py --subsetconfig ${CONFIG_SUBSET} --refdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src --testdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src --datadir ${DATA_DIR} --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
+                                statusDisplay=$?
+                                } >> log_Jenkins 2> >(tee -a log_Jenkins >&2)
+                                
+                                # Move to the top directory
+                                cd ..
+                                
+                                # If the script displayHistos.py fails, the pipeline stops
+                                {
+                                ./HGCTPGValidation/scripts/check_command_status.sh $statusDisplay $STAGE_NAME
+                                } >> log_Jenkins 2> >(tee -a log_Jenkins 1>&2)
+                                '''
+                            }
+                        }
                     }
                 }
-                stage('Produce_Ref'){
+                stage('Geom_Check') {
+                    
                     steps {
                         sh '''#!/usr/bin/env bash
                         {
                         set +x
-                        echo '\n==> Produce reference data ======================='
-                        
-                        if [ -f "out_err" ]; then
-                            echo "Remove the last created out_err."
-                            rm out_err
+                        echo '\n==> Geom Check ======================='
+                        if [ -f "log_Jenkins_geomchecks" ]; then
+                            echo "Remove the last created log_Jenkins_geomchecks."
+                            rm log_Jenkins_geomchecks
+                        else
+                            echo "log_Jenkins_geomchecks does not exist."
                         fi
-                        } >> log_Jenkins 1>&2> >(tee -a log_Jenkins 1>&2)
+                        } >> log_Jenkins_geomchecks 1>&2> >(tee -a log_Jenkins_geomchecks 1>&2)
+                        '''
+                        
+                        sh '''#!/usr/bin/env bash
+                        {
+                        set +x
+                        ./HGCTPGValidation/scripts/geom_check.sh ${TEST_RELEASE} ${LABEL_TEST}
+                        statusGeomCheck=$?
+                        } >> log_Jenkins_geomchecks 2> >(tee -a log_Jenkins_geomchecks >&2)
+                        
+                        # If the script geom_check.sh fails, the pipeline stops
+                        {
+                        ./HGCTPGValidation/scripts/check_command_status.sh $statusGeomCheck $STAGE_NAME
+                        } >> log_Jenkins_geomchecks 2> >(tee -a log_Jenkins_geomchecks 1>&2)
                         '''
                         sh '''#!/usr/bin/env bash
                         {
                         set +x
-                        cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
-                        source ../../../HGCTPGValidation/env_install.sh
+                        export PATH="$PATH:/data/jenkins/.local/bin:/data/jenkins/bin"
+                        git clone https://github.com/hgc-tpg/HGCTPGGeometryTools
+                        cd HGCTPGGeometryTools
+                        module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el9
+                        module load python/3.12.4
+                        module load quarto/1.10.8
+                        python3 -m pip install --editable .
+                        cp ../test_dir/${TEST_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src/test_triggergeom.root resources
                         
-                        echo "CONFIG_SUBSET=" ${CONFIG_SUBSET}
-                        echo "label=" ${LABEL_REF}
-                        python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_REF}
-                        statusProduceRef=$?
-                        } >> log_Jenkins 2> >(tee -a log_Jenkins out_err)
+                        echo "===== Run snakemake ====="
+                        snakemake --cores 1 all
+                        statusGeomCheckWebPages=$?
+                        } >> log_Jenkins_geomchecks 2> >(tee -a log_Jenkins_geomchecks >&2)
                         
-                        # Move to the top directory
-                        cd ../../../
-                        
-                        # If the script produceData_multiconfiguration.py fails, the pipeline stops
-                        {
-                        ./HGCTPGValidation/scripts/check_command_status.sh $statusProduceRef $STAGE_NAME
-                        } >> log_Jenkins 2> >(tee -a log_Jenkins 1>&2)
-                        '''
-                    }
-                }
-                stage('Produce_Test'){
-                    steps {
-                        sh '''#!/usr/bin/env bash
-                        {
-                        set +x
-                        echo '\n==> Produce test data ======================='
-                        if [ -f "out_err" ]; then
-                            echo "Remove the last created out_err."
-                            rm out_err
-                        fi
-                        } >> log_Jenkins 1>&2> >(tee -a log_Jenkins 1>&2)
-                        '''
-                        sh '''#!/usr/bin/env bash
-                        {
-                        set +x
-                        cd test_dir/${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
-                        source ../../../HGCTPGValidation/env_install.sh
-                        
-                        echo "CONFIG_SUBSET=" ${CONFIG_SUBSET}
-                        echo "label=" ${LABEL_TEST}
-                        python ../../../HGCTPGValidation/scripts/produceData_multiconfiguration.py --subsetconfig ${CONFIG_SUBSET} --label ${LABEL_TEST}
-                        statusProduceTest=$?
-                        } >> log_Jenkins 2> >(tee -a log_Jenkins out_err)
-                        
-                        # Move to the top directory
-                        cd ../../../
-                        
-                        # If the script produceData_multiconfiguration.py fails, the pipeline stops
-                        {
-                        ./HGCTPGValidation/scripts/check_command_status.sh $statusProduceTest $STAGE_NAME
-                        } >> log_Jenkins 2> >(tee -a log_Jenkins 1>&2)
-                        '''
-                    }
-                }
-                stage('Display') {
-                    steps {
-                        sh '''#!/usr/bin/env bash
-                        {
-                        set +x
-                        echo '\n==> Display ======================='
-                        } >> log_Jenkins 1>&2> >(tee -a log_Jenkins 1>&2)
-                        '''
-                        sh '''#!/usr/bin/env bash
-                        {
-                        set +x
-                        cd test_dir
-                        source ../HGCTPGValidation/env_install.sh
-                        
-                        echo "CONFIG_SUBSET=" ${CONFIG_SUBSET}
-                        echo "REF_DIR" ${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src
-                        echo "TEST_DIR" ${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src
-                        echo "DATA_DIR" ${DATA_DIR}
-                        echo "PR_NUMBER" $CHANGE_ID
-                        echo "PR_TITLE" "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
-                        python ../HGCTPGValidation/scripts/displayHistos.py --subsetconfig ${CONFIG_SUBSET} --refdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_REF}/src --testdir ${REF_RELEASE}_HGCalTPGValidation_${LABEL_TEST}/src --datadir ${DATA_DIR} --prnumber $CHANGE_ID --prtitle "$CHANGE_TITLE (from $CHANGE_AUTHOR, $CHANGE_URL)"
-                        statusDisplay=$?
-                        } >> log_Jenkins 2> >(tee -a log_Jenkins >&2)
-                        
-                        # Move to the top directory
                         cd ..
                         
-                        # If the script displayHistos.py fails, the pipeline stops
+                        # If the command snakemake fails, the pipeline stops
                         {
-                        ./HGCTPGValidation/scripts/check_command_status.sh $statusDisplay $STAGE_NAME
-                        } >> log_Jenkins 2> >(tee -a log_Jenkins 1>&2)
+                        ./HGCTPGValidation/scripts/check_command_status.sh $statusGeomCheckWebPages $STAGE_NAME
+                        ./HGCTPGValidation/scripts/copy_geom_pictures.sh $DATA_DIR PR$CHANGE_ID
+                        
+                        } >> log_Jenkins_geomchecks 2> >(tee -a log_Jenkins_geomchecks 1>&2)
+                        
                         '''
                     }
                 }
-            }
-        }
-        stage('Geom_Check') {
-            steps {
-                sh '''#!/usr/bin/env bash
-                {
-                set +x
-                echo '\n==> Geom Check ======================='
-                } >> log_Jenkins 1>&2> >(tee -a log_Jenkins 1>&2)
-                '''
-                sh '''#!/usr/bin/env bash
-                {
-                set +x
-                ./HGCTPGValidation/scripts/geom_check.sh ${TEST_RELEASE} ${LABEL_TEST}
-                statusGeomCheck=$?
-                } >> log_Jenkins 2> >(tee -a log_Jenkins >&2)
-                
-                # If the script displayHistos.py fails, the pipeline stops
-                {
-                ./HGCTPGValidation/scripts/check_command_status.sh $statusGeomCheck $STAGE_NAME
-                } >> log_Jenkins 2> >(tee -a log_Jenkins 1>&2)
-                '''
             }
         }
     }
