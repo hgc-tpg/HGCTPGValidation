@@ -157,14 +157,16 @@ def readFileStatement(configname, rel, dirname):
                         listHistos[i].GetXaxis().SetRange(listHistos[i].FindFirstBinAbove(), listHistos[i].FindLastBinAbove() + 10)
     hFile.Write()
 
-def writeIntoFile(prnumber, configTest, configRef, prtitle, prdir):
+def writeIntoFile(prnumber, configTest, configRef, prtitle, prdir, geomCheck):
     print("Call writeIntoFile.")
     
     fileName = prdir + "/validation_webpages.txt"
     print(fileName)
     with open(fileName, 'a') as f:
         prnb  = "PR" + prnumber
-        if configTest=='':
+        if geomCheck!='':
+            title = "Geom_check : Geometry check\n"
+        elif configTest=='':
             title = prnb + " : " + prtitle + "\n"
         else:
             title = prnb + "_" + configTest + "_" + configRef + " : Test: " + configTest + " | " + "Ref: " + configRef + "\n"
@@ -202,7 +204,7 @@ def main(configset, refdir, testdir, datadir, prnumber, prtitle):
     os.system("ls -lrt " + prdir)
 
     # Write the first line of the validation_webpages.txt
-    writeIntoFile(prnumber, '', '', prtitle, prdir)
+    writeIntoFile(prnumber, '', '', prtitle, prdir, '')
     
     # Path to the config file
     path='../HGCTPGValidation/config/'
@@ -266,8 +268,14 @@ def main(configset, refdir, testdir, datadir, prnumber, prtitle):
             os.system("mkdir " + datadir_gif)
             print("cp -rf " + imgdir + "/. " + datadir_gif)
             os.system("cp -rf " + imgdir + "/. " + datadir_gif)
-            writeIntoFile(prnumber, confTest, confRef, prtitle, prdir)
-     
+            writeIntoFile(prnumber, confTest, confRef, prtitle, prdir, '')
+    # Geom check part
+    # Write into the file validation_webpages.txt
+    writeIntoFile(prnumber, confTest, confRef, prtitle, prdir, "geomCheck")
+    # Create the directory for the geometry images
+    datadir_geom_gif = prdir + "/" + "Geom_check"
+    os.system("mkdir " + datadir_geom_gif)
+    
 if __name__=='__main__':
     import optparse
     import importlib
