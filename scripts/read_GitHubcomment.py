@@ -94,10 +94,6 @@ def extract_yaml_block(comment):
 
 def main(tmpFile, defaultSubsetFile):
     
-    # Load the default.yaml
-    with open(f"../HGCTPGValidation/config/default.yaml", "r") as file:
-        default_data = yaml.load(file)
-    
     # Read the comment from GitHub
     with open(f"../{tmpFile}", "r") as file:
         config = file.read()
@@ -127,6 +123,11 @@ def main(tmpFile, defaultSubsetFile):
         
         if len(parsed_blocks) >= 1:
             for block in parsed_blocks[0:]:
+                
+                # Load the default.yaml
+                with open(f"../HGCTPGValidation/config/default.yaml", "r") as file:
+                    default_data = yaml.load(file)
+                
                 if "shortName" in block: # process the new configurations
                     update_configs(block, default_data)
                 elif "subsetName" in block: # process the subset configuration
