@@ -8,10 +8,10 @@ parameters:
     nbOfEvents: 50
     conditions: auto:phase2_realistic_T35
     beamspot: VtxSmearedHLLHC14TeV
-    geometry: ExtendedRun4D110
-    era: Phase2C17I13M9
+    geometry: ExtendedRun4D122
+    era: Phase2C26I13M9
     inputCommands: '"keep *"'
-    filein: file:/data_CMS_upgrade/data_jenkins/relval/CMSSW_20_0_0_pre1/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU_150X_mcRun4_realistic_v1_STD_D121_RegeneratedGS_PU-v1/0033230b-a131-453a-95c0-fe14d5027d1f.root
+    filein: file:/data_CMS_upgrade/data_jenkins/relval/CMSSW_20_0_0/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU_150X_mcRun4_realistic_v1_STD_D127_RegeneratedGS_PU_16Aug26-v2/00f3dc39-4e7d-4438-863b-565ffb3094f0.root
 ---
 shortName: s1fw
 longName: "Stage 1 firmware emulator testing"
@@ -22,10 +22,10 @@ parameters:
     nbOfEvents: 50
     conditions: auto:phase2_realistic_T35
     beamspot: VtxSmearedHLLHC14TeV
-    geometry: ExtendedRun4D110
-    era: Phase2C17I13M9
+    geometry: ExtendedRun4D122
+    era: Phase2C26I13M9
     inputCommands: '"keep *"'
-    filein: file:/data_CMS_upgrade/data_jenkins/relval/CMSSW_20_0_0_pre1/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU_150X_mcRun4_realistic_v1_STD_D121_RegeneratedGS_PU-v1/0033230b-a131-453a-95c0-fe14d5027d1f.root
+    filein: file:/data_CMS_upgrade/data_jenkins/relval/CMSSW_20_0_0/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU_150X_mcRun4_realistic_v1_STD_D127_RegeneratedGS_PU_16Aug26-v2/00f3dc39-4e7d-4438-863b-565ffb3094f0.root
     customise: L1Trigger/L1THGCal/customLayer1.custom_layer1_latestfw
     customise_commands: "process.L1THGCalTrigPrimValidation.Clusters = process.l1tHGCalBackEndLayer2Producer.InputCluster;"
 ---
@@ -38,10 +38,10 @@ parameters:
     nbOfEvents: 50
     conditions: auto:phase2_realistic_T35
     beamspot: VtxSmearedHLLHC14TeV
-    geometry: ExtendedRun4D110
-    era: Phase2C17I13M9
+    geometry: ExtendedRun4D122
+    era: Phase2C26I13M9
     inputCommands: '"keep *"'
-    filein: file:/data_CMS_upgrade/data_jenkins/relval/CMSSW_20_0_0_pre1/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU_150X_mcRun4_realistic_v1_STD_D121_RegeneratedGS_PU-v1/0033230b-a131-453a-95c0-fe14d5027d1f.root
+    filein: file:/data_CMS_upgrade/data_jenkins/relval/CMSSW_20_0_0/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU_150X_mcRun4_realistic_v1_STD_D127_RegeneratedGS_PU_16Aug26-v2/00f3dc39-4e7d-4438-863b-565ffb3094f0.root
     customise: L1Trigger/L1THGCal/customTriggerCellSelect.custom_triggercellselect_mixedBestChoiceSuperTriggerCell_decentralized
 ---
 shortName: newProcessors
@@ -53,8 +53,8 @@ parameters:
     nbOfEvents: 50
     conditions: auto:phase2_realistic_T35
     beamspot: VtxSmearedHLLHC14TeV
-    geometry: ExtendedRun4D110
-    era: Phase2C17I13M9
+    geometry: ExtendedRun4D122
+    era: Phase2C26I13M9
     inputCommands: '"keep *","drop l1tTkPrimaryVertexs_L1TkPrimaryVertex__RECO"'
-    filein: file:/data_CMS_upgrade/data_jenkins/relval/CMSSW_20_0_0_pre1/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU_150X_mcRun4_realistic_v1_STD_D121_RegeneratedGS_PU-v1/0033230b-a131-453a-95c0-fe14d5027d1f.root
+    filein: file:/data_CMS_upgrade/data_jenkins/relval/CMSSW_20_0_0/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU_150X_mcRun4_realistic_v1_STD_D127_RegeneratedGS_PU_16Aug26-v2/00f3dc39-4e7d-4438-863b-565ffb3094f0.root
     customise: L1Trigger/L1THGCal/customNewProcessors.custom_clustering_standalone,L1Trigger/L1THGCal/customNewProcessors.custom_tower_standalone,L1Trigger/L1THGCalUtilities/customNtuples.custom_ntuples_standalone_clustering,L1Trigger/L1THGCalUtilities/customNtuples.custom_ntuples_standalone_tower
