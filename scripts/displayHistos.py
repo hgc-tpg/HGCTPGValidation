@@ -30,12 +30,13 @@ from graphFunctionsMulticonfigs import createWebPageLite, initRootStyle
 from configFunctions import get_listOfConfigs, check_schema_config, read_config 
 
 def checkSubprocessStatus(subProc, logfile):
-    if subProc.wait() != 0:
+    return_status = subProc.wait()
+    if return_status != 0:
        print('------------------------------------------------------------------------')
        print('=> Execution failed! There were some errors. Please, check the logfile.')
        print('------------------------------------------------------------------------')
        logfile.write('=> Execution failed! There were some errors.\n')
-       sys.exit(1)
+       sys.exit(return_status)
     else:
        print('Subprocess completed successfully!')
        logfile.write('=> Subprocess completed successfully!\n')
