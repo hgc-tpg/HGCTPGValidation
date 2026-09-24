@@ -15,21 +15,15 @@ echo "DATA_DIR = " $DATA_DIR
 echo "PRCHANGE_ID = " $PRCHANGE_ID
 pwd
 
-# max wait time in seconds
-MAX_WAIT=3600
-SECONDS=0
-
 GEOM_CHECK_DIR="Geom_check"
 
-while [ ! -d "../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}" ]
-do
-    if (( SECONDS >= MAX_WAIT )); then
-        echo "Waiting for Display stage time > $MAX_WAIT seconds."
-        exit 1
-    fi
-    sleep 300
-    echo "Waiting for Display stage to finish."
-done
+if [ ! -d "../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}" ] ; then
+    mkdir ../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}
+else
+    echo "The folder" ../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR} " exists."
+fi
+
+printf "${GEOM_CHECK_DIR} : Geometry check" >> "../${DATA_DIR}/${PRCHANGE_ID}/validation_webpages.txt"
 
 # Copy the pictures and the html page from GeomCheck stage
 cp -rf ./HGCTPGGeometryTools/results/test_triggergeom/plot_errors_files ../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}/

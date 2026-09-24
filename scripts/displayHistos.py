@@ -163,15 +163,14 @@ def writeIntoFile(prnumber, configTest, configRef, prtitle, prdir, geomCheck):
     
     fileName = prdir + "/validation_webpages.txt"
     print(fileName)
-    with open(fileName, 'a') as f:
-        prnb  = "PR" + prnumber
-        if geomCheck!='':
-            title = "Geom_check : Geometry check\n"
-        elif configTest=='':
-            title = prnb + " : " + prtitle + "\n"
-        else:
-            title = prnb + "_" + configTest + "_" + configRef + " : Test: " + configTest + " | " + "Ref: " + configRef + "\n"
-        f.write(title)
+    
+    with open(filename, 'a') as f:
+    prnb  = "pr" + prnumber
+    if configtest=='':
+        title = prnb + " : " + prtitle + "\n"
+    else:
+        title = prnb + "_" + configtest + "_" + configref + " : test: " + configtest + " | " + "ref: " + configref + "\n"
+    f.write(title)
 
 def main(configset, refdir, testdir, datadir, prnumber, prtitle):
     print(' == Main == ')
@@ -270,12 +269,6 @@ def main(configset, refdir, testdir, datadir, prnumber, prtitle):
             print("cp -rf " + imgdir + "/. " + datadir_gif)
             os.system("cp -rf " + imgdir + "/. " + datadir_gif)
             writeIntoFile(prnumber, confTest, confRef, prtitle, prdir, '')
-    # Geom check part
-    # Write into the file validation_webpages.txt
-    writeIntoFile(prnumber, confTest, confRef, prtitle, prdir, "geomCheck")
-    # Create the directory for the geometry images
-    datadir_geom_gif = prdir + "/" + "Geom_check"
-    os.system("mkdir " + datadir_geom_gif)
     
 if __name__=='__main__':
     import optparse
