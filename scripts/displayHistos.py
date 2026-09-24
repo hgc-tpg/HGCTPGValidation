@@ -30,12 +30,13 @@ from graphFunctionsMulticonfigs import createWebPageLite, initRootStyle
 from configFunctions import get_listOfConfigs, check_schema_config, read_config 
 
 def checkSubprocessStatus(subProc, logfile):
-    if subProc.wait() != 0:
+    return_status = subProc.wait()
+    if return_status != 0:
        print('------------------------------------------------------------------------')
        print('=> Execution failed! There were some errors. Please, check the logfile.')
        print('------------------------------------------------------------------------')
        logfile.write('=> Execution failed! There were some errors.\n')
-       sys.exit()
+       sys.exit(return_status)
     else:
        print('Subprocess completed successfully!')
        logfile.write('=> Subprocess completed successfully!\n')
@@ -78,7 +79,7 @@ def	extractTimeMemoryInfos(namefile, dirname):
                     RSS_values.append(indicator[7])
                 # Read Time summary information
                 if " Time Summary:" in line:
-                    # Read 18 lines starting from " Time Summary:"
+                    # Read 18 lines starting from " Time Seummary:"
                     lines_cache = islice(f, 2, 5, None)
                     for current_line in lines_cache:
                         indicator = current_line.split(" ")
