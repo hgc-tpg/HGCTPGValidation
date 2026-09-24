@@ -16,15 +16,22 @@ echo "PRCHANGE_ID = " $PRCHANGE_ID
 pwd
 
 GEOM_CHECK_DIR="Geom_check"
+PATH_GEOM="../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}"
 
-if [ ! -d "../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}" ] ; then
-    mkdir ../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}
+if [ ! -d $PATH_GEOM ] ; then
+    mkdir -p $PATH_GEOM
 else
-    echo "The folder" ../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR} " exists."
+    echo "The folder $PATH_GEOM exists."
+    # Remove the content of ${GEOM_CHECK_DIR} directory including hidden files
+    rm -rf $PATH_GEOM/* $PATH_GEOM/.[!.]*
 fi
 
-printf "${GEOM_CHECK_DIR} : Geometry check" >> "../${DATA_DIR}/${PRCHANGE_ID}/validation_webpages.txt"
+FILE="../${DATA_DIR}/${PRCHANGE_ID}/validation_webpages.txt"
+# Checks if the FILE exists and if it contains the link to the Geom_check web page
+if [ -f "$FILE" ] && ! grep -q "$GEOM_CHECK_DIR" "$FILE"; then
+    printf "${GEOM_CHECK_DIR} : Geometry check" >> "../${DATA_DIR}/${PRCHANGE_ID}/validation_webpages.txt"
+fi
 
 # Copy the pictures and the html page from GeomCheck stage
-cp -rf ./HGCTPGGeometryTools/results/test_triggergeom/plot_errors_files ../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}/
-cp ./HGCTPGGeometryTools/results/test_triggergeom/plot_errors.html ../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}/index.html
+cp -rf ./HGCTPGGeometryTools/results/test_triggergeom/plot_errors_files $PATH_GEOM/
+cp ./HGCTPGGeometryTools/results/test_triggergeom/plot_errors.html $PATH_GEOM/index.html
