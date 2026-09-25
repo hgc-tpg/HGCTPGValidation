@@ -164,13 +164,13 @@ def writeIntoFile(prnumber, configTest, configRef, prtitle, prdir, geomCheck):
     fileName = prdir + "/validation_webpages.txt"
     print(fileName)
     
-    with open(filename, 'a') as f:
-    prnb  = "pr" + prnumber
-    if configtest=='':
-        title = prnb + " : " + prtitle + "\n"
-    else:
-        title = prnb + "_" + configtest + "_" + configref + " : test: " + configtest + " | " + "ref: " + configref + "\n"
-    f.write(title)
+    with open(fileName, 'a') as f:
+        prnb  = "PR" + prnumber
+        if configTest=='':
+            title = prnb + " : " + prtitle + "\n"
+        else:
+            title = prnb + "_" + configTest + "_" + configRef + " : Test: " + configTest + " | " + "Ref: " + configRef + "\n"
+        f.write(title)
 
 import shutil
 from pathlib import Path
@@ -205,7 +205,7 @@ def main(configset, refdir, testdir, datadir, prnumber, prtitle):
         print("The data directory for the PR ", prdir, "already exists. It will be deleted.")
         mess = "The data directory for the PR " + prdir + "already exists. The configuration sub-directories will be deleted."
         logfile.write(mess)
-        clean_subdirs(prdir, keep="Geom_check"):
+        clean_subdirs(prdir, keep="Geom_check")
     else:
         print("The data directory for the PR ", prdir, "doesn't exist. It will be created")
         os.system("mkdir " + prdir)
