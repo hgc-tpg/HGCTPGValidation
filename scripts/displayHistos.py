@@ -172,6 +172,18 @@ def writeIntoFile(prnumber, configTest, configRef, prtitle, prdir, geomCheck):
         title = prnb + "_" + configtest + "_" + configref + " : test: " + configtest + " | " + "ref: " + configref + "\n"
     f.write(title)
 
+import shutil
+from pathlib import Path
+
+def clean_subdirs(prdir, keep="Geom_check"):
+    prdir = Path(prdir)
+    if not prdir.exists():
+        return
+    
+    for entry in prdir.iterdir():
+        if entry.is_dir() and entry.name != keep:
+            shutil.rmtree(entry)
+            
 def main(configset, refdir, testdir, datadir, prnumber, prtitle):
     print(' == Main == ')
     print('configset=', configset)
@@ -188,21 +200,18 @@ def main(configset, refdir, testdir, datadir, prnumber, prtitle):
     prdir = "../../" + datadir + "/PR" + prnumber
     print('prdir = ', prdir)
     if os.path.exists(prdir):
-        # Remove directory before copying new histograms, this is used when running only Display script
-        # When running the job with Jenkins, this directory is removed at the beginning of the job
+        # Remove configuration directories before copying new histograms, this is used when running only Display script
+        # or when the PR directory was created by Geom_check stage
         print("The data directory for the PR ", prdir, "already exists. It will be deleted.")
-        mess = "The data directory for the PR " + prdir + "already exists. It will be deleted."
+        mess = "The data directory for the PR " + prdir + "already exists. The configuration sub-directories will be deleted."
         logfile.write(mess)
-        os.system("rm -rf " + prdir)
+        clean_subdirs(prdir, keep="Geom_check"):
     else:
         print("The data directory for the PR ", prdir, "doesn't exist. It will be created")
+        os.system("mkdir " + prdir)
         mess = "The data directory for the PR " + prdir + "doesn't exist. It will be created"
         logfile.write(mess)
     
-    print("Will do mkdir " + prdir)
-    os.system("mkdir " + prdir)
-    os.system("ls -lrt " + prdir)
-
     # Write the first line of the validation_webpages.txt
     writeIntoFile(prnumber, '', '', prtitle, prdir, '')
     
