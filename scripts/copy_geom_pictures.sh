@@ -28,8 +28,9 @@ fi
 
 FILE="../${DATA_DIR}/${PRCHANGE_ID}/validation_webpages.txt"
 # Checks if the FILE exists and if it contains the link to the Geom_check web page
-if [ -f "$FILE" ] && ! grep -q "$GEOM_CHECK_DIR" "$FILE"; then
-    printf "${GEOM_CHECK_DIR} : Geometry check" >> "../${DATA_DIR}/${PRCHANGE_ID}/validation_webpages.txt"
+if [ -f "$FILE" ] && ! grep -q "^$GEOM_CHECK_DIR" "$FILE"; then
+    # Write the link to the Geom_check web page
+    printf "${GEOM_CHECK_DIR} : Geometry check" >> "$FILE"
 fi
 
 # Copy the pictures and the html page from GeomCheck stage
