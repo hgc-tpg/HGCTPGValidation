@@ -8,8 +8,8 @@ parameters:
     nbOfEvents: 50
     conditions: auto:phase2_realistic_T35
     beamspot: VtxSmearedHLLHC14TeV
-    geometry: ExtendedRun4D110
-    era: Phase2C17I13M9
+    geometry: ExtendedRun4D122
+    era: Phase2C26I13M9
     inputCommands: '"keep *"'
-    filein: file:/data_CMS_upgrade/data_jenkins/Phase2Spring24DIGIRECOMiniAOD/TT_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_Trk1GeV_140X_mcRun4_realistic_v4-v2/00c7f40e-b44e-4eea-a86b-def8f7d82b0e.root
+    filein: file:/data_CMS_upgrade/data_jenkins/relval/CMSSW_20_0_0/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU_150X_mcRun4_realistic_v1_STD_D127_RegeneratedGS_PU_16Aug26-v2/00f3dc39-4e7d-4438-863b-565ffb3094f0.root
 
