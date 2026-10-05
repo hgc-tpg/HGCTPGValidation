@@ -514,7 +514,7 @@ pipeline {
                         } >> log_Jenkins_geomchecks 2> >(tee -a log_Jenkins_geomchecks >&2)
                         
                         cd ..
-                        pwd
+                        
                         # If the command snakemake fails, the pipeline stops
                         {
                         ./HGCTPGValidation/scripts/check_command_status.sh $statusGeomCheckWebPages $STAGE_NAME
