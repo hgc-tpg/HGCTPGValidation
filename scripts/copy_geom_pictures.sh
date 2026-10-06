@@ -15,22 +15,24 @@ echo "DATA_DIR = " $DATA_DIR
 echo "PRCHANGE_ID = " $PRCHANGE_ID
 pwd
 
-# max wait time in seconds
-MAX_WAIT=3600
-SECONDS=0
-
 GEOM_CHECK_DIR="Geom_check"
+PATH_GEOM="../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}"
 
-while [ ! -d "../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}" ]
-do
-    if (( SECONDS >= MAX_WAIT )); then
-        echo "Waiting for Display stage time > $MAX_WAIT seconds."
-        exit 1
-    fi
-    sleep 300
-    echo "Waiting for Display stage to finish."
-done
+if [ ! -d $PATH_GEOM ] ; then
+    mkdir -p $PATH_GEOM
+else
+    echo "The folder $PATH_GEOM exists."
+    # Remove the content of ${GEOM_CHECK_DIR} directory including hidden files
+    rm -rf $PATH_GEOM/* $PATH_GEOM/.[!.]*
+fi
+
+FILE="../${DATA_DIR}/${PRCHANGE_ID}/validation_webpages.txt"
+# Checks if the FILE exists and if it contains the link to the Geom_check web page
+if [ -f "$FILE" ] && ! grep -q "^$GEOM_CHECK_DIR" "$FILE"; then
+    # Write the link to the Geom_check web page
+    printf "${GEOM_CHECK_DIR} : Geometry check" >> "$FILE"
+fi
 
 # Copy the pictures and the html page from GeomCheck stage
-cp -rf ./HGCTPGGeometryTools/results/test_triggergeom/plot_errors_files ../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}/
-cp ./HGCTPGGeometryTools/results/test_triggergeom/plot_errors.html ../${DATA_DIR}/${PRCHANGE_ID}/${GEOM_CHECK_DIR}/index.html
+cp -rf ./HGCTPGGeometryTools/results/test_triggergeom/plot_errors_files $PATH_GEOM/
+cp ./HGCTPGGeometryTools/results/test_triggergeom/plot_errors.html $PATH_GEOM/index.html
